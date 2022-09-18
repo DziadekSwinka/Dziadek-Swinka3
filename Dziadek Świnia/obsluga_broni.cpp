@@ -8,14 +8,27 @@ bullet::bullet(sf::RenderWindow &window1,std::string sciezka):window(window1)
     sprite.setScale(0.05,0.05);
     fly=false;
 }
-void bullet::Update()
+bool bullet::pozaEkranem()
+{
+    if(posX<0 || posY<0 || posX>window.getSize().x || posY>window.getSize().y)
+        return true;
+    else return false;
+}
+void bullet::setPosition(float posX, float posY)
 {
     sprite.setPosition(posX,posY);
-    if(fly=true)
+}
+void bullet::setRotation(float dir)
+{
+    sprite.setRotation(-dir+90);
+}
+void bullet::Update()
+{
+    if(fly==true || true)
     {
         float alfa;
-        float a,b,c=3;
-        alfa=dir-90;
+        float a,b,c=1;
+        alfa=sprite.getRotation()+90;
         alfa=alfa/60;         //+270
         a=c*(sin(alfa));
         b=c*(cos(alfa));
@@ -23,8 +36,13 @@ void bullet::Update()
             sprite.move(b,a);
         if(!k)
             sprite.move(-b,-a);
-        window.draw(sprite);
+        if(pozaEkranem())
+            {
+                fly=false;
+            }
+
     }
+    window.draw(sprite);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -42,20 +60,21 @@ bron::bron(sf::RenderWindow &window1,std::string sciezka,short bron_type):window
 }
 void bron::wystrzel(float degree)
 {
-    for(short i=0;i<10;i++)
+    for(int i=0;Bullet[i].fly==false||i<10;i++)
     {
-        if(!Bullet[i].fly)
+        if(Bullet[i].fly==false)
         {
             Bullet[i].fly=true;
+            Bullet[i].setRotation(degree);
             Bullet[i].dir=degree;
-            Bullet[i].posX=sprite.getPosition().x;
-            Bullet[i].posY=sprite.getPosition().y;
+            Bullet[i].setPosition(sprite.getPosition().x,sprite.getPosition().y);
             if(sprite.getScale().x>0)
             {
                 Bullet[i].k=true;
+
             }else Bullet[i].k=false;
             break;
-        }else{ continue; }
+        }
     }
 }
 void bron::move_to_side(side Side)
@@ -92,7 +111,7 @@ void bron::Update(float posX,float posY,float degree)
         sprite.setRotation(degree*-1);
     }
 
-    for(short i=0;i<10;i++)
+    for(int i=0;i<10;i++)
     {
         Bullet[i].Update();
     }

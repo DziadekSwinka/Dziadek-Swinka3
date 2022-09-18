@@ -10,7 +10,10 @@ private:
     sf::Sprite sprite;
 public:
     void Update();
+    bool pozaEkranem();
     bullet(sf::RenderWindow &window1,std::string sciezka);
+    void setPosition(float posX, float posY);
+    void setRotation(float dir);
     float posX,posY;
     float dir;
     bool fly;

@@ -6,6 +6,9 @@
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
+
+bool ButtonPressed=0;
+
 enum Mode
 {
     lev1,           //
@@ -18,75 +21,18 @@ enum Interior
 {
     shop,
     home,
-    farm,
     outside
 };
+
 Interior interior;
-bool ButtonPressed=0;
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-class button
-{
-private:
-    sf::RenderWindow &window;
-    sf::Texture txt,txt2;
-    sf::Sprite Button;
-    bool onclick=false;
-public:
-    button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y);
-    void Update();
-    bool isPressed();
-};
-button::button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y):window(window1)
-{
-    txt.loadFromFile(sciezka);
-    txt2.loadFromFile(sciezka2);
-    Button.setTexture(txt);
-    Button.setPosition(x,y);
-
-}
-void button::Update()
-{
-    sf::Vector2i Mouse = sf::Mouse::getPosition( window );
-    float szerokosc=txt.getSize().x;
-    float wysokosc=txt.getSize().y;
-    float x=Button.getPosition().x;
-    float y=Button.getPosition().y;
-    if((Mouse.x>x)&&(Mouse.x<x+szerokosc)&&(Mouse.y>y)&&(Mouse.y<y+wysokosc))
-    {
-        Button.setTexture(txt2);
-    }else Button.setTexture(txt);
-    window.draw(Button);
-    if((Mouse.x>x)&&(Mouse.x<x+szerokosc)&&(Mouse.y>y)&&(Mouse.y<y+wysokosc) && ButtonPressed)
-    {
-        onclick=true;
-    }else onclick=false;
-}
-bool button::isPressed()
-{
-    if(onclick)
-    {
-        return true;
-    }
-    return false;
-}
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-
-
 class Background
 {
 private:
-    sf::Font ProFontWindows;
+
     sf::RenderWindow &window;
     sf::Sprite bcg[3],B1,B2,B3;
     sf::Texture txt,b1,b2,b3;
@@ -97,6 +43,8 @@ public:
     void Update();
     Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3);
 };
+
+
 Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3)
     :window(window1)
 {
@@ -168,8 +116,8 @@ bool Background::background_move(side Side)
     if((bcg[2].getPosition().x)<0)
         {
             bcg[0].setPosition(0-798,window.getSize().y-(txt.getSize().y*1.7));
-            bcg[1].setPosition(0,window.getSize().y-(txt.getSize().y*1.5));
-            bcg[2].setPosition(window.getSize().x-4,window.getSize().y-(txt.getSize().y*1.5));
+            bcg[1].setPosition(0,window.getSize().y-(txt.getSize().y*1.7));
+            bcg[2].setPosition(window.getSize().x-4,window.getSize().y-(txt.getSize().y*1.7));
         }
     if((bcg[0].getPosition().x)>0)
         {
@@ -179,6 +127,86 @@ bool Background::background_move(side Side)
         }
 
     return true;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+class Equipment
+{
+private:
+    sf::Font ProFontWindows;
+    sf::RectangleShape backRect;
+    sf::RenderWindow &window;
+public:
+    Equipment(sf::RenderWindow &window1);
+    unsigned int ammunition;
+    unsigned int HP;
+    void Update();
+};
+
+Equipment::Equipment(sf::RenderWindow &window1):window(window1)
+{
+    ammunition=15;
+    HP=100;
+    backRect.setSize(sf::Vector2f(200,100));
+    backRect.setPosition(0,window.getSize().y-backRect.getSize().y-50);
+    backRect.setFillColor(sf::Color(150,150,150));
+}
+void Equipment::Update()
+{
+    window.draw(backRect);
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+class button
+{
+private:
+    sf::RenderWindow &window;
+    sf::Texture txt,txt2;
+    sf::Sprite Button;
+    bool onclick=false;
+public:
+    button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y);
+    void Update();
+    bool isPressed();
+};
+button::button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y):window(window1)
+{
+    txt.loadFromFile(sciezka);
+    txt2.loadFromFile(sciezka2);
+    Button.setTexture(txt);
+    Button.setPosition(x,y);
+
+}
+void button::Update()
+{
+    sf::Vector2i Mouse = sf::Mouse::getPosition( window );
+    float szerokosc=txt.getSize().x;
+    float wysokosc=txt.getSize().y;
+    float x=Button.getPosition().x;
+    float y=Button.getPosition().y;
+    if((Mouse.x>x)&&(Mouse.x<x+szerokosc)&&(Mouse.y>y)&&(Mouse.y<y+wysokosc))
+    {
+        Button.setTexture(txt2);
+    }else Button.setTexture(txt);
+    window.draw(Button);
+    if((Mouse.x>x)&&(Mouse.x<x+szerokosc)&&(Mouse.y>y)&&(Mouse.y<y+wysokosc) && ButtonPressed)
+    {
+        onclick=true;
+    }else onclick=false;
+}
+bool button::isPressed()
+{
+    if(onclick)
+    {
+        return true;
+    }
+    return false;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -291,6 +319,7 @@ int main()
     button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",400,10);
     button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",400,110);
     bron karabin(window,"Textures//ak47.png",1);
+    Equipment Eq(window);
     while (window.isOpen())
     {
         sf::Event event;
@@ -317,6 +346,7 @@ int main()
         background.Update();
         Dziadek.Update();
         karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree());
+        Eq.Update();
         Misje_bt.Update();
         if(Menu_misje)
         {
