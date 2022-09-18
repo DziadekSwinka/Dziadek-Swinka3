@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "side.hpp"
+#include "obsluga_broni.hpp"
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -271,96 +272,8 @@ void Postac::Fall()
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
-class bullet
-{
-private:
-    sf::RenderWindow &window;
-    sf::Texture txt;
-    sf::Sprite sprite;
-public:
-    sf::Sprite Update();
-    void setup(sf::RenderWindow &window1,std::string sciezka);
-    float posX,posY;
-    bool fly;
-};
-void bullet::setup(sf::RenderWindow &window1,std::string sciezka)///:window(window1)
-{
-    txt.loadFromFile(sciezka);
-    sprite.setTexture(txt);
-    sprite.setScale(0.05,0.05);
-}
-sf::Sprite bullet::Update()
-{
-    return(&sprite);
-}
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-class bron
-{
-private:
-    sf::RenderWindow &window;
-    sf::Texture txt;
-    sf::Sprite sprite;
-    void move_to_side(side Side);
-    void wystrzel();
-public:
-    bron(sf::RenderWindow &window1,std::string sciezka,short bron_type);
-    void Update(float posX,float posY,float degree);
-};
-bron::bron(sf::RenderWindow &window1,std::string sciezka,short bron_type):window(window1)
-{
-    txt.loadFromFile(sciezka);
-    sprite.setTexture(txt);
-    sprite.setScale(-0.3,0.3);
-    sprite.setOrigin(700,250);
-    sprite.setRotation(0);
-    bullet Bullet[10];
-    for(short i=0;i<10;i++)
-        Bullet[i].setup("Textures//bullets.png");
-}
-void bron::wystrzel()
-{
-    ;
-}
-void bron::move_to_side(side Side)
-{
-    if(Side==Right)
-    {
-        sprite.setScale(-0.3,sprite.getScale().y);
-    }else if(Side==Left)
-    {
-        sprite.setScale(0.3,sprite.getScale().y);
-    }
-}
-void bron::Update(float posX,float posY,float degree)
-{
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        move_to_side(Right);
-    }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    {
-        move_to_side(Left);
-    }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-    {
-        wystrzel();
-    }
-    if(sprite.getScale().x>0)
-    {
-        sprite.setPosition(posX-150,posY+70);
-        sprite.setRotation(degree);
-    }else
-    {
-        sprite.setPosition(posX+150,posY+70);
-        sprite.setRotation(degree*-1);
-    }
 
 
-    window.draw(sprite);
-}
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
