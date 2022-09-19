@@ -2,6 +2,7 @@
 #include <iostream>
 #include "obsluga_broni.hpp"
 
+
 bullet::bullet(sf::RenderWindow &window1,std::string sciezka):window(window1)
 {
     txt.loadFromFile(sciezka);
@@ -68,6 +69,7 @@ void bron::wystrzel(float degree)
         {
             Bullet[i].fly=true;
             ustawPocisk(i,degree);
+            break;
         }
         else
             i++;
@@ -77,6 +79,10 @@ void bron::ustawPocisk(short i,float degree)
 {
     Bullet[i].setPosition(sprite.getPosition().x,sprite.getPosition().y);
     Bullet[i].setRotation(degree);
+    if(sprite.getScale().x>0)
+        Bullet[i].k=true;
+    else
+        Bullet[i].k=false;
 }
 void bron::move_to_side(side Side)
 {
@@ -88,7 +94,7 @@ void bron::move_to_side(side Side)
         sprite.setScale(0.3,sprite.getScale().y);
     }
 }
-void bron::Update(float posX,float posY,float degree)
+void bron::Update(float posX,float posY,float degree,bool EnterP)
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
@@ -98,7 +104,7 @@ void bron::Update(float posX,float posY,float degree)
     {
         move_to_side(Left);
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+    if(EnterP)
     {
         wystrzel(degree);
     }
@@ -118,16 +124,3 @@ void bron::Update(float posX,float posY,float degree)
     }
     window.draw(sprite);
 }
-
-/*
-float alfa;
-        float a,b,c=1;
-        alfa=sprite.getRotation()+90;
-        alfa=alfa/60;         //+270
-        a=c*(sin(alfa));
-        b=c*(cos(alfa));
-        if(k)
-            sprite.move(b,a);
-        if(!k)
-            sprite.move(-b,-a);
-*/
