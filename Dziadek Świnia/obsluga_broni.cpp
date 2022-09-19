@@ -1,4 +1,5 @@
 #include <math.h>
+#include <iostream>
 #include "obsluga_broni.hpp"
 
 bullet::bullet(sf::RenderWindow &window1,std::string sciezka):window(window1)
@@ -10,8 +11,11 @@ bullet::bullet(sf::RenderWindow &window1,std::string sciezka):window(window1)
 }
 bool bullet::pozaEkranem()
 {
-    if(posX<0 || posY<0 || posX>window.getSize().x || posY>window.getSize().y)
+    if(posX<0 || posY<0 || posX>window.getSize().x || posY>window.getSize().y )
+    {
         return true;
+    }
+
     else return false;
 }
 void bullet::setPosition(float posX, float posY)
@@ -24,24 +28,21 @@ void bullet::setRotation(float dir)
 }
 void bullet::Update()
 {
-    if(fly==true || true)
-    {
-        float alfa;
-        float a,b,c=1;
-        alfa=sprite.getRotation()+90;
-        alfa=alfa/60;         //+270
-        a=c*(sin(alfa));
-        b=c*(cos(alfa));
-        if(k)
-            sprite.move(b,a);
-        if(!k)
-            sprite.move(-b,-a);
-        if(pozaEkranem())
-            {
-                fly=false;
-            }
+    posX=sprite.getPosition().x;
+    posY=sprite.getPosition().y;
+    float alfa;
+    float a,b,c=0.1;
+    alfa=sprite.getRotation()+90;
+    alfa=alfa/60;         //+270
+    a=c*(sin(alfa));
+    b=c*(cos(alfa));
+    if(k)
+        sprite.move(b,a);
+    if(!k)
+        sprite.move(-b,-a);
+    if(pozaEkranem())
+        fly=false;
 
-    }
     window.draw(sprite);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -60,22 +61,22 @@ bron::bron(sf::RenderWindow &window1,std::string sciezka,short bron_type):window
 }
 void bron::wystrzel(float degree)
 {
-    for(int i=0;Bullet[i].fly==false||i<10;i++)
+    short i=0;
+    while(i<10)
     {
         if(Bullet[i].fly==false)
         {
             Bullet[i].fly=true;
-            Bullet[i].setRotation(degree);
-            Bullet[i].dir=degree;
-            Bullet[i].setPosition(sprite.getPosition().x,sprite.getPosition().y);
-            if(sprite.getScale().x>0)
-            {
-                Bullet[i].k=true;
-
-            }else Bullet[i].k=false;
-            break;
+            ustawPocisk(i,degree);
         }
+        else
+            i++;
     }
+}
+void bron::ustawPocisk(short i,float degree)
+{
+    Bullet[i].setPosition(sprite.getPosition().x,sprite.getPosition().y);
+    Bullet[i].setRotation(degree);
 }
 void bron::move_to_side(side Side)
 {
@@ -110,10 +111,23 @@ void bron::Update(float posX,float posY,float degree)
         sprite.setPosition(posX+150,posY+70);
         sprite.setRotation(degree*-1);
     }
-
-    for(int i=0;i<10;i++)
+    for(short i=0;i<10;i++)
     {
-        Bullet[i].Update();
+        if(Bullet[i].fly==true)
+            Bullet[i].Update();
     }
     window.draw(sprite);
 }
+
+/*
+float alfa;
+        float a,b,c=1;
+        alfa=sprite.getRotation()+90;
+        alfa=alfa/60;         //+270
+        a=c*(sin(alfa));
+        b=c*(cos(alfa));
+        if(k)
+            sprite.move(b,a);
+        if(!k)
+            sprite.move(-b,-a);
+*/
