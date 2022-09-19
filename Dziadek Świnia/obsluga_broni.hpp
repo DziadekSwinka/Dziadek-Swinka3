@@ -49,7 +49,7 @@ private:
                             bullet(window,"Textures//bullet.png")};
 public:
     bron(sf::RenderWindow &window1,std::string sciezka,short bron_type);
-    void Update(float posX,float posY,float degree,bool EnterP);
+    void Update(float posX,float posY,float degree,bool *EnterP);
 };
 
 #endif // OBSLUGA_BRONI_HPP_INCLUDED

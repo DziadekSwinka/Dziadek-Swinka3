@@ -94,7 +94,7 @@ void bron::move_to_side(side Side)
         sprite.setScale(0.3,sprite.getScale().y);
     }
 }
-void bron::Update(float posX,float posY,float degree,bool EnterP)
+void bron::Update(float posX,float posY,float degree,bool *EnterP)
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
@@ -104,9 +104,10 @@ void bron::Update(float posX,float posY,float degree,bool EnterP)
     {
         move_to_side(Left);
     }
-    if(EnterP)
+    if(*EnterP==true)
     {
         wystrzel(degree);
+        *EnterP=false;
     }
     if(sprite.getScale().x>0)
     {

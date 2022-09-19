@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "side.hpp"
 #include "obsluga_broni.hpp"
 
@@ -334,7 +335,7 @@ int main()
             if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter)
             {
                 EnterPressed=true;
-            }else EnterPressed=false;
+            }
         }
         if(Misje_bt.isPressed())
         {
@@ -349,7 +350,8 @@ int main()
         window.clear(sf::Color(138,191,255));
         background.Update();
         Dziadek.Update();
-        karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),EnterPressed);
+        //std::cout<<EnterPressed<<std::endl;
+        karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed);
         Eq.Update();
         Misje_bt.Update();
         if(Menu_misje)
@@ -363,6 +365,6 @@ int main()
 
         window.display();
     }
-
+    EnterPressed=false;
     return 0;
 }

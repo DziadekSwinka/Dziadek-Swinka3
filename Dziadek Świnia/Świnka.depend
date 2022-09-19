@@ -420,18 +420,19 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1663610491 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1663611822 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
+	<iostream>
 	"side.hpp"
 	"obsluga_broni.hpp"
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\side.hpp
 
-1663610491 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\obsluga_broni.hpp
+1663611836 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\obsluga_broni.hpp
 	<SFML/Graphics.hpp>
 	"side.hpp"
 
-1663610491 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\obsluga_broni.cpp
+1663611709 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\obsluga_broni.cpp
 	<math.h>
 	<iostream>
 	"obsluga_broni.hpp"
