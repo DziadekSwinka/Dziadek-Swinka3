@@ -136,7 +136,7 @@ bool Background::background_move(side Side)
 class Equipment
 {
 private:
-    sf::Font ProFontWindows;
+    sf::Font OswaldRegular;
     sf::RectangleShape backRect;
     sf::RenderWindow &window;
 public:
@@ -148,10 +148,13 @@ public:
 
 Equipment::Equipment(sf::RenderWindow &window1):window(window1)
 {
+    OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     ammunition=15;
     HP=100;
-    backRect.setSize(sf::Vector2f(200,100));
-    backRect.setPosition(0,window.getSize().y-backRect.getSize().y-50);
+    backRect.setSize(sf::Vector2f(500,200));
+    backRect.setPosition(3,window.getSize().y-backRect.getSize().y-100);
+    backRect.setOutlineColor(sf::Color::Black);
+    backRect.setOutlineThickness(3);
     backRect.setFillColor(sf::Color(150,150,150));
 }
 void Equipment::Update()

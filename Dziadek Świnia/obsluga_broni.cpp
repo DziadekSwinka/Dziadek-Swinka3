@@ -32,7 +32,7 @@ void bullet::Update()
     posX=sprite.getPosition().x;
     posY=sprite.getPosition().y;
     float alfa;
-    float a,b,c=0.1;
+    float a,b,c=2;
     alfa=sprite.getRotation()+90;
     alfa=alfa/60;         //+270
     a=c*(sin(alfa));

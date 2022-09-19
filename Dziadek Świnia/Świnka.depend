@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1663611822 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1663612920 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<iostream>
 	"side.hpp"
@@ -432,7 +432,7 @@
 	<SFML/Graphics.hpp>
 	"side.hpp"
 
-1663611709 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\obsluga_broni.cpp
+1663612552 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\obsluga_broni.cpp
 	<math.h>
 	<iostream>
 	"obsluga_broni.hpp"
