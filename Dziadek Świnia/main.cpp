@@ -136,13 +136,6 @@ bool Background::background_move(side Side)
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
 class button
 {
 private:
@@ -196,19 +189,20 @@ class Postac
 {
 private:
     sf::RenderWindow &window;
-    sf::Texture txt,red_txt,white_txt;
+    sf::Texture txt,txt2,red_txt,white_txt;
     sf::Sprite postac,red[10],white;
     void Fall();
     void move_to_side(side Side);
     float vs=0;
     float hand_degree=0;
 public:
-    Postac(sf::RenderWindow &window1,std::string sciezka,float x,float y);
+    Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,float x,float y);
     void Update(unsigned int Hp);
+    void getDmg(unsigned int *Hp);
     float getDegree();
     float posX,posY;
 };
-Postac::Postac(sf::RenderWindow &window1,std::string sciezka,float x,float y):window(window1)
+Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,float x,float y):window(window1)
 {
     red_txt.loadFromFile("Textures//red_.png");
     white_txt.loadFromFile("Textures//white_.png");
@@ -220,12 +214,20 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,float x,float y):wi
 
     white.setTexture(white_txt);
     txt.loadFromFile(sciezka);
+    txt2.loadFromFile(sciezka1);
     postac.setTexture(txt);
     postac.setScale(0.5,0.5);
     postac.setOrigin((txt.getSize().x)/4,(txt.getSize().y)/4);
     postac.setPosition(x,y);
     posX=x;
     posY=y;
+}
+void Postac::getDmg(unsigned int *Hp)
+{
+    postac.setTexture(txt2);
+    if(*Hp>10)
+        *Hp-=10;
+    postac.setTexture(txt);
 }
 void Postac::move_to_side(side Side)
 {
@@ -257,12 +259,16 @@ void Postac::Update(unsigned int Hp)
         white.setPosition(posX-50,posY-100);
         for(int i=0;i<10;i++)
         {
-            red[i].setPosition(posX-50+12.5*i,posY-100);
+            red[i].setPosition(posX-50+20*i,posY-100);
         }
     }
     else
     {
         white.setPosition(posX-150,posY-100);
+        for(int i=0;i<10;i++)
+        {
+            red[i].setPosition(posX-150+20*i,posY-100);
+        }
     }
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -321,7 +327,7 @@ int main()
     const int GroundLevel=700;
     bool Menu_misje=false;
 
-    Postac Dziadek(window,"Textures//dziadek.png",window.getSize().x/2,GroundLevel);
+    Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png",window.getSize().x/2,GroundLevel);
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png");
     button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",100,50);
     button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",400,10);
@@ -347,6 +353,8 @@ int main()
                     Eq.ammunition--;
                 }
             }
+            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)    ///To jest do wywalenia potem ,teraz  do testów
+                Dziadek.getDmg(&Eq.HP);
         }
         if(Misje_bt.isPressed())
         {
