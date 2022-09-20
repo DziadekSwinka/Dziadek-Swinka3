@@ -1,14 +1,19 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "side.hpp"
+#include "obsluga_broni.hpp"
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
+bool ButtonPressed=0;
+bool EnterPressed=0;
+
 enum Mode
 {
-    lev1,           //Przewoz nielegalnych imigrantow do Niemiec
-    lev2,           //hodowla ziola
+    lev1,           //
+    lev2,           //
     lev3,           //
     lev4,           //
     without_level
@@ -17,79 +22,18 @@ enum Interior
 {
     shop,
     home,
-    farm,
     outside
 };
 Interior interior;
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-class button
-{
-private:
-    sf::RenderWindow &window;
-    sf::Texture txt;
-    sf::Sprite Button;
-public:
-    button(sf::RenderWindow &window1,std::string sciezka,float x,float y);
-    void Update();
-    bool isPressed();
-};
-button::button(sf::RenderWindow &window1,std::string sciezka,float x,float y):window(window1)
-{
-    txt.loadFromFile(sciezka);
-    Button.setTexture(txt);
-    Button.setPosition(x,y);
-
-}
-void button::Update()
-{
-
-    sf::Vector2i Mouse = sf::Mouse::getPosition(    window );
-    float szerokosc=txt.getSize().x;
-    float wysokosc=txt.getSize().y;
-    float x=Button.getPosition().x;
-    float y=Button.getPosition().y;
-    if((Mouse.x>x)&&(Mouse.x<x+szerokosc)&&(Mouse.y>y)&&(Mouse.y<y+wysokosc))
-    {
-        Button.setBringthness(50);
-    }
-    window.draw(Button);
-}
-bool button::isPressed()
-{
-    sf::Vector2i Mouse = sf::Mouse::getPosition(    window );
-    float szerokosc=txt.getSize().x;
-    float wysokosc=txt.getSize().y;
-    float x=Button.getPosition().x;
-    float y=Button.getPosition().y;
-    if((Mouse.x>x)&&(Mouse.x<x+szerokosc)&&(Mouse.y>y)&&(Mouse.y<y+wysokosc) && (sf::Mouse::isButtonPressed( sf::Mouse::Left )))
-    {
-        return true;
-    }
-    return false;
-}
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-
-
 class Background
 {
 private:
-    sf::Font ProFontWindows;
+
     sf::RenderWindow &window;
     sf::Sprite bcg[3],B1,B2,B3;
     sf::Texture txt,b1,b2,b3;
@@ -100,6 +44,8 @@ public:
     void Update();
     Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3);
 };
+
+
 Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3)
     :window(window1)
 {
@@ -146,9 +92,9 @@ void Background::Update()
     window.draw(bcg[0]);
     window.draw(bcg[1]);
     window.draw(bcg[2]);
-        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::D))
             background_move(Right);
-        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::A))
             background_move(Left);
 }
 
@@ -171,8 +117,8 @@ bool Background::background_move(side Side)
     if((bcg[2].getPosition().x)<0)
         {
             bcg[0].setPosition(0-798,window.getSize().y-(txt.getSize().y*1.7));
-            bcg[1].setPosition(0,window.getSize().y-(txt.getSize().y*1.5));
-            bcg[2].setPosition(window.getSize().x-4,window.getSize().y-(txt.getSize().y*1.5));
+            bcg[1].setPosition(0,window.getSize().y-(txt.getSize().y*1.7));
+            bcg[2].setPosition(window.getSize().x-4,window.getSize().y-(txt.getSize().y*1.7));
         }
     if((bcg[0].getPosition().x)>0)
         {
@@ -187,6 +133,89 @@ bool Background::background_move(side Side)
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
+class Equipment
+{
+private:
+    sf::Font OswaldRegular;
+    sf::RectangleShape backRect;
+    sf::RenderWindow &window;
+public:
+    Equipment(sf::RenderWindow &window1);
+    unsigned int ammunition;
+    unsigned int HP;
+    void Update();
+};
+
+Equipment::Equipment(sf::RenderWindow &window1):window(window1)
+{
+    OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
+    ammunition=15;
+    HP=100;
+    backRect.setSize(sf::Vector2f(500,200));
+    backRect.setPosition(3,100);
+    backRect.setOutlineColor(sf::Color::Black);
+    backRect.setOutlineThickness(3);
+    backRect.setFillColor(sf::Color(150,150,150,200));
+}
+void Equipment::Update()
+{
+    window.draw(backRect);
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+class button
+{
+private:
+    sf::RenderWindow &window;
+    sf::Texture txt,txt2;
+    sf::Sprite Button;
+    bool onclick=false;
+public:
+    button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y);
+    void Update();
+    bool isPressed();
+};
+button::button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y):window(window1)
+{
+    txt.loadFromFile(sciezka);
+    txt2.loadFromFile(sciezka2);
+    Button.setTexture(txt);
+    Button.setPosition(x,y);
+
+}
+void button::Update()
+{
+    sf::Vector2i Mouse = sf::Mouse::getPosition( window );
+    float szerokosc=txt.getSize().x;
+    float wysokosc=txt.getSize().y;
+    float x=Button.getPosition().x;
+    float y=Button.getPosition().y;
+    if((Mouse.x>x)&&(Mouse.x<x+szerokosc)&&(Mouse.y>y)&&(Mouse.y<y+wysokosc))
+    {
+        Button.setTexture(txt2);
+    }else Button.setTexture(txt);
+    window.draw(Button);
+    if((Mouse.x>x)&&(Mouse.x<x+szerokosc)&&(Mouse.y>y)&&(Mouse.y<y+wysokosc) && ButtonPressed)
+    {
+        onclick=true;
+    }else onclick=false;
+}
+bool button::isPressed()
+{
+    if(onclick)
+    {
+        return true;
+    }
+    return false;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
 class Postac
 {
 private:
@@ -196,9 +225,11 @@ private:
     void Fall();
     void move_to_side(side Side);
     float vs=0;
+    float hand_degree=0;
 public:
     Postac(sf::RenderWindow &window1,std::string sciezka,float x,float y);
     void Update();
+    float getDegree();
     float posX,posY;
 };
 Postac::Postac(sf::RenderWindow &window1,std::string sciezka,float x,float y):window(window1)
@@ -225,15 +256,25 @@ void Postac::Update()
 {
     Fall();
     //postac.setPosition(posX,posY);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         move_to_side(Right);
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
         move_to_side(Left);
     }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        hand_degree+=0.2;
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        hand_degree-=0.2;
     window.draw(postac);
+    posX=postac.getPosition().x;
+    posY=postac.getPosition().y;
+}
+float Postac::getDegree()
+{
+    return hand_degree;
 }
 void Postac::Fall()
 {
@@ -264,15 +305,25 @@ void Postac::Fall()
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Œwinka");
     interior=outside;
     const int GroundLevel=700;
+    bool Menu_misje=false;
 
     Postac Dziadek(window,"Textures//dziadek.png",window.getSize().x/2,GroundLevel);
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png");
-    button Misje_bt(window,"Textures//misje_button.png",100,100);
+    button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",100,50);
+    button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",400,10);
+    button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",400,110);
+    bron karabin(window,"Textures//ak47.png",1);
+    Equipment Eq(window);
     while (window.isOpen())
     {
         sf::Event event;
@@ -280,14 +331,43 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+            if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left )
+            {
+                ButtonPressed=true;
+            }else ButtonPressed=false;
+            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter)
+            {
+                EnterPressed=true;
+            }
         }
-
+        if(Misje_bt.isPressed())
+        {
+            if(Menu_misje)
+            {
+                Menu_misje=0;
+            }
+            else
+                if(!Menu_misje)
+                    Menu_misje=1;
+        }
         window.clear(sf::Color(138,191,255));
         background.Update();
         Dziadek.Update();
+        //std::cout<<EnterPressed<<std::endl;
+        karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed);
+        Eq.Update();
         Misje_bt.Update();
+        if(Menu_misje)
+        {
+            Misja1_bt.Update();
+        }
+        if(Menu_misje)
+        {
+            Misja2_bt.Update();
+        }
+
         window.display();
     }
-
+    EnterPressed=false;
     return 0;
 }

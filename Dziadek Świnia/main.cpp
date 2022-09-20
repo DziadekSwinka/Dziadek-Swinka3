@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <string>
 #include "side.hpp"
+#include "Equipment.hpp"
 #include "obsluga_broni.hpp"
 
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -133,34 +135,7 @@ bool Background::background_move(side Side)
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
-class Equipment
-{
-private:
-    sf::Font OswaldRegular;
-    sf::RectangleShape backRect;
-    sf::RenderWindow &window;
-public:
-    Equipment(sf::RenderWindow &window1);
-    unsigned int ammunition;
-    unsigned int HP;
-    void Update();
-};
 
-Equipment::Equipment(sf::RenderWindow &window1):window(window1)
-{
-    OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
-    ammunition=15;
-    HP=100;
-    backRect.setSize(sf::Vector2f(500,200));
-    backRect.setPosition(3,window.getSize().y-backRect.getSize().y-100);
-    backRect.setOutlineColor(sf::Color::Black);
-    backRect.setOutlineThickness(3);
-    backRect.setFillColor(sf::Color(150,150,150));
-}
-void Equipment::Update()
-{
-    window.draw(backRect);
-}
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -337,7 +312,11 @@ int main()
             }else ButtonPressed=false;
             if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter)
             {
-                EnterPressed=true;
+                if(Eq.ammunition>0)
+                {
+                    EnterPressed=true;
+                    Eq.ammunition--;
+                }
             }
         }
         if(Misje_bt.isPressed())
@@ -356,14 +335,14 @@ int main()
         //std::cout<<EnterPressed<<std::endl;
         karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed);
         Eq.Update();
-        Misje_bt.Update();
+        //Misje_bt.Update();
         if(Menu_misje)
         {
-            Misja1_bt.Update();
+            //Misja1_bt.Update();
         }
         if(Menu_misje)
         {
-            Misja2_bt.Update();
+            //Misja2_bt.Update();
         }
 
         window.display();
