@@ -1,5 +1,6 @@
 #ifndef EQUIPMENT_HPP_INCLUDED
 #define EQUIPMENT_HPP_INCLUDED
+
 #include <SFML/Graphics.hpp>
 
 class Equipment

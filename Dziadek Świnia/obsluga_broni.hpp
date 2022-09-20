@@ -1,5 +1,6 @@
 #ifndef OBSLUGA_BRONI_HPP_INCLUDED
 #define OBSLUGA_BRONI_HPP_INCLUDED
+
 #include <SFML/Graphics.hpp>
 #include "side.hpp"
 

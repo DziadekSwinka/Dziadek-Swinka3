@@ -4,6 +4,7 @@
 #include "side.hpp"
 #include "Equipment.hpp"
 #include "obsluga_broni.hpp"
+#include "level.hpp"
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -26,7 +27,10 @@ enum Interior
     home,
     outside
 };
+
+void level_setUp(unsigned short level);
 Interior interior;
+Mode mode=without_level;
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -197,10 +201,10 @@ private:
     float hand_degree=0;
 public:
     Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,float x,float y);
-    void Update(unsigned int Hp);
     void getDmg(unsigned int *Hp);
     float getDegree();
     float posX,posY;
+    void Update(unsigned int Hp);
 };
 Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,float x,float y):window(window1)
 {
@@ -316,6 +320,7 @@ void Postac::Fall()
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 
+
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -329,9 +334,9 @@ int main()
 
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png",window.getSize().x/2,GroundLevel);
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png");
-    button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",100,50);
-    button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",400,10);
-    button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",400,110);
+    button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",900,50);
+    button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1300,10);
+    button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1300,110);
     bron karabin(window,"Textures//ak47.png",1);
     Equipment Eq(window);
     while (window.isOpen())
@@ -366,20 +371,27 @@ int main()
                 if(!Menu_misje)
                     Menu_misje=1;
         }
+        if(Misja1_bt.isPressed())
+        {
+            if(mode==without_level)
+            {
+                mode=lev1;
+                level_setUp(1,&Eq);
+            }
+        }
         window.clear(sf::Color(138,191,255));
         background.Update();
         Dziadek.Update(Eq.HP);
-        //std::cout<<EnterPressed<<std::endl;
         karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed);
         Eq.Update();
-        //Misje_bt.Update();
+        Misje_bt.Update();
         if(Menu_misje)
         {
-            //Misja1_bt.Update();
+            Misja1_bt.Update();
         }
         if(Menu_misje)
         {
-            //Misja2_bt.Update();
+            Misja2_bt.Update();
         }
 
         window.display();
