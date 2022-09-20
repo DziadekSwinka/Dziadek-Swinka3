@@ -28,6 +28,7 @@ enum Interior
 };
 Interior interior;
 
+
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -195,20 +196,29 @@ class Postac
 {
 private:
     sf::RenderWindow &window;
-    sf::Texture txt;
-    sf::Sprite postac;
+    sf::Texture txt,red_txt,white_txt;
+    sf::Sprite postac,red[10],white;
     void Fall();
     void move_to_side(side Side);
     float vs=0;
     float hand_degree=0;
 public:
     Postac(sf::RenderWindow &window1,std::string sciezka,float x,float y);
-    void Update();
+    void Update(unsigned int Hp);
     float getDegree();
     float posX,posY;
 };
 Postac::Postac(sf::RenderWindow &window1,std::string sciezka,float x,float y):window(window1)
 {
+    red_txt.loadFromFile("Textures//red_.png");
+    white_txt.loadFromFile("Textures//white_.png");
+    for(int i=0;i<10;i++)
+    {
+        red[i].setTexture(red_txt);
+        red[i].setScale(0.25,0.25);
+    }
+
+    white.setTexture(white_txt);
     txt.loadFromFile(sciezka);
     postac.setTexture(txt);
     postac.setScale(0.5,0.5);
@@ -227,9 +237,10 @@ void Postac::move_to_side(side Side)
         postac.setScale(-0.5,postac.getScale().y);
     }
 }
-void Postac::Update()
+void Postac::Update(unsigned int Hp)
 {
     Fall();
+
     //postac.setPosition(posX,posY);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
@@ -239,13 +250,31 @@ void Postac::Update()
     {
         move_to_side(Left);
     }
+    posX=postac.getPosition().x;
+    posY=postac.getPosition().y;
+    if(postac.getScale().x>0)
+    {
+        white.setPosition(posX-50,posY-100);
+        for(int i=0;i<10;i++)
+        {
+            red[i].setPosition(posX-50+12.5*i,posY-100);
+        }
+    }
+    else
+    {
+        white.setPosition(posX-150,posY-100);
+    }
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         hand_degree+=0.2;
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         hand_degree-=0.2;
     window.draw(postac);
-    posX=postac.getPosition().x;
-    posY=postac.getPosition().y;
+    window.draw(white);
+    Hp/=10;
+    for(int i=0;i<Hp;i++)
+        window.draw(red[i]);
+
 }
 float Postac::getDegree()
 {
@@ -287,7 +316,7 @@ void Postac::Fall()
 //------------------------------------------------------------------------------------------------------------------------------------------
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Œwinka");
+    sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
     interior=outside;
     const int GroundLevel=700;
     bool Menu_misje=false;
@@ -331,7 +360,7 @@ int main()
         }
         window.clear(sf::Color(138,191,255));
         background.Update();
-        Dziadek.Update();
+        Dziadek.Update(Eq.HP);
         //std::cout<<EnterPressed<<std::endl;
         karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed);
         Eq.Update();

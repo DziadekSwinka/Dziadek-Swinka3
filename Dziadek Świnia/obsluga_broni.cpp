@@ -25,14 +25,25 @@ void bullet::setPosition(float posX, float posY)
 }
 void bullet::setRotation(float dir)
 {
-    sprite.setRotation(-dir+90);
+    if(!k)
+    {
+        sprite.setRotation(-dir+90);
+        sprite.setScale(0.05,0.05);
+    }
+    else
+    {
+         sprite.setRotation(dir-90+180);
+         sprite.setScale(-0.05,-0.05);
+    }
+
+
 }
 void bullet::Update()
 {
     posX=sprite.getPosition().x;
     posY=sprite.getPosition().y;
     float alfa;
-    float a,b,c=2;
+    float a,b,c=0.5;
     alfa=sprite.getRotation()+90;
     alfa=alfa/60;         //+270
     a=c*(sin(alfa));
