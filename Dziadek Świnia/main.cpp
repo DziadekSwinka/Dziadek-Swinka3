@@ -29,10 +29,6 @@ enum Interior
     home,
     outside
 };
-struct AI_Eq
-{
-    unsigned int HP=100;
-};
 
 void level_setUp(unsigned short level);
 Interior interior;
@@ -457,7 +453,7 @@ int main()
             if(mode==without_level)
             {
                 mode=lev1;
-                level_setUp(1,&Eq);
+                level_setUp(1,&Eq,&peppaEq);
             }
         }
         window.clear(sf::Color(138,191,255));

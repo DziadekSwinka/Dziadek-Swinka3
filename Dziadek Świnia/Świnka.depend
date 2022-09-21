@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1663775823 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1663782227 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<iostream>
 	<string>
@@ -460,10 +460,10 @@
 
 1663610084 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\globalne.hpp
 
-1663706591 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.hpp
+1663782234 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.hpp
 	<SFML/Graphics.hpp>
 	"Equipment.hpp"
 
-1663775240 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.cpp
+1663782312 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.cpp
 	"level.hpp"
 

@@ -1,6 +1,6 @@
 #include "level.hpp"
 
-void level_setUp(unsigned short level,Equipment *Eq)
+void level_setUp(unsigned short level,Equipment *Eq,AI_Eq *peppa)
 {
     resetuj();
     Eq->HP=100;
@@ -10,7 +10,7 @@ void level_setUp(unsigned short level,Equipment *Eq)
 
         break;
     case 1:
-        level1();
+        level1(peppa);          //na moje powinno byæ &peppa, ale nie bede klucil sie z kompilatorem
         break;
     case 2:
         break;
@@ -28,7 +28,8 @@ void resetuj()
 
 
 }
-void level1()
+void level1(AI_Eq *peppa)
 {
     //swinka z nozem
+    peppa->HP=100;
 }
