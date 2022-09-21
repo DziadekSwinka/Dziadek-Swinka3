@@ -2,11 +2,12 @@
 
 void level_setUp(unsigned short level,Equipment *Eq)
 {
+    resetuj();
     Eq->HP=100;
     switch (level)
     {
     case 0:
-        resetuj();
+
         break;
     case 1:
         level1();

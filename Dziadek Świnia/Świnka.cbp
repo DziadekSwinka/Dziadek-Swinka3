@@ -45,6 +45,18 @@
 		<Linker>
 			<Add directory="D:/Biblioteki C++/SFML-2.5.1/lib" />
 		</Linker>
+		<Unit filename="Equipment.cpp">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="Equipment.hpp">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="level.cpp">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="level.hpp">
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="main.cpp" />
 		<Unit filename="obsluga_broni.cpp">
 			<Option target="Release" />

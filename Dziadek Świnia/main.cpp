@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <time.h>
 #include "side.hpp"
 #include "Equipment.hpp"
 #include "obsluga_broni.hpp"
@@ -27,10 +29,15 @@ enum Interior
     home,
     outside
 };
+struct AI_Eq
+{
+    unsigned int HP=100;
+};
 
 void level_setUp(unsigned short level);
 Interior interior;
 Mode mode=without_level;
+AI_Eq peppaEq;
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -191,7 +198,7 @@ bool button::isPressed()
 //------------------------------------------------------------------------------------------------------------------------------------------
 class Postac
 {
-private:
+protected:
     sf::RenderWindow &window;
     sf::Texture txt,txt2,red_txt,white_txt;
     sf::Sprite postac,red[10],white;
@@ -318,8 +325,79 @@ void Postac::Fall()
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
+class AI
+    :public Postac
+{
+public:
+    void Update(unsigned int HP);
+    AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,float x,float y);
+};
+AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,float x,float y)
+    :Postac(window1,sciezka,sciezka1,x,y)
+{
+}
+void AI::Update(unsigned int Hp)
+{
+    int przedzial;
+    int losowa=std::rand()%2000;
+    if(losowa==1)
+    {
+        move_to_side(Right);
+        do
+        {
+            przedzial=1;
+            postac.move(0.8,0);
+            przedzial++;
+        }while(std::rand()%przedzial==1 && przedzial<=100);
+    }
+    if(losowa==0)
+    {
+        move_to_side(Left);
+        do
+        {
+            przedzial=1;
+            postac.move(-0.8,0);
+            przedzial++;
+        }while(std::rand()%przedzial==1 && przedzial<=100);
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        postac.move(-0.8,0);
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+        postac.move(0.8,0);
+    }
+    posX=postac.getPosition().x;
+    posY=postac.getPosition().y;
+    if(postac.getScale().x>0)
+    {
+        white.setPosition(posX-50,posY-100);
+        for(int i=0;i<10;i++)
+        {
+            red[i].setPosition(posX-50+20*i,posY-100);
+        }
+    }
+    else
+    {
+        white.setPosition(posX-150,posY-100);
+        for(int i=0;i<10;i++)
+        {
+            red[i].setPosition(posX-150+20*i,posY-100);
+        }
+    }
 
+    if(false)
+        hand_degree+=0.2;
+    if(false)
+        hand_degree-=0.2;
+    window.draw(postac);
+    window.draw(white);
+    Hp/=10;
+    for(int i=0;i<Hp;i++)
+        window.draw(red[i]);
 
+}
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -327,18 +405,21 @@ void Postac::Fall()
 //------------------------------------------------------------------------------------------------------------------------------------------
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
+    srand(time(NULL));
     interior=outside;
-    const int GroundLevel=700;
     bool Menu_misje=false;
+    const int GroundLevel=700;
+    sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
 
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png",window.getSize().x/2,GroundLevel);
+    AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png",100,GroundLevel-50);
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png");
     button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",900,50);
     button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1300,10);
     button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1300,110);
     bron karabin(window,"Textures//ak47.png",1);
     Equipment Eq(window);
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -383,6 +464,8 @@ int main()
         background.Update();
         Dziadek.Update(Eq.HP);
         karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed);
+        if(true)
+            peppa.Update(peppaEq.HP);   //jezeli level=1, wyswietl
         Eq.Update();
         Misje_bt.Update();
         if(Menu_misje)
