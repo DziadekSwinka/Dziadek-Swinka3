@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1664098661 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1664130980 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<iostream>
 	<string>
@@ -429,10 +429,9 @@
 	<math.h>
 	"side.hpp"
 	"Equipment.hpp"
-	"obsluga_broni.hpp"
 	"level.hpp"
 
-1663935353 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\side.hpp
+1664111971 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\side.hpp
 
 1664098661 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\obsluga_broni.hpp
 	<SFML/Graphics.hpp>
@@ -453,7 +452,7 @@
 1663504151 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"background.hpp"
 
-1663854805 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
+1664098685 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
 	"Equipment.hpp"
 
 1663706591 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
@@ -462,10 +461,11 @@
 1663935746 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\globalne.hpp
 	"obsluga_broni.hpp"
 
-1663782234 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.hpp
+1664127801 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.hpp
 	<SFML/Graphics.hpp>
 	"Equipment.hpp"
+	"side.hpp"
 
-1663782312 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.cpp
+1664128098 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.cpp
 	"level.hpp"
 

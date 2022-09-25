@@ -58,12 +58,6 @@
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="main.cpp" />
-		<Unit filename="obsluga_broni.cpp">
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="obsluga_broni.hpp">
-			<Option target="Release" />
-		</Unit>
 		<Unit filename="side.hpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

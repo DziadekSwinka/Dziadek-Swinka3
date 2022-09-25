@@ -1,5 +1,6 @@
 #include "level.hpp"
 
+
 void level_setUp(unsigned short level,Equipment *Eq,AI_Eq *peppa)
 {
     resetuj();
@@ -7,10 +8,9 @@ void level_setUp(unsigned short level,Equipment *Eq,AI_Eq *peppa)
     switch (level)
     {
     case 0:
-
         break;
     case 1:
-        level1(peppa);          //na moje powinno byæ &peppa, ale nie bede klucil sie z kompilatorem
+        level1(peppa);  //na moje powinno byæ &peppa, ale nie bede klucil sie z kompilatorem
         break;
     case 2:
         break;
@@ -24,7 +24,6 @@ void level_setUp(unsigned short level,Equipment *Eq,AI_Eq *peppa)
 void resetuj()
 {
     ///kasowanie wszystkich obiektow nalezacych do poziomow
-
 
 
 }

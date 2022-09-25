@@ -6,7 +6,6 @@
 #include <math.h>
 #include "side.hpp"
 #include "Equipment.hpp"
-#include "obsluga_broni.hpp"
 #include "level.hpp"
 
 
@@ -17,25 +16,16 @@
 
 bool ButtonPressed=0;
 bool EnterPressed=0;
+short level=1;
 
-enum Mode
-{
-    lev1,           //
-    lev2,           //
-    lev3,           //
-    lev4,           //
-    without_level
-};
 enum Interior
 {
     shop,
     home,
     outside
 };
-
 void level_setUp(unsigned short level);
 Interior interior;
-Mode mode=without_level;
 AI_Eq peppaEq;
 
 class bullet;
@@ -525,14 +515,42 @@ void bron::Update(float posX,float posY,float degree,bool *EnterP)
 class AI
     :public Postac
 {
+private:
+    sf::Texture b1;
+    sf::Sprite B1;
+    void ustawBron();
+    double odleglosc();
 public:
     void Update(unsigned int HP);
     bool dotykaPostaci(int i);
-    AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,float x,float y);
+    AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,float x,float y);
 };
-AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,float x,float y)
+AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,float x,float y)
     :Postac(window1,sciezka,sciezka1,x,y)
 {
+    b1.loadFromFile(sciezka_bron);
+    B1.setTexture(b1);
+    B1.setScale(0.08,0.08);
+}
+double AI::odleglosc()
+{
+    double dist;
+    dist=abs(posX)+(window.getSize().x/2);
+    return dist;
+}
+void AI::ustawBron()
+{
+    if(postac.getScale().x>0)
+    {
+        B1.setPosition(posX+80,670);
+        B1.setScale(0.08,0.08);
+    }
+    else
+    {
+        B1.setPosition(posX-80,670);
+        B1.setScale(-0.08,0.08);
+    }
+
 }
 bool AI::dotykaPostaci(int i)
 {
@@ -619,11 +637,14 @@ void AI::Update(unsigned int Hp)
             red[i].setPosition(posX-150+20*i,posY-100);
         }
     }
+    ustawBron();
     if(false)
         hand_degree+=0.2;
     if(false)
         hand_degree-=0.2;
     window.draw(postac);
+    if( true )
+        window.draw(B1);
     window.draw(white);
     Hp/=10;
     for(int i=0;i<Hp;i++)
@@ -642,9 +663,8 @@ int main()
     bool Menu_misje=false;
     const int GroundLevel=700;
     sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
-
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png",window.getSize().x/2,GroundLevel);
-    AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png",100,GroundLevel-50);
+    AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png",100,GroundLevel-50);
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png");
     button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",900,50);
     button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1300,10);
@@ -686,9 +706,9 @@ int main()
         }
         if(Misja1_bt.isPressed())
         {
-            if(mode==without_level)
+            if(level==0)
             {
-                mode=lev1;
+                level=1;
                 level_setUp(1,&Eq,&peppaEq);
             }
         }
@@ -696,8 +716,12 @@ int main()
         background.Update();
         Dziadek.Update(Eq.HP);
         karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed);
-        if(true)
-            peppa.Update(peppaEq.HP);   //jezeli level=1, wyswietl
+        if(level==1)
+        {
+            if(peppaEq.HP>0)
+                peppa.Update(peppaEq.HP);
+        }
+
         Eq.Update();
         Misje_bt.Update();
         if(Menu_misje)
