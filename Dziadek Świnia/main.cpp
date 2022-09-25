@@ -3,15 +3,18 @@
 #include <string>
 #include <cstdlib>
 #include <time.h>
+#include <math.h>
 #include "side.hpp"
 #include "Equipment.hpp"
 #include "obsluga_broni.hpp"
 #include "level.hpp"
 
+
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
+
 bool ButtonPressed=0;
 bool EnterPressed=0;
 
@@ -34,6 +37,10 @@ void level_setUp(unsigned short level);
 Interior interior;
 Mode mode=without_level;
 AI_Eq peppaEq;
+
+class bullet;
+bullet* bullet_wsk[10];
+
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -321,16 +328,235 @@ void Postac::Fall()
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
+class bullet
+{
+private:
+    sf::RenderWindow &window;
+    sf::Texture txt;
+    sf::Sprite sprite;
+public:
+    void Update();
+    bool pozaEkranem();
+    bullet(sf::RenderWindow &window1,std::string sciezka,int i);
+    void setPosition(float posX, float posY);
+    void setRotation(float dir);
+    float posX,posY;
+    float dir;
+    bool fly;
+    bool k;
+};
+bullet::bullet(sf::RenderWindow &window1,std::string sciezka,int i):window(window1)
+{
+    txt.loadFromFile(sciezka);
+    sprite.setTexture(txt);
+    sprite.setScale(0.05,0.05);
+    fly=false;
+    bullet_wsk[i]=this;
+}
+
+bool bullet::pozaEkranem()
+{
+    if(posX<0 || posY<0 || posX>window.getSize().x || posY>window.getSize().y )
+    {
+        return true;
+    }
+
+    else return false;
+}
+void bullet::setPosition(float X, float Y)
+{
+    sprite.setPosition(X,Y);
+}
+void bullet::setRotation(float dir)
+{
+    if(!k)
+    {
+        sprite.setRotation(-dir+90);
+        sprite.setScale(0.05,0.05);
+    }
+    else
+    {
+         sprite.setRotation(dir-90+180);
+         sprite.setScale(-0.05,-0.05);
+    }
+}
+
+void bullet::Update()
+{
+    posX=sprite.getPosition().x;
+    posY=sprite.getPosition().y;
+    float alfa;
+    float a,b,c=0.5;
+    alfa=sprite.getRotation()+90;
+    alfa=alfa/60;         //+270
+    a=c*(sin(alfa));
+    b=c*(cos(alfa));
+    if(k)
+        sprite.move(b,a);
+    if(!k)
+        sprite.move(-b,-a);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        sprite.move(-0.2,0);
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+        sprite.move(0.2,0);
+    }
+    if(pozaEkranem())
+        fly=false;
+
+    window.draw(sprite);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+class bron
+{
+private:
+    sf::RenderWindow &window;
+    sf::Texture txt;
+    sf::Sprite sprite;
+    void move_to_side(side Side);
+    void wystrzel(float degreee);
+    void ustawPocisk(short i,float degre);
+public:
+    bullet Bullet[10] = {   bullet(window,"Textures//bullet.png",0),
+                            bullet(window,"Textures//bullet.png",1),
+                            bullet(window,"Textures//bullet.png",2),
+                            bullet(window,"Textures//bullet.png",3),
+                            bullet(window,"Textures//bullet.png",4),
+                            bullet(window,"Textures//bullet.png",5),
+                            bullet(window,"Textures//bullet.png",6),
+                            bullet(window,"Textures//bullet.png",7),
+                            bullet(window,"Textures//bullet.png",8),
+                            bullet(window,"Textures//bullet.png",9)};
+    bron(sf::RenderWindow &window1,std::string sciezka,short bron_type);
+    void Update(float posX,float posY,float degree,bool *EnterP);
+};
+bron::bron(sf::RenderWindow &window1,std::string sciezka,short bron_type):window(window1)
+{
+    txt.loadFromFile(sciezka);
+    sprite.setTexture(txt);
+    sprite.setScale(-0.3,0.3);
+    sprite.setOrigin(700,250);
+    sprite.setRotation(0);
+}
+void bron::wystrzel(float degree)
+{
+    short i=0;
+    while(i<10)
+    {
+        if(Bullet[i].fly==false)
+        {
+            Bullet[i].fly=true;
+            ustawPocisk(i,degree);
+            break;
+        }
+        else
+            i++;
+    }
+}
+void bron::ustawPocisk(short i,float degree)
+{
+    Bullet[i].setPosition(sprite.getPosition().x,sprite.getPosition().y);
+    Bullet[i].setRotation(degree);
+    if(sprite.getScale().x>0)
+        Bullet[i].k=true;
+    else
+        Bullet[i].k=false;
+}
+void bron::move_to_side(side Side)
+{
+    if(Side==Right)
+    {
+        sprite.setScale(-0.3,sprite.getScale().y);
+    }else if(Side==Left)
+    {
+        sprite.setScale(0.3,sprite.getScale().y);
+    }
+}
+void bron::Update(float posX,float posY,float degree,bool *EnterP)
+{
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        move_to_side(Right);
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+        move_to_side(Left);
+    }
+    if(*EnterP==true)
+    {
+        wystrzel(degree);
+        *EnterP=false;
+    }
+    if(sprite.getScale().x>0)
+    {
+        sprite.setPosition(posX-150,posY+70);
+        sprite.setRotation(degree);
+    }else
+    {
+        sprite.setPosition(posX+150,posY+70);
+        sprite.setRotation(degree*-1);
+    }
+    for(short i=0;i<10;i++)
+    {
+        if(Bullet[i].fly==true)
+            Bullet[i].Update();
+    }
+    window.draw(sprite);
+}
+
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 class AI
     :public Postac
 {
 public:
     void Update(unsigned int HP);
+    bool dotykaPostaci(int i);
     AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,float x,float y);
 };
 AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,float x,float y)
     :Postac(window1,sciezka,sciezka1,x,y)
 {
+}
+bool AI::dotykaPostaci(int i)
+{
+        float bX=bullet_wsk[i]->posX;
+        float bY=bullet_wsk[i]->posY;
+        float originX=postac.getOrigin().x;
+        float originY=postac.getOrigin().y;
+        float x=postac.getPosition().x;
+        float y=postac.getPosition().y;
+        x-=originX;
+        y-=originY;
+        float sizeX=txt.getSize().x;
+        float sizeY=txt.getSize().y;
+        if((x)>bX && bX>(x-sizeX))
+        {
+            if((y)<bY && bY<(y+sizeY))
+            {
+                if(bullet_wsk[i]->fly==true)
+                {
+                    bullet_wsk[i]->fly=false;
+                    return true;
+                }else return false;
+            }else return false;
+        }else return false;
 }
 void AI::Update(unsigned int Hp)
 {
@@ -366,6 +592,17 @@ void AI::Update(unsigned int Hp)
     }
     posX=postac.getPosition().x;
     posY=postac.getPosition().y;
+    for(int i=0;i<10;i++)
+    {
+        if(dotykaPostaci(i)==true)
+        {
+            if(peppaEq.HP>=10)
+            {
+                peppaEq.HP-=10;
+            }
+        }
+    }
+
     if(postac.getScale().x>0)
     {
         white.setPosition(posX-50,posY-100);
@@ -382,7 +619,6 @@ void AI::Update(unsigned int Hp)
             red[i].setPosition(posX-150+20*i,posY-100);
         }
     }
-
     if(false)
         hand_degree+=0.2;
     if(false)
