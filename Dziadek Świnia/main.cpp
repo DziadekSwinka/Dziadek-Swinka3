@@ -32,6 +32,7 @@ struct obj
     sf::RectangleShape rect;
     bool active;
     float vs=0;
+    unsigned short type;
 };
 void level_setUp(unsigned short level);
 Interior interior;
@@ -688,6 +689,7 @@ void losuj_zrzut()
                 skrzynka.posX=(std::rand()%1920);
                 skrzynka.rect.setTexture(&skrzynka.txt1);
                 skrzynka.posY=0;
+                skrzynka.type=1;
             }
             break;
         }
@@ -699,6 +701,7 @@ void losuj_zrzut()
                 skrzynka.posX=(std::rand()%1920);
                 skrzynka.rect.setTexture(&skrzynka.txt2);
                 skrzynka.posY=0;
+                skrzynka.type=2;
             }
             break;
         }
@@ -706,7 +709,24 @@ void losuj_zrzut()
     }
     skrzynka.rect.setPosition(sf::Vector2f(skrzynka.posX,skrzynka.posY));
 }
-void skrzynka_fall(int GroundLevel)
+void skrzynka_off(Equipment Eq)
+{
+    skrzynka.active=false;
+    switch (skrzynka.type)
+    {
+    case 1:
+        if(Eq.HP<50)
+            Eq.HP+=50;
+        else
+            Eq.HP=100;
+        break;
+    case 2:
+        Eq.ammunition+=5;
+        break;
+    }
+    skrzynka.type=0;
+}
+void skrzynka_fall(int GroundLevel,float x,Equipment *Eq)
 {
     skrzynka.posX=skrzynka.rect.getPosition().x;
     skrzynka.posY=skrzynka.rect.getPosition().y;
@@ -725,6 +745,16 @@ void skrzynka_fall(int GroundLevel)
         {
             skrzynka.rect.move(0.8,0);
         }
+        if(x<skrzynka.posX)
+        {
+            if(skrzynka.posX-x<10)
+                {
+                    skrzynka_off(*Eq);
+                }
+        }else if(x-skrzynka.posX<10)
+                 {
+                     skrzynka_off(*Eq);
+                 }
     }
 }
 void skrzynki()
@@ -807,7 +837,7 @@ int main()
         background.Update();
         if(skrzynka.active)
         {
-            skrzynka_fall(GroundLevel);
+            skrzynka_fall(GroundLevel,Dziadek.posX,&Eq);
             window.draw(skrzynka.rect);
         }
 
