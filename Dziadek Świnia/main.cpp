@@ -26,13 +26,17 @@ enum Interior
 };
 struct obj
 {
+    sf::Texture txt1,txt2;
     float posX,posY;
-    sf::Texture txt;
     sf::Sprite sprite;
+    sf::RectangleShape rect;
+    bool active;
+    float vs=0;
 };
 void level_setUp(unsigned short level);
 Interior interior;
 AI_Eq peppaEq;
+obj skrzynka;
 
 class bullet;
 bullet* bullet_wsk[10];
@@ -677,11 +681,58 @@ void losuj_zrzut()
     switch (l)
     {
     case 1:
-        break;
+        {
+            if(!skrzynka.active)
+            {
+                skrzynka.active=true;
+                skrzynka.posX=(std::rand()%1920);
+                skrzynka.rect.setTexture(&skrzynka.txt1);
+                skrzynka.posY=0;
+            }
+            break;
+        }
     case 2:
-        break;
+        {
+            if(!skrzynka.active)
+            {
+                skrzynka.active=true;
+                skrzynka.posX=(std::rand()%1920);
+                skrzynka.rect.setTexture(&skrzynka.txt2);
+                skrzynka.posY=0;
+            }
+            break;
+        }
     default: break;
     }
+    skrzynka.rect.setPosition(sf::Vector2f(skrzynka.posX,skrzynka.posY));
+}
+void skrzynka_fall(int GroundLevel)
+{
+    skrzynka.posX=skrzynka.rect.getPosition().x;
+    skrzynka.posY=skrzynka.rect.getPosition().y;
+    if(skrzynka.posY<GroundLevel)
+    {
+        skrzynka.vs+=0.001;
+        skrzynka.rect.move(0,skrzynka.vs);
+    }
+    if(skrzynka.posY>=GroundLevel)
+    {
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
+            skrzynka.rect.move(-0.8,0);
+        }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
+            skrzynka.rect.move(0.8,0);
+        }
+    }
+}
+void skrzynki()
+{
+    skrzynka.rect.setSize(sf::Vector2f(50,50));
+    skrzynka.active=false;
+    skrzynka.txt1.loadFromFile("Textures//apteczka.png");
+    skrzynka.txt2.loadFromFile("Textures//ammo.png");
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -694,6 +745,7 @@ int main()
     bool Menu_misje=false;
     const int GroundLevel=700;
     sf::Clock liczZrzut;
+
     sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png",window.getSize().x/2,GroundLevel);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png",100,GroundLevel-50);
@@ -703,6 +755,7 @@ int main()
     button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1300,110);
     bron karabin(window,"Textures//ak47.png",1);
     Equipment Eq(window);
+    skrzynki();
 
     while (window.isOpen())
     {
@@ -752,6 +805,12 @@ int main()
         }
         window.clear(sf::Color(138,191,255));
         background.Update();
+        if(skrzynka.active)
+        {
+            skrzynka_fall(GroundLevel);
+            window.draw(skrzynka.rect);
+        }
+
         Dziadek.Update(Eq.HP);
         karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed);
         if(level==1)
