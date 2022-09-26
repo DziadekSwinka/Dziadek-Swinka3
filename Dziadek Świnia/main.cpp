@@ -24,6 +24,12 @@ enum Interior
     home,
     outside
 };
+struct obj
+{
+    float posX,posY;
+    sf::Texture txt;
+    sf::Sprite sprite;
+};
 void level_setUp(unsigned short level);
 Interior interior;
 AI_Eq peppaEq;
@@ -221,7 +227,7 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     txt2.loadFromFile(sciezka1);
     postac.setTexture(txt);
     postac.setScale(0.5,0.5);
-    postac.setOrigin((txt.getSize().x)/4,(txt.getSize().y)/4);
+    postac.setOrigin((txt.getSize().x)*postac.getScale().x/2,(txt.getSize().y)*postac.getScale().y/2);
     postac.setPosition(x,y);
     posX=x;
     posY=y;
@@ -517,6 +523,7 @@ class AI
 {
 private:
     sf::Texture b1;
+    sf::Texture mieso;
     sf::Sprite B1;
     void ustawBron();
     double odleglosc();
@@ -528,6 +535,7 @@ public:
 AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,float x,float y)
     :Postac(window1,sciezka,sciezka1,x,y)
 {
+    mieso.loadFromFile("Textures//porkchop_raw.png");
     b1.loadFromFile(sciezka_bron);
     B1.setTexture(b1);
     B1.setScale(0.08,0.08);
@@ -564,6 +572,8 @@ bool AI::dotykaPostaci(int i)
         y-=originY;
         float sizeX=txt.getSize().x;
         float sizeY=txt.getSize().y;
+        sizeX*=postac.getScale().x;
+        sizeY*=postac.getScale().y;
         if((x)>bX && bX>(x-sizeX))
         {
             if((y)<bY && bY<(y+sizeY))
@@ -642,9 +652,14 @@ void AI::Update(unsigned int Hp)
         hand_degree+=0.2;
     if(false)
         hand_degree-=0.2;
+    if(Hp<=10)
+    {
+        postac.setTexture(mieso);
+    }
     window.draw(postac);
-    if( true )
+    if(Hp>10)
         window.draw(B1);
+
     window.draw(white);
     Hp/=10;
     for(int i=0;i<Hp;i++)
@@ -656,12 +671,29 @@ void AI::Update(unsigned int Hp)
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
+void losuj_zrzut()
+{
+    unsigned short l=(std::rand()%8)+1;
+    switch (l)
+    {
+    case 1:
+        break;
+    case 2:
+        break;
+    default: break;
+    }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
 int main()
 {
     srand(time(NULL));
     interior=outside;
     bool Menu_misje=false;
     const int GroundLevel=700;
+    sf::Clock liczZrzut;
     sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png",window.getSize().x/2,GroundLevel);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png",100,GroundLevel-50);
@@ -693,6 +725,12 @@ int main()
             }
             if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)    ///To jest do wywalenia potem ,teraz  do testów
                 Dziadek.getDmg(&Eq.HP);
+        }
+        sf::Time time1=liczZrzut.getElapsedTime();
+        if(time1.asSeconds()>15)
+        {
+            liczZrzut.restart();
+            losuj_zrzut();
         }
         if(Misje_bt.isPressed())
         {
