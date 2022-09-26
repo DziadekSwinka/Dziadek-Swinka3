@@ -709,19 +709,19 @@ void losuj_zrzut()
     }
     skrzynka.rect.setPosition(sf::Vector2f(skrzynka.posX,skrzynka.posY));
 }
-void skrzynka_off(Equipment Eq)
+void skrzynka_off(Equipment *Eq)
 {
     skrzynka.active=false;
     switch (skrzynka.type)
     {
     case 1:
-        if(Eq.HP<50)
-            Eq.HP+=50;
+        if(Eq->HP<50)
+            Eq->HP+=50;
         else
-            Eq.HP=100;
+            Eq->HP=100;
         break;
     case 2:
-        Eq.ammunition+=5;
+        Eq->ammunition+=5;
         break;
     }
     skrzynka.type=0;
@@ -749,11 +749,11 @@ void skrzynka_fall(int GroundLevel,float x,Equipment *Eq)
         {
             if(skrzynka.posX-x<10)
                 {
-                    skrzynka_off(*Eq);
+                    skrzynka_off(Eq);
                 }
         }else if(x-skrzynka.posX<10)
                  {
-                     skrzynka_off(*Eq);
+                     skrzynka_off(Eq);
                  }
     }
 }
