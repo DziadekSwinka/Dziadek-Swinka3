@@ -7,7 +7,7 @@ class Equipment
 {
 private:
     sf::Font OswaldRegular;
-    sf::RectangleShape backRect,icon[4];
+    sf::RectangleShape backRect,icon[4],pieniadz_bcg;
     sf::Sprite symbol[4];
     sf::Texture symbol_txt[4];
     sf::Text text[4];
@@ -17,6 +17,7 @@ public:
     Equipment(sf::RenderWindow &window1);
     unsigned int ammunition;
     unsigned int HP;
+    unsigned int pieniadze;
     void Update();
 };
 

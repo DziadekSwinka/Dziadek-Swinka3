@@ -842,9 +842,9 @@ int main()
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50);
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png");
-    button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",900,50);
-    button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1300,10);
-    button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1300,110);
+    button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1000,80);
+    button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1400,10);
+    button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1400,110);
     bron karabin(window,"Textures//ak47.png",1);
     Equipment Eq(window);
     skrzynki();
