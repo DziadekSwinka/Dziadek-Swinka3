@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -527,29 +528,40 @@ class AI
     :public Postac
 {
 private:
+    sf::SoundBuffer buffer1,buffer2;
+    sf::Sound sound;
     sf::Texture b1;
     sf::Texture mieso;
     sf::Sprite B1;
     void ustawBron();
-    double odleglosc();
+    void graj_dzwiek();
+    float dist();
 public:
-    void Update(unsigned int HP);
+    void Update(unsigned int HP,unsigned int *targetHP);
     bool dotykaPostaci(int i);
-    AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,float x,float y);
+    AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y);
 };
-AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,float x,float y)
+AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y)
     :Postac(window1,sciezka,sciezka1,x,y)
 {
+    buffer1.loadFromFile(sciezka2);
+    buffer2.loadFromFile(sciezka3);
     mieso.loadFromFile("Textures//porkchop_raw.png");
     b1.loadFromFile(sciezka_bron);
     B1.setTexture(b1);
     B1.setScale(0.08,0.08);
 }
-double AI::odleglosc()
+void AI::graj_dzwiek()
 {
-    double dist;
-    dist=abs(posX)+(window.getSize().x/2);
-    return dist;
+    unsigned short i=(std::rand()%2)+1;
+    if(i==1)
+    {
+        sound.setBuffer(buffer1);
+    }else if(i==2)
+    {
+        sound.setBuffer(buffer2);
+    }
+    sound.play();
 }
 void AI::ustawBron()
 {
@@ -591,7 +603,11 @@ bool AI::dotykaPostaci(int i)
             }else return false;
         }else return false;
 }
-void AI::Update(unsigned int Hp)
+float AI::dist()
+{
+    return abs(posX-window.getSize().x/2);
+}
+void AI::Update(unsigned int Hp,unsigned int *targetHP)
 {
     int przedzial;
     int losowa=std::rand()%2000;
@@ -614,6 +630,14 @@ void AI::Update(unsigned int Hp)
             postac.move(-0.8,0);
             przedzial++;
         }while(std::rand()%przedzial==1 && przedzial<=100);
+    }
+    if(losowa==3 && dist()<300 && std::rand()%3==1)
+    {
+        if(*targetHP>0)
+        {
+            *targetHP-=10;
+            graj_dzwiek();
+        }
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
@@ -726,13 +750,13 @@ void skrzynka_off(Equipment *Eq)
     }
     skrzynka.type=0;
 }
-void skrzynka_fall(int GroundLevel,float x,Equipment *Eq)
+void skrzynka_fall(int GroundLevel,float x,float y,Equipment *Eq)
 {
     skrzynka.posX=skrzynka.rect.getPosition().x;
     skrzynka.posY=skrzynka.rect.getPosition().y;
     if(skrzynka.posY<GroundLevel)
     {
-        skrzynka.vs+=0.001;
+        skrzynka.vs+=0.0001;
         skrzynka.rect.move(0,skrzynka.vs);
     }
     if(skrzynka.posY>=GroundLevel)
@@ -745,13 +769,13 @@ void skrzynka_fall(int GroundLevel,float x,Equipment *Eq)
         {
             skrzynka.rect.move(0.8,0);
         }
-        if(x<skrzynka.posX)
+        if(x<skrzynka.posX && y>GroundLevel-100)
         {
-            if(skrzynka.posX-x<10)
+            if(skrzynka.posX-x<100)
                 {
                     skrzynka_off(Eq);
                 }
-        }else if(x-skrzynka.posX<10)
+        }else if(x-skrzynka.posX<100)
                  {
                      skrzynka_off(Eq);
                  }
@@ -777,8 +801,9 @@ int main()
     sf::Clock liczZrzut;
 
     sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
+    //window.setFramerateLimit(60);
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png",window.getSize().x/2,GroundLevel);
-    AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png",100,GroundLevel-50);
+    AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50);
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png");
     button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",900,50);
     button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1300,10);
@@ -837,7 +862,7 @@ int main()
         background.Update();
         if(skrzynka.active)
         {
-            skrzynka_fall(GroundLevel,Dziadek.posX,&Eq);
+            skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
             window.draw(skrzynka.rect);
         }
 
@@ -846,7 +871,7 @@ int main()
         if(level==1)
         {
             if(peppaEq.HP>0)
-                peppa.Update(peppaEq.HP);
+                peppa.Update(peppaEq.HP,&Eq.HP);
         }
 
         Eq.Update();

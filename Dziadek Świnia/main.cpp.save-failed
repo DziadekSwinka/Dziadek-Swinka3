@@ -531,9 +531,9 @@ private:
     sf::Texture mieso;
     sf::Sprite B1;
     void ustawBron();
-    double odleglosc();
+    float dist(float targetX,float targetY);
 public:
-    void Update(unsigned int HP);
+    void Update(unsigned int HP,float targetX,float targetY);
     bool dotykaPostaci(int i);
     AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,float x,float y);
 };
@@ -544,12 +544,6 @@ AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::s
     b1.loadFromFile(sciezka_bron);
     B1.setTexture(b1);
     B1.setScale(0.08,0.08);
-}
-double AI::odleglosc()
-{
-    double dist;
-    dist=abs(posX)+(window.getSize().x/2);
-    return dist;
 }
 void AI::ustawBron()
 {
@@ -591,7 +585,12 @@ bool AI::dotykaPostaci(int i)
             }else return false;
         }else return false;
 }
-void AI::Update(unsigned int Hp)
+float AI::dist(float targetX,float targetY)
+{
+    std::cout<<abs(posX)+targetX;
+    return abs(posX)+targetX;
+}
+void AI::Update(unsigned int Hp,float targetX,float targetY)
 {
     int przedzial;
     int losowa=std::rand()%2000;
@@ -614,6 +613,10 @@ void AI::Update(unsigned int Hp)
             postac.move(-0.8,0);
             przedzial++;
         }while(std::rand()%przedzial==1 && przedzial<=100);
+    }
+    if(losowa==3 || true && dist(targetX,targetY)<200)
+    {
+        std::cout<<".";
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
@@ -709,30 +712,30 @@ void losuj_zrzut()
     }
     skrzynka.rect.setPosition(sf::Vector2f(skrzynka.posX,skrzynka.posY));
 }
-void skrzynka_off(Equipment Eq)
+void skrzynka_off(Equipment *Eq)
 {
     skrzynka.active=false;
     switch (skrzynka.type)
     {
     case 1:
-        if(Eq.HP<50)
-            Eq.HP+=50;
+        if(Eq->HP<50)
+            Eq->HP+=50;
         else
-            Eq.HP=100;
+            Eq->HP=100;
         break;
     case 2:
-        Eq.ammunition+=5;
+        Eq->ammunition+=5;
         break;
     }
     skrzynka.type=0;
 }
-void skrzynka_fall(int GroundLevel,float x,Equipment *Eq)
+void skrzynka_fall(int GroundLevel,float x,float y,Equipment *Eq)
 {
     skrzynka.posX=skrzynka.rect.getPosition().x;
     skrzynka.posY=skrzynka.rect.getPosition().y;
     if(skrzynka.posY<GroundLevel)
     {
-        skrzynka.vs+=0.001;
+        skrzynka.vs+=0.0001;
         skrzynka.rect.move(0,skrzynka.vs);
     }
     if(skrzynka.posY>=GroundLevel)
@@ -745,15 +748,15 @@ void skrzynka_fall(int GroundLevel,float x,Equipment *Eq)
         {
             skrzynka.rect.move(0.8,0);
         }
-        if(x<skrzynka.posX)
+        if(x<skrzynka.posX && y>GroundLevel-100)
         {
-            if(skrzynka.posX-x<10)
+            if(skrzynka.posX-x<100)
                 {
-                    skrzynka_off(*Eq);
+                    skrzynka_off(Eq);
                 }
-        }else if(x-skrzynka.posX<10)
+        }else if(x-skrzynka.posX<100)
                  {
-                     skrzynka_off(*Eq);
+                     skrzynka_off(Eq);
                  }
     }
 }
@@ -837,7 +840,7 @@ int main()
         background.Update();
         if(skrzynka.active)
         {
-            skrzynka_fall(GroundLevel,Dziadek.posX,&Eq);
+            skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
             window.draw(skrzynka.rect);
         }
 
@@ -846,7 +849,7 @@ int main()
         if(level==1)
         {
             if(peppaEq.HP>0)
-                peppa.Update(peppaEq.HP);
+                peppa.Update(peppaEq.HP,Dziadek.posX,Dziadek.posY);
         }
 
         Eq.Update();
