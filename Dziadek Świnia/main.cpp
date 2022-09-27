@@ -203,7 +203,12 @@ bool button::isPressed()
 //------------------------------------------------------------------------------------------------------------------------------------------
 class Postac
 {
+private:
+    void graj_dzwiek();
+    void graj_dzwiek(unsigned short i);
 protected:
+    sf::SoundBuffer buffer1,buffer2,buffer3,buffer4;
+    sf::Sound sound;
     sf::RenderWindow &window;
     sf::Texture txt,txt2,red_txt,white_txt;
     sf::Sprite postac,red[10],white;
@@ -212,22 +217,26 @@ protected:
     float vs=0;
     float hand_degree=0;
 public:
-    Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,float x,float y);
+    Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y);
     void getDmg(unsigned int *Hp);
     float getDegree();
     float posX,posY;
     void Update(unsigned int Hp);
 };
-Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,float x,float y):window(window1)
+Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y):window(window1)
 {
     red_txt.loadFromFile("Textures//red_.png");
     white_txt.loadFromFile("Textures//white_.png");
+
     for(int i=0;i<10;i++)
     {
         red[i].setTexture(red_txt);
         red[i].setScale(0.25,0.25);
     }
-
+    buffer1.loadFromFile(sciezka2);
+    buffer2.loadFromFile(sciezka3);
+    buffer3.loadFromFile(sciezka4);
+    buffer4.loadFromFile(sciezka5);
     white.setTexture(white_txt);
     txt.loadFromFile(sciezka);
     txt2.loadFromFile(sciezka1);
@@ -254,6 +263,32 @@ void Postac::move_to_side(side Side)
     {
         postac.setScale(-0.5,postac.getScale().y);
     }
+}
+
+void Postac::graj_dzwiek(unsigned short i)
+{
+    switch(i)
+    {
+    case 1:
+        sound.setBuffer(buffer1);
+        break;
+    case 2:
+        sound.setBuffer(buffer2);
+        break;
+    case 3:
+        sound.setBuffer(buffer3);
+        break;
+    case 4:
+        sound.setBuffer(buffer4);
+        break;
+    }
+    sound.play();
+}
+void Postac::graj_dzwiek()
+{
+    srand(time(NULL));
+    unsigned short i=(std::rand()%5);
+    graj_dzwiek(i);
 }
 void Postac::Update(unsigned int Hp)
 {
@@ -291,6 +326,10 @@ void Postac::Update(unsigned int Hp)
         hand_degree+=0.2;
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         hand_degree-=0.2;
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+    {
+        graj_dzwiek();
+    }
     window.draw(postac);
     window.draw(white);
     Hp/=10;
@@ -528,8 +567,6 @@ class AI
     :public Postac
 {
 private:
-    sf::SoundBuffer buffer1,buffer2;
-    sf::Sound sound;
     sf::Texture b1;
     sf::Texture mieso;
     sf::Sprite B1;
@@ -542,10 +579,10 @@ public:
     AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y);
 };
 AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y)
-    :Postac(window1,sciezka,sciezka1,x,y)
+    :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y)
 {
-    buffer1.loadFromFile(sciezka2);
-    buffer2.loadFromFile(sciezka3);
+    if(buffer1.loadFromFile(sciezka2))  std::cout<<"b1OK"<<std::endl;
+    if(buffer2.loadFromFile(sciezka3))  std::cout<<"b1OK"<<std::endl;
     mieso.loadFromFile("Textures//porkchop_raw.png");
     b1.loadFromFile(sciezka_bron);
     B1.setTexture(b1);
@@ -553,7 +590,7 @@ AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::s
 }
 void AI::graj_dzwiek()
 {
-    unsigned short i=(std::rand()%2)+1;
+    unsigned short i=(std::rand()%3)+1;
     if(i==1)
     {
         sound.setBuffer(buffer1);
@@ -794,15 +831,15 @@ void skrzynki()
 //------------------------------------------------------------------------------------------------------------------------------------------
 int main()
 {
-    srand(time(NULL));
     interior=outside;
     bool Menu_misje=false;
     const int GroundLevel=700;
     sf::Clock liczZrzut;
+    srand(time(NULL));
 
     sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
     //window.setFramerateLimit(60);
-    Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png",window.getSize().x/2,GroundLevel);
+    Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50);
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png");
     button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",900,50);
