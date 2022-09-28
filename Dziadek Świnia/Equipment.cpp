@@ -4,7 +4,7 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
 {
     symbol_txt[0].loadFromFile("Textures//bullet.png");
     symbol_txt[1].loadFromFile("Textures//pistolet.png");
-    symbol_txt[2].loadFromFile("Textures//bullet.png");
+    symbol_txt[2].loadFromFile("Textures//ak47.png");
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     ammunition=15;
     HP=100;
@@ -16,6 +16,10 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
         symbol[i].setPosition(70*i+53,30);
         text[i].setPosition(70*i+38,98);
     }
+    pieniadze_tekst.setFont(OswaldRegular);
+    pieniadze_tekst.setColor(sf::Color(5,0,170));
+    pieniadze_tekst.setPosition(900,5);
+    pieniadze_tekst.setStyle(sf::Text::Bold);
     symbol[0].setScale(0.1,0.1);
     symbol[1].setScale(0.1,0.1);
     symbol[2].setScale(0.1,0.1);
@@ -48,7 +52,9 @@ void Equipment::ustaw_Text()
 void Equipment::Update()
 {
     ustaw_Text();
+    pieniadze_tekst.setString(std::to_string(pieniadze)+" $");
     window.draw(pieniadz_bcg);
+    window.draw(pieniadze_tekst);
     window.draw(backRect);
     for(int i=0;i<4;i++)
     {

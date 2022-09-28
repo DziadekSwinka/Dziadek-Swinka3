@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1664300800 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1664374905 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<iostream>
@@ -453,10 +453,10 @@
 1663504151 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"background.hpp"
 
-1664300789 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
+1664373611 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
 	"Equipment.hpp"
 
-1664300598 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
+1664373178 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
 	<SFML/Graphics.hpp>
 
 1663935746 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\globalne.hpp
@@ -573,4 +573,14 @@
 1660370568 d:\biblioteki c++\sfml-2.5.1\include\sfml\audio\soundfilewriter.hpp
 	<SFML/Audio/Export.hpp>
 	<string>
+
+1664374559 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\skrzynki.hpp
+	<cstdlib>
+	"Equipment.hpp"
+	"obj.hpp"
+
+1664374702 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\obj.hpp
+
+1664374695 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\skrzynki.cpp
+	"skrzynki.hpp"
 

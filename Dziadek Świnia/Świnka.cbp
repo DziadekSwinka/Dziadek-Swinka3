@@ -28,11 +28,18 @@
 					<Add option="-s" />
 					<Add library="sfml-graphics-s" />
 					<Add library="sfml-window-s" />
+					<Add library="sfml-audio-s" />
 					<Add library="sfml-system-s" />
 					<Add library="gdi32" />
 					<Add library="winmm" />
 					<Add library="freetype" />
 					<Add library="opengl32" />
+					<Add library="openal32" />
+					<Add library="flac" />
+					<Add library="vorbisenc" />
+					<Add library="vorbisfile" />
+					<Add library="vorbis" />
+					<Add library="ogg" />
 				</Linker>
 			</Target>
 		</Build>

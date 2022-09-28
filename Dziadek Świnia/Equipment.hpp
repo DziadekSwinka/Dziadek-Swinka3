@@ -10,7 +10,7 @@ private:
     sf::RectangleShape backRect,icon[4],pieniadz_bcg;
     sf::Sprite symbol[4];
     sf::Texture symbol_txt[4];
-    sf::Text text[4];
+    sf::Text text[4],pieniadze_tekst;
     sf::RenderWindow &window;
     void ustaw_Text();
 public:
