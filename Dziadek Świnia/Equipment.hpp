@@ -16,11 +16,14 @@ private:
     sf::Text text[4],pieniadze_tekst;
     sf::RenderWindow &window;
     void ustaw_Text();
+    void ustaw_reke();
 public:
     Equipment(sf::RenderWindow &window1);
     unsigned int ammunition;
     unsigned int HP;
     unsigned int pieniadze;
+    bool pistolet,karabin;
+    short w_rece;
     void Update();
 };
 

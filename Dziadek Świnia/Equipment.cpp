@@ -15,19 +15,23 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
         text[i].setFont(OswaldRegular);
         symbol[i].setTexture(symbol_txt[i]);
         symbol[i].setPosition(70*i+53,30);
-        text[i].setPosition(70*i+38,98);
+        text[i].setPosition(68*i+38,98);
     }
+    pistolet=false;
+    karabin=true;
+    w_rece=1;
     pieniadze_tekst.setFont(OswaldRegular);
     pieniadze_tekst.setColor(sf::Color(5,0,170));
     pieniadze_tekst.setPosition(900,5);
     pieniadze_tekst.setStyle(sf::Text::Bold);
     symbol[0].setScale(0.1,0.1);
-    symbol[1].setScale(0.1,0.1);
-    symbol[2].setScale(0.08,0.08);
-    symbol[2].setPosition(163,60);
+    symbol[1].setScale(-0.04,0.04);
+    symbol[2].setScale(-0.07,0.07);
+    symbol[1].setPosition(120,25);
+    symbol[2].setPosition(210,35);
     symbol[0].setRotation(45);
-    symbol[1].setRotation(45);
-    symbol[2].setRotation(0);
+    symbol[1].setRotation(-45);
+    symbol[2].setRotation(-45);
 
     backRect.setSize(sf::Vector2f(290,125));
     backRect.setPosition(10,10);
@@ -52,13 +56,39 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
     main.setLoop(true);
     main.play();
 }
+void Equipment::ustaw_reke()
+{
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+    {
+        w_rece=1;
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+    {
+        w_rece=2;
+    }
+}
 void Equipment::ustaw_Text()
 {
     text[0].setString(std::to_string(ammunition));
+    text[1].setString("[1]");
+    text[2].setString("[2]");
+    if(pistolet)
+    {
+        text[1].setColor(sf::Color(5,0,170));
+    }
+    if(karabin)
+    {
+        text[2].setColor(sf::Color(5,0,170));
+    }
+    if(true)
+    {
+        text[0].setColor(sf::Color(5,0,170));
+    }
 }
 void Equipment::Update()
 {
     ustaw_Text();
+    ustaw_reke();
     pieniadze_tekst.setString(std::to_string(pieniadze)+" $");
     window.draw(pieniadz_bcg);
     window.draw(pieniadze_tekst);

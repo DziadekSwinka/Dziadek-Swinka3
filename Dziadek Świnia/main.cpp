@@ -459,11 +459,12 @@ class bron
 {
 private:
     sf::RenderWindow &window;
-    sf::Texture txt;
+    sf::Texture txt[3];
     sf::Sprite sprite;
     void move_to_side(side Side);
     void wystrzel(float degreee);
     void ustawPocisk(short i,float degre);
+    short type;
 public:
     bullet Bullet[10] = {   bullet(window,"Textures//bullet.png",0),
                             bullet(window,"Textures//bullet.png",1),
@@ -475,13 +476,14 @@ public:
                             bullet(window,"Textures//bullet.png",7),
                             bullet(window,"Textures//bullet.png",8),
                             bullet(window,"Textures//bullet.png",9)};
-    bron(sf::RenderWindow &window1,std::string sciezka,short bron_type);
-    void Update(float posX,float posY,float degree,bool *EnterP);
+    bron(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,short bron_type);
+    void Update(float posX,float posY,float degree,bool *EnterP,short type);
 };
-bron::bron(sf::RenderWindow &window1,std::string sciezka,short bron_type):window(window1)
+bron::bron(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,short bron_type):window(window1),type(bron_type)
 {
-    txt.loadFromFile(sciezka);
-    sprite.setTexture(txt);
+    txt[1].loadFromFile(sciezka);
+    txt[2].loadFromFile(sciezka2);
+    sprite.setTexture(txt[type]);
     sprite.setScale(-0.3,0.3);
     sprite.setOrigin(700,250);
     sprite.setRotation(0);
@@ -520,8 +522,10 @@ void bron::move_to_side(side Side)
         sprite.setScale(0.3,sprite.getScale().y);
     }
 }
-void bron::Update(float posX,float posY,float degree,bool *EnterP)
+void bron::Update(float posX,float posY,float degree,bool *EnterP,short type1)
 {
+    type=type1;
+    sprite.setTexture(txt[type]);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         move_to_side(Right);
@@ -582,8 +586,6 @@ public:
 AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y)
     :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y)
 {
-    if(buffer1.loadFromFile(sciezka2))  std::cout<<"b1OK"<<std::endl;
-    if(buffer2.loadFromFile(sciezka3))  std::cout<<"b1OK"<<std::endl;
     mieso.loadFromFile("Textures//porkchop_raw.png");
     b1.loadFromFile(sciezka_bron);
     B1.setTexture(b1);
@@ -846,8 +848,8 @@ int main()
     button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1000,80);
     button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1400,10);
     button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1400,110);
-    bron karabin(window,"Textures//ak47.png",1);
     Equipment Eq(window);
+    bron karabin(window,"Textures//ak47.png","Textures//pistolet.png",Eq.w_rece);
     skrzynki();
 
     while (window.isOpen())
@@ -905,7 +907,7 @@ int main()
         }
 
         Dziadek.Update(Eq.HP);
-        karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed);
+        karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
         if(level==1)
         {
             if(peppaEq.HP>0)
