@@ -6,6 +6,7 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
     symbol_txt[1].loadFromFile("Textures//pistolet.png");
     symbol_txt[2].loadFromFile("Textures//ak47.png");
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
+    intro.loadFromFile("Sounds//intro.wav");
     ammunition=15;
     HP=100;
     pieniadze=100;
@@ -22,10 +23,12 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
     pieniadze_tekst.setStyle(sf::Text::Bold);
     symbol[0].setScale(0.1,0.1);
     symbol[1].setScale(0.1,0.1);
-    symbol[2].setScale(0.1,0.1);
+    symbol[2].setScale(0.08,0.08);
+    symbol[2].setPosition(163,60);
     symbol[0].setRotation(45);
     symbol[1].setRotation(45);
-    symbol[2].setRotation(45);
+    symbol[2].setRotation(0);
+
     backRect.setSize(sf::Vector2f(290,125));
     backRect.setPosition(10,10);
     backRect.setOutlineColor(sf::Color(135,135,135));
@@ -44,6 +47,10 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
         icon[i].setOutlineThickness(5);
         icon[i].setPosition(70*i+25,45);
     }
+    main.setBuffer(intro);
+    main.setVolume(40);
+    main.setLoop(true);
+    main.play();
 }
 void Equipment::ustaw_Text()
 {

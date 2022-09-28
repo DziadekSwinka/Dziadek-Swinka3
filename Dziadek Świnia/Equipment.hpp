@@ -2,10 +2,13 @@
 #define EQUIPMENT_HPP_INCLUDED
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 class Equipment
 {
 private:
+    sf::Sound main;
+    sf::SoundBuffer intro;
     sf::Font OswaldRegular;
     sf::RectangleShape backRect,icon[4],pieniadz_bcg;
     sf::Sprite symbol[4];

@@ -669,7 +669,7 @@ void AI::Update(unsigned int Hp,unsigned int *targetHP)
             przedzial++;
         }while(std::rand()%przedzial==1 && przedzial<=100);
     }
-    if(losowa==3 && dist()<300 && std::rand()%3==1)
+    if(losowa==3 && dist()<300 /*&& std::rand()%3==1*/)
     {
         if(*targetHP>0)
         {
