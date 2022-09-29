@@ -38,7 +38,7 @@ struct obj
 };
 void level_setUp(unsigned short level);
 Interior interior;
-AI_Eq peppaEq;
+AI_Eq peppaEq,mamaEq;
 obj skrzynka;
 
 class bullet;
@@ -159,11 +159,14 @@ private:
     sf::RenderWindow &window;
     sf::Texture txt,txt2;
     sf::Sprite Button;
+    sf::Clock clock;
+    sf::Time time;
     bool onclick=false;
 public:
     button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y);
     void Update();
     bool isPressed();
+    float scaleX,scaleY;
 };
 button::button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y):window(window1)
 {
@@ -171,13 +174,17 @@ button::button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     txt2.loadFromFile(sciezka2);
     Button.setTexture(txt);
     Button.setPosition(x,y);
-
+    scaleX=0.6;
+    scaleY=0.6;
+    Button.setScale(scaleX,scaleY);
 }
 void button::Update()
 {
+    time=clock.getElapsedTime();
     sf::Vector2i Mouse = sf::Mouse::getPosition( window );
-    float szerokosc=txt.getSize().x;
-    float wysokosc=txt.getSize().y;
+    Button.setScale(scaleX,scaleY);
+    float szerokosc=txt.getSize().x*Button.getScale().x;
+    float wysokosc=txt.getSize().y*Button.getScale().y;
     float x=Button.getPosition().x;
     float y=Button.getPosition().y;
     if((Mouse.x>x)&&(Mouse.x<x+szerokosc)&&(Mouse.y>y)&&(Mouse.y<y+wysokosc))
@@ -192,8 +199,9 @@ void button::Update()
 }
 bool button::isPressed()
 {
-    if(onclick)
+    if(onclick && time.asSeconds()>0.2)
     {
+        clock.restart();
         return true;
     }
     return false;
@@ -460,11 +468,10 @@ class bron
 private:
     sf::RenderWindow &window;
     sf::Texture txt[3];
-    sf::Sprite sprite;
+    sf::RectangleShape sprite;
     void move_to_side(side Side);
     void wystrzel(float degreee);
     void ustawPocisk(short i,float degre);
-    short type;
 public:
     bullet Bullet[10] = {   bullet(window,"Textures//bullet.png",0),
                             bullet(window,"Textures//bullet.png",1),
@@ -476,14 +483,16 @@ public:
                             bullet(window,"Textures//bullet.png",7),
                             bullet(window,"Textures//bullet.png",8),
                             bullet(window,"Textures//bullet.png",9)};
-    bron(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,short bron_type);
+    bron(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2);
     void Update(float posX,float posY,float degree,bool *EnterP,short type);
 };
-bron::bron(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,short bron_type):window(window1),type(bron_type)
+bron::bron(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2):window(window1)
 {
-    txt[1].loadFromFile(sciezka);
-    txt[2].loadFromFile(sciezka2);
-    sprite.setTexture(txt[type]);
+    sprite.setSize(sf::Vector2f(1024,370));
+    txt[0].loadFromFile(sciezka2);
+    txt[2].loadFromFile(sciezka);
+    txt[1].loadFromFile(sciezka2);
+    //sprite.setTexture(txt[type]);
     sprite.setScale(-0.3,0.3);
     sprite.setOrigin(700,250);
     sprite.setRotation(0);
@@ -522,10 +531,9 @@ void bron::move_to_side(side Side)
         sprite.setScale(0.3,sprite.getScale().y);
     }
 }
-void bron::Update(float posX,float posY,float degree,bool *EnterP,short type1)
+void bron::Update(float posX,float posY,float degree,bool *EnterP,short type)
 {
-    type=type1;
-    sprite.setTexture(txt[type]);
+    sprite.setTexture(&txt[type]);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         move_to_side(Right);
@@ -844,12 +852,16 @@ int main()
     //window.setFramerateLimit(60);
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50);
+    AI mama(window,"Textures//mama_swinka.png","","Textures//noz_.png","","",1300,GroundLevel-50);                                                                                      //dorobic brakujace pliki
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png");
-    button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1000,80);
-    button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1400,10);
-    button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1400,110);
+    button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1600,20);
+    button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1520,80);
+    button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1670,80);
+    button Sklep_bt(window,"Textures//sklep.png","Textures//sklepc.png",550,5);
+    Sklep_bt.scaleX=0.45;
+    Sklep_bt.scaleY=0.45;
     Equipment Eq(window);
-    bron karabin(window,"Textures//ak47.png","Textures//pistolet.png",Eq.w_rece);
+    bron karabin(window,"Textures//ak47.png","Textures//pistolet.png");
     skrzynki();
 
     while (window.isOpen())
@@ -885,6 +897,7 @@ int main()
             if(Menu_misje)
             {
                 Menu_misje=0;
+                level=0;
             }
             else
                 if(!Menu_misje)
@@ -892,10 +905,18 @@ int main()
         }
         if(Misja1_bt.isPressed())
         {
-            if(level==0)
+            if(level==0 || true)
             {
                 level=1;
-                level_setUp(1,&Eq,&peppaEq);
+                level_setUp(1,&Eq,&peppaEq,&mamaEq);
+            }
+        }
+        if(Misja2_bt.isPressed())
+        {
+            if(level==1 || true)
+            {
+                level=2;
+                level_setUp(2,&Eq,&peppaEq,&mamaEq);
             }
         }
         window.clear(sf::Color(138,191,255));
@@ -913,9 +934,15 @@ int main()
             if(peppaEq.HP>0)
                 peppa.Update(peppaEq.HP,&Eq.HP);
         }
+        if(level==2)
+        {
+            if(mamaEq.HP>0)
+                mama.Update(mamaEq.HP,&Eq.HP);
+        }
 
         Eq.Update();
         Misje_bt.Update();
+        Sklep_bt.Update();
         if(Menu_misje)
         {
             Misja1_bt.Update();

@@ -25,9 +25,9 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
     pieniadze_tekst.setPosition(900,5);
     pieniadze_tekst.setStyle(sf::Text::Bold);
     symbol[0].setScale(0.1,0.1);
-    symbol[1].setScale(-0.04,0.04);
+    symbol[1].setScale(-0.14,0.14);
     symbol[2].setScale(-0.07,0.07);
-    symbol[1].setPosition(120,25);
+    symbol[1].setPosition(170,-8);
     symbol[2].setPosition(210,35);
     symbol[0].setRotation(45);
     symbol[1].setRotation(-45);
@@ -61,7 +61,7 @@ void Equipment::ustaw_reke()
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
     {
         w_rece=1;
-    }
+    }else
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
     {
         w_rece=2;
