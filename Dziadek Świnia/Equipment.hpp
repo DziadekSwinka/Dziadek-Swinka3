@@ -3,10 +3,13 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+
+const unsigned int price[6]={100,100,100,100,100,100};
 struct sklep
 {
     sf::RectangleShape background;
     sf::Sprite ico[6];
+    sf::Text price_text[6];
 };
 class Equipment
 {

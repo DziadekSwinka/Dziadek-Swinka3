@@ -60,6 +60,7 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
 
     }
     Sklep.ico[4].setScale(-0.25,0.25);
+    Sklep.ico[4].setPosition(600,140+5*120);
     Sklep.ico[4].setRotation(90);
 
     backRect.setSize(sf::Vector2f(426,125));
@@ -116,6 +117,13 @@ void Equipment::ustaw_Text()
     text[3].setString("[3]");
     text[4].setString("[4]");
     text[5].setString("[5]");
+    for(short i=0;i<6;i++)
+    {
+        Sklep.price_text[i].setFont(OswaldRegular);
+        Sklep.price_text[i].setColor(sf::Color(250,200,60));
+        Sklep.price_text[i].setString(std::to_string(price[i])+"$");
+        Sklep.price_text[i].setPosition(800,170+i*130);
+    }
     if(pistolet)
     {
         text[1].setColor(sf::Color(5,0,170));
@@ -157,6 +165,7 @@ void Equipment::Update(bool panelSklep)
         for(int i=0;i<6;i++)
         {
             window.draw(Sklep.ico[i]);
+            window.draw(Sklep.price_text[i]);
         }
     }
 }
