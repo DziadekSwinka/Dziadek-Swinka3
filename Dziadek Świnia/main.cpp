@@ -9,8 +9,6 @@
 #include "Equipment.hpp"
 #include "level.hpp"
 
-
-
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -18,7 +16,8 @@
 
 bool ButtonPressed=0;
 bool EnterPressed=0;
-short level=1;
+bool panelSklep=0;
+short level=0;
 
 enum Interior
 {
@@ -42,7 +41,7 @@ AI_Eq peppaEq,mamaEq;
 obj skrzynka;
 
 class bullet;
-bullet* bullet_wsk[10];
+bullet* bullet_wsk[10]={nullptr};
 
 
 
@@ -467,7 +466,7 @@ class bron
 {
 private:
     sf::RenderWindow &window;
-    sf::Texture txt[3];
+    sf::Texture txt[5];
     sf::RectangleShape sprite;
     void move_to_side(side Side);
     void wystrzel(float degreee);
@@ -483,15 +482,17 @@ public:
                             bullet(window,"Textures//bullet.png",7),
                             bullet(window,"Textures//bullet.png",8),
                             bullet(window,"Textures//bullet.png",9)};
-    bron(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2);
+    bron(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,std::string sciezka3,std::string sciezka4);
     void Update(float posX,float posY,float degree,bool *EnterP,short type);
 };
-bron::bron(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2):window(window1)
+bron::bron(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,std::string sciezka3,std::string sciezka4):window(window1)
 {
     sprite.setSize(sf::Vector2f(1024,370));
     txt[0].loadFromFile(sciezka2);
     txt[2].loadFromFile(sciezka);
     txt[1].loadFromFile(sciezka2);
+    txt[3].loadFromFile(sciezka3);
+    txt[4].loadFromFile(sciezka4);
     //sprite.setTexture(txt[type]);
     sprite.setScale(-0.3,0.3);
     sprite.setOrigin(700,250);
@@ -587,7 +588,7 @@ private:
     void graj_dzwiek();
     float dist();
 public:
-    void Update(unsigned int HP,unsigned int *targetHP);
+    void Update(AI_Eq *Eq,unsigned int *targetHP);
     bool dotykaPostaci(int i);
     AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y);
 };
@@ -655,7 +656,7 @@ float AI::dist()
 {
     return abs(posX-window.getSize().x/2);
 }
-void AI::Update(unsigned int Hp,unsigned int *targetHP)
+void AI::Update(AI_Eq *Eq,unsigned int *targetHP)
 {
     int przedzial;
     int losowa=std::rand()%2000;
@@ -701,13 +702,12 @@ void AI::Update(unsigned int Hp,unsigned int *targetHP)
     {
         if(dotykaPostaci(i)==true)
         {
-            if(peppaEq.HP>=10)
+            if(Eq->HP>=10)
             {
-                peppaEq.HP-=10;
+                Eq->HP-=10;
             }
         }
     }
-
     if(postac.getScale().x>0)
     {
         white.setPosition(posX-50,posY-100);
@@ -729,17 +729,16 @@ void AI::Update(unsigned int Hp,unsigned int *targetHP)
         hand_degree+=0.2;
     if(false)
         hand_degree-=0.2;
-    if(Hp<=10)
+    if(Eq->HP<=10)
     {
         postac.setTexture(mieso);
     }
     window.draw(postac);
-    if(Hp>10)
+    if(Eq->HP>10)
         window.draw(B1);
 
     window.draw(white);
-    Hp/=10;
-    for(int i=0;i<Hp;i++)
+    for(int i=0;i<Eq->HP/10;i++)
         window.draw(red[i]);
 
 }
@@ -861,7 +860,7 @@ int main()
     Sklep_bt.scaleX=0.45;
     Sklep_bt.scaleY=0.45;
     Equipment Eq(window);
-    bron karabin(window,"Textures//ak47.png","Textures//pistolet.png");
+    bron karabin(window,"Textures//ak47.png","Textures//pistolet.png","Textures//bazooka.png","Textures//uzi.png");
     skrzynki();
 
     while (window.isOpen())
@@ -919,38 +918,48 @@ int main()
                 level_setUp(2,&Eq,&peppaEq,&mamaEq);
             }
         }
+        if(Sklep_bt.isPressed())
+        {
+            if(panelSklep)
+            {
+                panelSklep=0;
+            }else panelSklep=1;
+        }
         window.clear(sf::Color(138,191,255));
-        background.Update();
-        if(skrzynka.active)
+        if(!panelSklep)
         {
-            skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
-            window.draw(skrzynka.rect);
+            background.Update();
+            if(skrzynka.active)
+            {
+                skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
+                window.draw(skrzynka.rect);
+            }
+            Dziadek.Update(Eq.HP);
+            karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
+            if(level==1)
+            {
+                if(peppaEq.HP>0)
+                    peppa.Update(&peppaEq,&Eq.HP);
+            }
+            if(level==2)
+            {
+                if(mamaEq.HP>0)
+                    mama.Update(&mamaEq,&Eq.HP);
+            }
+            Misje_bt.Update();
+            if(Menu_misje)
+            {
+                Misja1_bt.Update();
+            }
+            if(Menu_misje)
+            {
+                Misja2_bt.Update();
+            }
         }
+        Eq.Update(panelSklep);
 
-        Dziadek.Update(Eq.HP);
-        karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
-        if(level==1)
-        {
-            if(peppaEq.HP>0)
-                peppa.Update(peppaEq.HP,&Eq.HP);
-        }
-        if(level==2)
-        {
-            if(mamaEq.HP>0)
-                mama.Update(mamaEq.HP,&Eq.HP);
-        }
-
-        Eq.Update();
-        Misje_bt.Update();
         Sklep_bt.Update();
-        if(Menu_misje)
-        {
-            Misja1_bt.Update();
-        }
-        if(Menu_misje)
-        {
-            Misja2_bt.Update();
-        }
+
 
         window.display();
     }
