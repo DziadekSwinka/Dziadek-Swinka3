@@ -7,6 +7,7 @@
 
 const unsigned int price[6]={80,300,500,150,10,100};
 const float pierwszy_kup = {160.f};
+
 struct sklep
 {
     sf::RectangleShape background;
