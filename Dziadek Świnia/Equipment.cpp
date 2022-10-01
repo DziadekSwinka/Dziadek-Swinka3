@@ -43,26 +43,6 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
     symbol[3].setRotation(-45);
     symbol[4].setRotation(0);
 
-    Sklep.background.setSize(sf::Vector2f(1190,790));
-    Sklep.background.setFillColor(sf::Color(160,140,80));
-    Sklep.background.setOutlineColor(sf::Color(70,70,70));
-    Sklep.background.setOutlineThickness(5);
-    Sklep.background.setPosition(360,100);
-    Sklep.ico[0].setTexture(symbol_txt[1]);
-    Sklep.ico[1].setTexture(symbol_txt[2]);
-    Sklep.ico[2].setTexture(symbol_txt[3]);
-    Sklep.ico[3].setTexture(symbol_txt[4]);
-    Sklep.ico[4].setTexture(symbol_txt[0]);
-    for(int i=0;i<6;i++)
-    {
-        Sklep.ico[i].setPosition(800,140+i*120);
-        Sklep.ico[i].setScale(-0.4,0.34);
-
-    }
-    Sklep.ico[4].setScale(-0.25,0.25);
-    Sklep.ico[4].setPosition(600,140+5*120);
-    Sklep.ico[4].setRotation(90);
-
     backRect.setSize(sf::Vector2f(426,125));
     backRect.setPosition(10,10);
     backRect.setOutlineColor(sf::Color(135,135,135));
@@ -81,10 +61,33 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
         icon[i].setOutlineThickness(5);
         icon[i].setPosition(70*i+25,45);
     }
+    ustaw_sklep();
     main.setBuffer(intro);
     main.setVolume(40);
     main.setLoop(true);
     main.play();
+}
+void Equipment::ustaw_sklep()
+{
+    Sklep.background.setSize(sf::Vector2f(1190,790));
+    Sklep.background.setFillColor(sf::Color(160,140,80));
+    Sklep.background.setOutlineColor(sf::Color(70,70,70));
+    Sklep.background.setOutlineThickness(5);
+    Sklep.background.setPosition(360,100);
+    Sklep.ico[0].setTexture(symbol_txt[1]);
+    Sklep.ico[1].setTexture(symbol_txt[2]);
+    Sklep.ico[2].setTexture(symbol_txt[3]);
+    Sklep.ico[3].setTexture(symbol_txt[4]);
+    Sklep.ico[4].setTexture(symbol_txt[0]);
+    for(int i=0;i<6;i++)
+    {
+        Sklep.ico[i].setPosition(800,140+i*120);
+        Sklep.ico[i].setScale(-0.4,0.34);
+
+    }
+    Sklep.ico[4].setScale(-0.25,0.25);
+    Sklep.ico[4].setPosition(600,170+5*120);
+    Sklep.ico[4].setRotation(90);
 }
 void Equipment::ustaw_reke()
 {
@@ -145,7 +148,7 @@ void Equipment::ustaw_Text()
         text[0].setColor(sf::Color(5,0,170));
     }
 }
-void Equipment::Update(bool panelSklep)
+void Equipment::Update(bool panelSklep,bool ButtonPressed)
 {
     ustaw_Text();
     ustaw_reke();
@@ -166,6 +169,7 @@ void Equipment::Update(bool panelSklep)
         {
             window.draw(Sklep.ico[i]);
             window.draw(Sklep.price_text[i]);
+            kup[i].Update(ButtonPressed);
         }
     }
 }

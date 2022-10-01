@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1664565454 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1664636707 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<iostream>
@@ -431,6 +431,7 @@
 	"side.hpp"
 	"Equipment.hpp"
 	"level.hpp"
+	"button.hpp"
 
 1664111971 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\side.hpp
 
@@ -453,12 +454,13 @@
 1663504151 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"background.hpp"
 
-1664571094 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
+1664636707 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
 	"Equipment.hpp"
 
-1664570907 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
+1664637612 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
+	"button.hpp"
 
 1663935746 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\globalne.hpp
 	"obsluga_broni.hpp"
@@ -584,4 +586,10 @@
 
 1664374695 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\skrzynki.cpp
 	"skrzynki.hpp"
+
+1664628253 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\button.hpp
+	<SFML/Graphics.hpp>
+
+1664628253 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\button.cpp
+	"button.hpp"
 

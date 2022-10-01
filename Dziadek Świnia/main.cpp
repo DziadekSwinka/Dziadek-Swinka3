@@ -8,6 +8,7 @@
 #include "side.hpp"
 #include "Equipment.hpp"
 #include "level.hpp"
+#include "button.hpp"
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -152,59 +153,8 @@ bool Background::background_move(side Side)
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
-class button
-{
-private:
-    sf::RenderWindow &window;
-    sf::Texture txt,txt2;
-    sf::Sprite Button;
-    sf::Clock clock;
-    sf::Time time;
-    bool onclick=false;
-public:
-    button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y);
-    void Update();
-    bool isPressed();
-    float scaleX,scaleY;
-};
-button::button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y):window(window1)
-{
-    txt.loadFromFile(sciezka);
-    txt2.loadFromFile(sciezka2);
-    Button.setTexture(txt);
-    Button.setPosition(x,y);
-    scaleX=0.6;
-    scaleY=0.6;
-    Button.setScale(scaleX,scaleY);
-}
-void button::Update()
-{
-    time=clock.getElapsedTime();
-    sf::Vector2i Mouse = sf::Mouse::getPosition( window );
-    Button.setScale(scaleX,scaleY);
-    float szerokosc=txt.getSize().x*Button.getScale().x;
-    float wysokosc=txt.getSize().y*Button.getScale().y;
-    float x=Button.getPosition().x;
-    float y=Button.getPosition().y;
-    if((Mouse.x>x)&&(Mouse.x<x+szerokosc)&&(Mouse.y>y)&&(Mouse.y<y+wysokosc))
-    {
-        Button.setTexture(txt2);
-    }else Button.setTexture(txt);
-    window.draw(Button);
-    if((Mouse.x>x)&&(Mouse.x<x+szerokosc)&&(Mouse.y>y)&&(Mouse.y<y+wysokosc) && ButtonPressed)
-    {
-        onclick=true;
-    }else onclick=false;
-}
-bool button::isPressed()
-{
-    if(onclick && time.asSeconds()>0.2)
-    {
-        clock.restart();
-        return true;
-    }
-    return false;
-}
+
+
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -668,7 +618,7 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP)
             przedzial=1;
             postac.move(0.8,0);
             przedzial++;
-        }while(std::rand()%przedzial==1 && przedzial<=100);
+        }while(std::rand()%przedzial==1 && przedzial<=200);
     }
     if(losowa==0)
     {
@@ -678,7 +628,7 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP)
             przedzial=1;
             postac.move(-0.8,0);
             przedzial++;
-        }while(std::rand()%przedzial==1 && przedzial<=100);
+        }while(std::rand()%przedzial==1 && przedzial<=200);
     }
     if(losowa==3 && dist()<300 /*&& std::rand()%3==1*/)
     {
@@ -851,7 +801,7 @@ int main()
     //window.setFramerateLimit(60);
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50);
-    AI mama(window,"Textures//mama_swinka.png","","Textures//noz_.png","","",1300,GroundLevel-50);                                                                                      //dorobic brakujace pliki
+    AI mama(window,"Textures//mama_swinka.png","","Textures//noz.png","","",1300,GroundLevel-50);                                                                                      //dorobic brakujace pliki
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png");
     button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1600,20);
     button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1520,80);
@@ -946,19 +896,19 @@ int main()
                 if(mamaEq.HP>0)
                     mama.Update(&mamaEq,&Eq.HP);
             }
-            Misje_bt.Update();
+            Misje_bt.Update(ButtonPressed);
             if(Menu_misje)
             {
-                Misja1_bt.Update();
+                Misja1_bt.Update(ButtonPressed);
             }
             if(Menu_misje)
             {
-                Misja2_bt.Update();
+                Misja2_bt.Update(ButtonPressed);
             }
         }
-        Eq.Update(panelSklep);
+        Eq.Update(panelSklep,ButtonPressed);
 
-        Sklep_bt.Update();
+        Sklep_bt.Update(ButtonPressed);
 
 
         window.display();
