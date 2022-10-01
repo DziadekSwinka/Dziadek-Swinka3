@@ -148,8 +148,82 @@ void Equipment::ustaw_Text()
         text[0].setColor(sf::Color(5,0,170));
     }
 }
+void Equipment::przyciski()
+{
+    int i;
+    for(i=0;i<6;i++)
+    {
+        if(kup[i].isPressed())
+        {
+            if(price[i]<=pieniadze)
+            {
+                pieniadze-=price[i];
+            }else return;
+            break;
+        }
+    }
+    switch(i)
+    {
+    case 0:
+        {
+            if(pistolet)
+            {
+                pieniadze+=price[i];
+            }else{
+                pistolet=true;
+            }
+        }
+        break;
+    case 1:
+        {
+            if(karabin)
+            {
+                pieniadze+=price[i];
+            }else{
+                karabin=true;
+            }
+        }
+        break;
+    case 2:
+        {
+            if(bazooka)
+            {
+                pieniadze+=price[i];
+            }else{
+                bazooka=true;
+            }
+        }
+        break;
+    case 3:
+        {
+            if(uzi)
+            {
+                pieniadze+=price[i];
+            }else{
+                uzi=true;
+            }
+        }
+        break;
+    case 4:
+        {
+            ammunition+=5;
+        }
+        break;
+    case 5:
+        {
+            if(pistolet)
+            {
+                pieniadze+=price[i];
+            }else{
+                pistolet=true;
+            }
+        }
+        break;
+    }
+}
 void Equipment::Update(bool panelSklep,bool ButtonPressed)
 {
+    przyciski();
     ustaw_Text();
     ustaw_reke();
     pieniadze_tekst.setString(std::to_string(pieniadze)+" $");

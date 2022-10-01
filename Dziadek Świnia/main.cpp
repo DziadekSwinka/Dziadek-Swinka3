@@ -124,6 +124,10 @@ void Postac::move_to_side(side Side)
 
 void Postac::graj_dzwiek(unsigned short i)
 {
+    if(sound.getStatus() == sf::Sound::Playing)
+    {
+        return;
+    }
     switch(i)
     {
     case 1:
@@ -451,6 +455,10 @@ AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::s
 }
 void AI::graj_dzwiek()
 {
+    if(sound.getStatus() == sf::Sound::Playing)
+    {
+        return;
+    }
     unsigned short i=(std::rand()%3)+1;
     if(i==1)
     {

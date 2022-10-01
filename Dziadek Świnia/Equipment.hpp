@@ -29,6 +29,7 @@ private:
     void ustaw_Text();
     void ustaw_reke();
     void ustaw_sklep();
+    void przyciski();
     button kup[6]={ button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup),
                     button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup+130),
                     button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup+260),
