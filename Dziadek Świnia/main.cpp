@@ -688,7 +688,7 @@ void skrzynki()
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
-int main()
+int main(int argc, char *argv[])
 {
     interior=outside;
     bool Menu_misje=false;
@@ -777,7 +777,7 @@ int main()
         window.clear(sf::Color(138,191,255));
         if(!panelSklep)
         {
-            background.Update(interior,level);
+            background.Update(&interior,level);
             if(skrzynka.active)
             {
                 skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);

@@ -40,7 +40,6 @@ void Background::wyswietl_napis(float z1,float z2,float z3)
     text.setPosition(960,400);
     if(abs(x+z1-700)<200)
     {
-
         pokaz_tekst[0]=1;
     }else pokaz_tekst[0]=0;
 
@@ -54,10 +53,31 @@ void Background::wyswietl_napis(float z1,float z2,float z3)
         pokaz_tekst[2]=1;
     }else pokaz_tekst[2]=0;
 }
-void Background::Update(Interior interior,unsigned short level)
+void Background::wejdz(Interior *interior)
 {
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+    {
+        if(pokaz_tekst[0])
+        {
+            *interior=home;
+        }else if(pokaz_tekst[1])
+        {
+            *interior=home;
+        }else if(pokaz_tekst[2])
+        {
+            *interior=home;
+        }
+    }
+}
+void Background::Update(Interior *interior,unsigned short level)
+{
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+    {
+        *interior=outside;
+    }
     wyswietl_napis(b1_x,b2_x,b3_x);
-    if(interior==outside)
+    wejdz(interior);
+    if(*interior==outside)
     {
         B1.setPosition(x-b1_x,750);
         B2.setPosition(x-b2_x,750);
