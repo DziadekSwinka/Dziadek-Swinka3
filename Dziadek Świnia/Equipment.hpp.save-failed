@@ -25,7 +25,6 @@ private:
     sf::RectangleShape backRect,icon[6],pieniadz_bcg;
     sf::Sprite symbol[6];
     sf::Texture symbol_txt[6];
-    sf::Clock clock;
     sf::Text text[6],pieniadze_tekst,pieniadze_plus;
     void ustaw_Text();
     void ustaw_reke();

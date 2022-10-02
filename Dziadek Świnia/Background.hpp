@@ -14,6 +14,8 @@ private:
     sf::RenderWindow &window;
     sf::Sprite bcg[3],B1,B2,B3;
     sf::Texture txt,b1,b2,b3;
+    sf::Texture gertruda;
+    sf::Sprite Pociag;
     sf::Text text;
     sf::Font OswaldRegular;
     bool background_move(side Side);
@@ -21,6 +23,7 @@ private:
     void wejdz(Interior *interior);
     float b1_x,b2_x,b3_x;
     float x=0;
+    float x_outside=0;
     bool pokaz_tekst[3]={0,0,0};
 public:
     void Update(Interior *interior,unsigned short level);

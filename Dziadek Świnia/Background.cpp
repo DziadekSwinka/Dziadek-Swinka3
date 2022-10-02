@@ -4,6 +4,9 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
     :window(window1)
 {
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
+    gertruda.loadFromFile("Textures//gertruda.png");
+    Pociag.setTexture(gertruda);
+    Pociag.setPosition(600,500);
     text.setFont(OswaldRegular);
     text.setCharacterSize(20);
     text.setColor(sf::Color(25,60,210));
@@ -60,12 +63,15 @@ void Background::wejdz(Interior *interior)
         if(pokaz_tekst[0])
         {
             *interior=home;
+            x_outside=x;
         }else if(pokaz_tekst[1])
         {
-            *interior=home;
+            *interior=pociong;
+            x_outside=x;
         }else if(pokaz_tekst[2])
         {
             *interior=home;
+            x_outside=x;
         }
     }
 }
@@ -74,30 +80,38 @@ void Background::Update(Interior *interior,unsigned short level)
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
     {
         *interior=outside;
+        x=x_outside;
     }
     wyswietl_napis(b1_x,b2_x,b3_x);
     wejdz(interior);
-    if(*interior==outside)
+    if(*interior==outside || *interior==pociong)
     {
+        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            background_move(Right);
+        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::A) && *interior!=pociong)
+            background_move(Left);
         B1.setPosition(x-b1_x,750);
         B2.setPosition(x-b2_x,750);
         B3.setPosition(x-b3_x,750);
         for(short i=0;i<3;i++)
-            bcg[i].setTexture(txt);
+                bcg[i].setTexture(txt);
+        if(*interior==outside)
+        {
+            window.draw(B1);
+            window.draw(B2);
+            window.draw(B3);
+            if(pokaz_tekst[0]||pokaz_tekst[1]||pokaz_tekst[2])
+                if(level<1)
+                    window.draw(text);
+        }
+        window.draw(bcg[0]);
+        window.draw(bcg[1]);
+        window.draw(bcg[2]);
+        if(*interior==pociong)
+        {
+            window.draw(Pociag);
+        }
     }
-    window.draw(B1);
-    window.draw(B2);
-    window.draw(B3);
-    window.draw(bcg[0]);
-    window.draw(bcg[1]);
-    window.draw(bcg[2]);
-    if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        background_move(Right);
-    if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        background_move(Left);
-    if(pokaz_tekst[0]||pokaz_tekst[1]||pokaz_tekst[2])
-        if(level<1)
-            window.draw(text);
 }
 
 bool Background::background_move(side Side)

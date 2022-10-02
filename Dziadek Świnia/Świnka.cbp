@@ -52,10 +52,22 @@
 		<Linker>
 			<Add directory="D:/Biblioteki C++/SFML-2.5.1/lib" />
 		</Linker>
+		<Unit filename="Background.cpp">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="Background.hpp">
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="Equipment.cpp">
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="Equipment.hpp">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="button.cpp">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="button.hpp">
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="level.cpp">
@@ -65,6 +77,9 @@
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="main.cpp" />
+		<Unit filename="mode.hpp">
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="side.hpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

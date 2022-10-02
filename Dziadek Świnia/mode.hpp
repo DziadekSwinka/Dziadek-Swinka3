@@ -6,6 +6,7 @@ enum Interior
     outside=0,
     shop,
     home,
+    pociong,
     none=-1
 };
 

@@ -33,7 +33,7 @@ struct obj
     unsigned short type;
 };
 void level_setUp(unsigned short level);
-Interior interior;
+Interior interior=outside;
 AI_Eq peppaEq,mamaEq;
 obj skrzynka;
 
@@ -705,7 +705,6 @@ int main(int argc, char *argv[])
     srand(time(NULL));
 
     sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
-    //window.setFramerateLimit(60);
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50);
     AI mama(window,"Textures//mama_swinka.png","","Textures//noz.png","","",1300,GroundLevel-50);                                                                                      //dorobic brakujace pliki
@@ -719,6 +718,10 @@ int main(int argc, char *argv[])
     Equipment Eq(window);
     bron karabin(window,"Textures//ak47.png","Textures//pistolet.png","Textures//bazooka.png","Textures//uzi.png");
     skrzynki();
+    sf::Sprite GameOver;
+    sf::Texture gameover;
+    gameover.loadFromFile("Textures//end.jpg");
+    GameOver.setTexture(gameover);
 
     while (window.isOpen())
     {
@@ -783,40 +786,49 @@ int main(int argc, char *argv[])
             }else panelSklep=1;
         }
         window.clear(sf::Color(138,191,255));
-        if(!panelSklep)
+        if(Eq.HP>0)
         {
-            background.Update(&interior,level);
-            if(skrzynka.active)
+            if(!panelSklep)
             {
-                skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
-                window.draw(skrzynka.rect);
+                background.Update(&interior,level);
+                if(interior==outside)
+                {
+                    if(skrzynka.active)
+                    {
+                        skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
+                        window.draw(skrzynka.rect);
+                    }
+                    Dziadek.Update(Eq.HP);
+                    karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
+                    if(level==1)
+                    {
+                        if(peppaEq.HP>0)
+                            peppa.Update(&peppaEq,&Eq.HP);
+                    }
+                    if(level==2)
+                    {
+                        if(mamaEq.HP>0)
+                            mama.Update(&mamaEq,&Eq.HP);
+                    }
+                }
+                Misje_bt.Update(ButtonPressed);
+                if(Menu_misje)
+                {
+                    Misja1_bt.Update(ButtonPressed);
+                }
+                if(Menu_misje)
+                {
+                    Misja2_bt.Update(ButtonPressed);
+                }
             }
-            Dziadek.Update(Eq.HP);
-            karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
-            if(level==1)
-            {
-                if(peppaEq.HP>0)
-                    peppa.Update(&peppaEq,&Eq.HP);
-            }
-            if(level==2)
-            {
-                if(mamaEq.HP>0)
-                    mama.Update(&mamaEq,&Eq.HP);
-            }
-            Misje_bt.Update(ButtonPressed);
-            if(Menu_misje)
-            {
-                Misja1_bt.Update(ButtonPressed);
-            }
-            if(Menu_misje)
-            {
-                Misja2_bt.Update(ButtonPressed);
-            }
+            Eq.Update(panelSklep,ButtonPressed);
+            Sklep_bt.Update(ButtonPressed);
+            if(interior==pociong)
+                    Eq.pociag();
+        }else
+        {
+            window.draw(GameOver);
         }
-        Eq.Update(panelSklep,ButtonPressed);
-
-        Sklep_bt.Update(ButtonPressed);
-
 
         window.display();
     }

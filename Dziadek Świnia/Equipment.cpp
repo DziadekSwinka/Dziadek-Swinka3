@@ -25,6 +25,7 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
     bazooka=false;
     w_rece=1;
     pieniadze_tekst.setFont(OswaldRegular);
+    pieniadze_plus.setFont(OswaldRegular);
     pieniadze_tekst.setColor(sf::Color(5,0,170));
     pieniadze_tekst.setPosition(900,5);
     pieniadze_tekst.setStyle(sf::Text::Bold);
@@ -66,6 +67,22 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
     main.setVolume(40);
     main.setLoop(true);
     main.play();
+}
+void Equipment::pociag()
+{
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        sf::Time time=clock.getElapsedTime();
+        if(time.asSeconds()>=1)
+        {
+            pieniadze+=5;
+            clock.restart();
+        }
+        pieniadze_plus.setString("+ 5$");
+        pieniadze_plus.setColor(sf::Color::Yellow);
+        pieniadze_plus.setPosition(pieniadze_tekst.getPosition().x+100,pieniadze_tekst.getPosition().y);
+        window.draw(pieniadze_plus);
+    }
 }
 void Equipment::ustaw_sklep()
 {
