@@ -5,6 +5,10 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
 {
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     gertruda.loadFromFile("Textures//gertruda.png");
+    chmura.loadFromFile("Textures//cloud.png");
+    Chmura.setTexture(chmura);
+    Chmura.setScale(0.3,0.3);
+    Chmura.setPosition(300,200);
     Pociag.setTexture(gertruda);
     Pociag.setPosition(600,500);
     text.setFont(OswaldRegular);
@@ -84,6 +88,7 @@ void Background::Update(Interior *interior,unsigned short level)
     }
     wyswietl_napis(b1_x,b2_x,b3_x);
     wejdz(interior);
+    window.draw(Chmura);
     if(*interior==outside || *interior==pociong)
     {
         if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::D))
@@ -121,15 +126,22 @@ bool Background::background_move(side Side)
         if(Side==Left)
         {
             bcg[i].move(0.2,0);
+            Chmura.move(0.02,0);
             x+=0.2;
         }
         if(Side==Right)
         {
             bcg[i].move(-0.2,0);
+            Chmura.move(-0.02,0);
             x-=0.2;
         }
 
     }
+    if(Chmura.getPosition().x>window.getSize().x+200)
+        Chmura.setPosition(-100,200);
+    if(Chmura.getPosition().x<-200)
+        Chmura.setPosition(window.getSize().x+100,200);
+
     if((bcg[2].getPosition().x)<0)
         {
             bcg[0].setPosition(0-798,window.getSize().y-(txt.getSize().y*1.7));

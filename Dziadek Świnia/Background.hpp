@@ -14,8 +14,8 @@ private:
     sf::RenderWindow &window;
     sf::Sprite bcg[3],B1,B2,B3;
     sf::Texture txt,b1,b2,b3;
-    sf::Texture gertruda;
-    sf::Sprite Pociag;
+    sf::Texture gertruda,chmura;
+    sf::Sprite Pociag,Chmura;
     sf::Text text;
     sf::Font OswaldRegular;
     bool background_move(side Side);

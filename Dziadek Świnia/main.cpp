@@ -441,7 +441,7 @@ private:
     void graj_dzwiek();
     float dist();
 public:
-    void Update(AI_Eq *Eq,unsigned int *targetHP);
+    void Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece);
     bool dotykaPostaci(int i);
     AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y);
 };
@@ -513,7 +513,7 @@ float AI::dist()
 {
     return abs(posX-window.getSize().x/2);
 }
-void AI::Update(AI_Eq *Eq,unsigned int *targetHP)
+void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
 {
     int przedzial;
     int losowa=std::rand()%2000;
@@ -559,10 +559,50 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP)
     {
         if(dotykaPostaci(i)==true)
         {
-            if(Eq->HP>=10)
+            switch(w_rece)
             {
-                Eq->HP-=10;
+            case 0 || 1:
+                {
+                    if(Eq->HP>=10)
+                    {
+                    Eq->HP-=10;
+                    }
+                }
+                break;
+            case 2:
+                {
+                    if(Eq->HP>=20)
+                    {
+                    Eq->HP-=20;
+                    }
+                }
+                break;
+            case 3:
+                {
+                    if(Eq->HP>=40)
+                    {
+                    Eq->HP-=40;
+                    }
+                }
+                break;
+            case 4:
+                {
+                    if(Eq->HP>=10)
+                    {
+                    Eq->HP-=10;
+                    }
+                }
+                break;
+            case 5:
+                {
+                    /*if(Eq->HP>=10)
+                    {
+                    Eq->HP-=10;
+                    }*/
+                }
+                break;
             }
+
         }
     }
     if(postac.getScale().x>0)
@@ -803,12 +843,12 @@ int main(int argc, char *argv[])
                     if(level==1)
                     {
                         if(peppaEq.HP>0)
-                            peppa.Update(&peppaEq,&Eq.HP);
+                            peppa.Update(&peppaEq,&Eq.HP,Eq.w_rece);
                     }
                     if(level==2)
                     {
                         if(mamaEq.HP>0)
-                            mama.Update(&mamaEq,&Eq.HP);
+                            mama.Update(&mamaEq,&Eq.HP,Eq.w_rece);
                     }
                 }
                 Misje_bt.Update(ButtonPressed);
