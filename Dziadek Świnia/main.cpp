@@ -216,7 +216,7 @@ void Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
     posY=postac.getPosition().y;
     if(postac.getScale().x>0)
     {
-        czas.setPosition(posX-50,posY-150);
+        czas.setPosition(posX-10,posY-220);
         white.setPosition(posX-50,posY-100);
         for(int i=0;i<10;i++)
         {
@@ -225,7 +225,7 @@ void Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
     }
     else
     {
-        czas.setPosition(posX-150,posY-150);
+        czas.setPosition(posX-110,posY-220);
         white.setPosition(posX-150,posY-100);
         for(int i=0;i<10;i++)
         {
