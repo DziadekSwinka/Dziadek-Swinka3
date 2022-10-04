@@ -272,14 +272,13 @@ void Equipment::Update(bool panelSklep,bool ButtonPressed)
         }
     }
 
-    sf::Time time2=clock.getElapsedTime();
+    sf::Time time2=clock2.getElapsedTime();
     if(time2.asSeconds()<2)
     {
             dodaj_pieniadze.setPosition(pieniadze_tekst.getPosition().x+200,pieniadze_tekst.getPosition().y);
             dodaj_pieniadze.setString(std::to_string(Ile)+" $");
             dodaj_pieniadze.setColor(sf::Color::Yellow);
             window.draw(dodaj_pieniadze);
-
     }
 }
 void Equipment::dodaj_za_zabojstwo(int ile)

@@ -542,15 +542,16 @@ bool AI::dotykaPostaci(int i)
         float originY=postac.getOrigin().y;
         float x=postac.getPosition().x;
         float y=postac.getPosition().y;
-        x-=originX;
-        y-=originY;
+       //y-=originY;
+       //x-=originX;
+        bY+=100;
         float sizeX=txt.getSize().x;
         float sizeY=txt.getSize().y;
         sizeX*=postac.getScale().x;
         sizeY*=postac.getScale().y;
-        if((x)>bX && bX>(x-sizeX))
+        if(bX>(x) && bX<(x+sizeX))
         {
-            if((y)<bY && bY<(y+sizeY))
+            if(bY>(y) && bY<(y+sizeY))
             {
                 if(bullet_wsk[i]->fly==true)
                 {
@@ -859,7 +860,7 @@ int main(int argc, char *argv[])
     sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50);
-    AI mama(window,"Textures//mama_swinka.png","","Textures//noz.png","","",1300,GroundLevel-50);                                                                                      //dorobic brakujace pliki
+    AI mama(window,"Textures//mama_swinka.png","","Textures//pistolet.png","","",1300,GroundLevel-50);                                                                                      //dorobic brakujace pliki
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png");
     button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1600,20);
     button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1520,80);
