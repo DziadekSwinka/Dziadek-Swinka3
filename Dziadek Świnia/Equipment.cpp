@@ -19,11 +19,12 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
         symbol[i].setPosition(70*i+53,30);
         text[i].setPosition(68*i+38,98);
     }
-    pistolet=false;
-    karabin=true;
+    pistolet=true;
+    karabin=false;
     uzi=false;
     bazooka=false;
     w_rece=1;
+    dodaj_pieniadze.setFont(OswaldRegular);
     pieniadze_tekst.setFont(OswaldRegular);
     pieniadze_plus.setFont(OswaldRegular);
     pieniadze_tekst.setColor(sf::Color(5,0,170));
@@ -67,6 +68,8 @@ Equipment::Equipment(sf::RenderWindow &window1):window(window1)
     main.setVolume(40);
     main.setLoop(true);
     main.play();
+
+    Ile=0;
 }
 void Equipment::pociag()
 {
@@ -75,10 +78,10 @@ void Equipment::pociag()
         sf::Time time=clock.getElapsedTime();
         if(time.asSeconds()>=1)
         {
-            pieniadze+=5;
+            pieniadze+=1;
             clock.restart();
         }
-        pieniadze_plus.setString("+ 5$");
+        pieniadze_plus.setString("+ 1$");
         pieniadze_plus.setColor(sf::Color::Yellow);
         pieniadze_plus.setPosition(pieniadze_tekst.getPosition().x+100,pieniadze_tekst.getPosition().y);
         window.draw(pieniadze_plus);
@@ -110,23 +113,28 @@ void Equipment::ustaw_reke()
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
     {
-        w_rece=1;
+        if(pistolet)
+            w_rece=1;
     }else
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
     {
-        w_rece=2;
+        if(karabin)
+            w_rece=2;
     }else
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
     {
-        w_rece=3;
+        if(bazooka)
+            w_rece=3;
     }else
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
     {
-        w_rece=4;
+        if(uzi)
+            w_rece=4;
     }else
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
     {
-        w_rece=5;
+        if(false)
+            w_rece=5;
     }
 }
 void Equipment::ustaw_Text()
@@ -263,5 +271,20 @@ void Equipment::Update(bool panelSklep,bool ButtonPressed)
             kup[i].Update(ButtonPressed);
         }
     }
-}
 
+    sf::Time time2=clock.getElapsedTime();
+    if(time2.asSeconds()<2)
+    {
+            dodaj_pieniadze.setPosition(pieniadze_tekst.getPosition().x+200,pieniadze_tekst.getPosition().y);
+            dodaj_pieniadze.setString(std::to_string(Ile)+" $");
+            dodaj_pieniadze.setColor(sf::Color::Yellow);
+            window.draw(dodaj_pieniadze);
+
+    }
+}
+void Equipment::dodaj_za_zabojstwo(int ile)
+{
+    Ile=ile;
+    pieniadze+=ile;
+    clock2.restart();
+}

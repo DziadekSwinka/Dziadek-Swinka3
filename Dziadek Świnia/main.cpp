@@ -63,6 +63,9 @@ class Postac
 private:
     void graj_dzwiek();
     void graj_dzwiek(unsigned short i);
+    float oblicz_czas(int w_rece,float czas);
+    sf::Font OswaldRegular;
+    sf::Text czas;
 protected:
     sf::SoundBuffer buffer1,buffer2,buffer3,buffer4;
     sf::Sound sound;
@@ -78,12 +81,14 @@ public:
     void getDmg(unsigned int *Hp);
     float getDegree();
     float posX,posY;
-    void Update(unsigned int Hp);
+    void Update(unsigned int Hp,sf::Time czas_p,int w_rece);
 };
 Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y):window(window1)
 {
+    OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     red_txt.loadFromFile("Textures//red_.png");
     white_txt.loadFromFile("Textures//white_.png");
+    czas.setFont(OswaldRegular);
 
     for(int i=0;i<10;i++)
     {
@@ -103,6 +108,48 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     postac.setPosition(x,y);
     posX=x;
     posY=y;
+}
+float Postac::oblicz_czas(int w_rece,float czas)
+{
+    switch(w_rece)
+    {
+    case 1:
+        {
+            if(czas>2)
+            {
+                return 0;
+            }else return (2-czas);
+        }
+    case 2:
+        {
+            if(czas>0.3)
+            {
+                return 0;
+            }else return (0.3-czas);
+        }
+    case 3:
+        {
+            if(czas>5)
+            {
+                return 0;
+            }else return (5-czas);
+        }
+    case 4:
+        {
+            if(czas>0.2)
+            {
+                return 0;
+            }else return (0.2-czas);
+        }
+    case 5:
+        {
+            if(czas>1)
+            {
+                return 0;
+            }else return (1-czas);
+        }
+    default: return(0);
+    }
 }
 void Postac::getDmg(unsigned int *Hp)
 {
@@ -151,8 +198,9 @@ void Postac::graj_dzwiek()
     unsigned short i=(std::rand()%5);
     graj_dzwiek(i);
 }
-void Postac::Update(unsigned int Hp)
+void Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
 {
+    czas.setString(std::to_string(oblicz_czas(w_rece,czas_p.asSeconds())));
     Fall();
 
     //postac.setPosition(posX,posY);
@@ -168,6 +216,7 @@ void Postac::Update(unsigned int Hp)
     posY=postac.getPosition().y;
     if(postac.getScale().x>0)
     {
+        czas.setPosition(posX-50,posY-150);
         white.setPosition(posX-50,posY-100);
         for(int i=0;i<10;i++)
         {
@@ -176,6 +225,7 @@ void Postac::Update(unsigned int Hp)
     }
     else
     {
+        czas.setPosition(posX-150,posY-150);
         white.setPosition(posX-150,posY-100);
         for(int i=0;i<10;i++)
         {
@@ -193,6 +243,7 @@ void Postac::Update(unsigned int Hp)
     }
     window.draw(postac);
     window.draw(white);
+    window.draw(czas);
     Hp/=10;
     for(int i=0;i<Hp;i++)
         window.draw(red[i]);
@@ -736,12 +787,73 @@ void skrzynki()
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
+bool mozna_strzelac(int w_rece,sf::Clock *przeladowanie)
+{
+    sf::Time time=przeladowanie->getElapsedTime();
+    switch (w_rece)
+    {
+    case 0:
+        return false;
+        break;
+    case 1:
+        {
+            if(time.asSeconds()>2)
+            {
+                przeladowanie->restart();
+                return true;
+            }else return false;
+        }
+    case 2:
+        {
+            if(time.asSeconds()>0.3)
+            {
+                przeladowanie->restart();
+                return true;
+            }else return false;
+        }
+        break;
+    case 3:
+        {
+            if(time.asSeconds()>5)
+            {
+                przeladowanie->restart();
+                return true;
+            }else return false;
+        }
+        break;
+    case 4:
+        {
+            if(time.asSeconds()>0.2)
+            {
+                przeladowanie->restart();
+                return true;
+            }else return false;
+        }
+        break;
+    case 5:
+        {
+            if(time.asSeconds()>1)
+            {
+                przeladowanie->restart();
+                return true;
+            }else return false;
+        }
+        break;
+    default: return false;
+    }
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
     interior=outside;
     bool Menu_misje=false;
     const int GroundLevel=700;
     sf::Clock liczZrzut;
+    sf::Clock przeladowanie;
     srand(time(NULL));
 
     sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
@@ -778,8 +890,12 @@ int main(int argc, char *argv[])
             {
                 if(Eq.ammunition>0)
                 {
-                    EnterPressed=true;
-                    Eq.ammunition--;
+                    if(mozna_strzelac(Eq.w_rece,&przeladowanie)==true)
+                    {
+                        EnterPressed=true;
+                        Eq.ammunition--;
+                    }
+
                 }
             }
             if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)    ///To jest do wywalenia potem ,teraz  do testów
@@ -838,17 +954,27 @@ int main(int argc, char *argv[])
                         skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
                         window.draw(skrzynka.rect);
                     }
-                    Dziadek.Update(Eq.HP);
+                    Dziadek.Update(Eq.HP,przeladowanie.getElapsedTime(),Eq.w_rece);
                     karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
                     if(level==1)
                     {
                         if(peppaEq.HP>0)
                             peppa.Update(&peppaEq,&Eq.HP,Eq.w_rece);
+                        if(peppaEq.HP==0)
+                        {
+                            level=0;
+                            Eq.dodaj_za_zabojstwo(50);
+                        }
                     }
                     if(level==2)
                     {
                         if(mamaEq.HP>0)
                             mama.Update(&mamaEq,&Eq.HP,Eq.w_rece);
+                        if(mamaEq.HP==0)
+                        {
+                            level=0;
+                            Eq.dodaj_za_zabojstwo(70);
+                        }
                     }
                 }
                 Misje_bt.Update(ButtonPressed);

@@ -25,8 +25,8 @@ private:
     sf::RectangleShape backRect,icon[6],pieniadz_bcg;
     sf::Sprite symbol[6];
     sf::Texture symbol_txt[6];
-    sf::Clock clock;
-    sf::Text text[6],pieniadze_tekst,pieniadze_plus;
+    sf::Clock clock,clock2;
+    sf::Text text[6],pieniadze_tekst,pieniadze_plus,dodaj_pieniadze;
     void ustaw_Text();
     void ustaw_reke();
     void ustaw_sklep();
@@ -37,6 +37,7 @@ private:
                     button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup+390),
                     button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup+520),
                     button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup+650)};
+    int Ile;
 public:
     sklep Sklep;
     Equipment(sf::RenderWindow &window1);
@@ -46,6 +47,7 @@ public:
     bool pistolet,karabin,bazooka,uzi;
     short w_rece;
     void Update(bool panelSklep,bool ButtonPressed);
+    void dodaj_za_zabojstwo(int ile);
     void pociag();
 };
 
