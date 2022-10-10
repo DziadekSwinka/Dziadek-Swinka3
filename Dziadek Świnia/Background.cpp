@@ -125,15 +125,15 @@ bool Background::background_move(side Side)
     {
         if(Side==Left)
         {
-            bcg[i].move(0.2,0);
-            Chmura.move(0.02,0);
-            x+=0.2;
+            bcg[i].move(0.2*czas_na_klatke(),0);
+            Chmura.move(0.02*czas_na_klatke(),0);
+            x+=0.2*czas_na_klatke();
         }
         if(Side==Right)
         {
-            bcg[i].move(-0.2,0);
-            Chmura.move(-0.02,0);
-            x-=0.2;
+            bcg[i].move(-0.2*czas_na_klatke(),0);
+            Chmura.move(-0.02*czas_na_klatke(),0);
+            x-=0.2*czas_na_klatke();
         }
 
     }

@@ -8,6 +8,8 @@
 #include "side.hpp"
 #include "mode.hpp"
 
+float czas_na_klatke();
+
 class Background
 {
 private:

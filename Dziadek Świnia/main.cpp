@@ -36,6 +36,8 @@ void level_setUp(unsigned short level);
 Interior interior=outside;
 AI_Eq peppaEq,mamaEq;
 obj skrzynka;
+sf::Clock klatka;
+sf::Time poprz_klatka;
 
 class bullet;
 bullet* bullet_wsk[10]={nullptr};
@@ -52,7 +54,17 @@ bullet* bullet_wsk[10]={nullptr};
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
-
+float czas_na_klatke()
+{
+    using namespace std;
+    const float czasX=400;
+    float ret={1.f};
+    //sf::Time time=klatka.getElapsedTime();
+    float uTime=poprz_klatka.asSeconds();
+    ret=uTime*czasX;
+    cout<<ret<<endl;
+    return ret;
+}
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -245,7 +257,7 @@ void Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
     window.draw(white);
     window.draw(czas);
     Hp/=10;
-    for(int i=0;i<Hp;i++)
+    for(int i=0;static_cast<unsigned int>(i)<Hp;i++)
         window.draw(red[i]);
 
 }
@@ -261,12 +273,12 @@ void Postac::Fall()
         if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
             vs=-0.1;
-            postac.move(0,vs);
+            postac.move(0,vs*czas_na_klatke()*3);
         }
         else if(false==sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
-            vs+=gravity;
-            postac.move(0,vs);
+            vs+=gravity*czas_na_klatke()*2;
+            postac.move(0,vs*czas_na_klatke()*3);
         }
     }else if((postac.getPosition().y+(txt.getSize().y)/4)>window.getSize().y-380)
     {
@@ -345,16 +357,16 @@ void bullet::Update()
     a=c*(sin(alfa));
     b=c*(cos(alfa));
     if(k)
-        sprite.move(b,a);
+        sprite.move(b*czas_na_klatke(),a*czas_na_klatke());
     if(!k)
-        sprite.move(-b,-a);
+        sprite.move(-b*czas_na_klatke(),-a*czas_na_klatke());
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
-        sprite.move(-0.2,0);
+        sprite.move(-0.2*czas_na_klatke(),0);
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
-        sprite.move(0.2,0);
+        sprite.move(0.2*czas_na_klatke(),0);
     }
     if(pozaEkranem())
         fly=false;
@@ -538,8 +550,8 @@ bool AI::dotykaPostaci(int i)
 {
         float bX=bullet_wsk[i]->posX;
         float bY=bullet_wsk[i]->posY;
-        float originX=postac.getOrigin().x;
-        float originY=postac.getOrigin().y;
+        //float originX=postac.getOrigin().x;
+        //float originY=postac.getOrigin().y;
         float x=postac.getPosition().x;
         float y=postac.getPosition().y;
        //y-=originY;
@@ -575,9 +587,9 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
         do
         {
             przedzial=1;
-            postac.move(0.8,0);
+            postac.move(0.8*czas_na_klatke(),0);
             przedzial++;
-        }while(std::rand()%przedzial==1 && przedzial<=200);
+        }while(std::rand()%przedzial==1 && przedzial<=200*czas_na_klatke());
     }
     if(losowa==0)
     {
@@ -585,9 +597,9 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
         do
         {
             przedzial=1;
-            postac.move(-0.8,0);
+            postac.move(-0.8*czas_na_klatke(),0);
             przedzial++;
-        }while(std::rand()%przedzial==1 && przedzial<=200);
+        }while(std::rand()%przedzial==1 && przedzial<=200*czas_na_klatke());
     }
     if(losowa==3 && dist()<300 /*&& std::rand()%3==1*/)
     {
@@ -599,11 +611,11 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
-        postac.move(-0.8,0);
+        postac.move(-0.8*czas_na_klatke(),0);
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
-        postac.move(0.8,0);
+        postac.move(0.8*czas_na_klatke(),0);
     }
     posX=postac.getPosition().x;
     posY=postac.getPosition().y;
@@ -687,7 +699,7 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
         window.draw(B1);
 
     window.draw(white);
-    for(int i=0;i<Eq->HP/10;i++)
+    for(int i=0;static_cast<unsigned int>(i)<Eq->HP/10;i++)
         window.draw(red[i]);
 
 }
@@ -752,18 +764,18 @@ void skrzynka_fall(int GroundLevel,float x,float y,Equipment *Eq)
     skrzynka.posY=skrzynka.rect.getPosition().y;
     if(skrzynka.posY<GroundLevel)
     {
-        skrzynka.vs+=0.0001;
-        skrzynka.rect.move(0,skrzynka.vs);
+        skrzynka.vs+=0.0001*czas_na_klatke();
+        skrzynka.rect.move(0,skrzynka.vs*czas_na_klatke());
     }
     if(skrzynka.posY>=GroundLevel)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
-            skrzynka.rect.move(-0.8,0);
+            skrzynka.rect.move(-0.8*czas_na_klatke(),0);
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
-            skrzynka.rect.move(0.8,0);
+            skrzynka.rect.move(0.8*czas_na_klatke(),0);
         }
         if(x<skrzynka.posX && y>GroundLevel-100)
         {
@@ -856,7 +868,6 @@ int main(int argc, char *argv[])
     sf::Clock liczZrzut;
     sf::Clock przeladowanie;
     srand(time(NULL));
-
     sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50);
@@ -875,6 +886,9 @@ int main(int argc, char *argv[])
     sf::Texture gameover;
     gameover.loadFromFile("Textures//end.jpg");
     GameOver.setTexture(gameover);
+
+    //window.setFramerateLimit(15);     to jest do testow
+
 
     while (window.isOpen())
     {
@@ -955,6 +969,7 @@ int main(int argc, char *argv[])
                         skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
                         window.draw(skrzynka.rect);
                     }
+
                     Dziadek.Update(Eq.HP,przeladowanie.getElapsedTime(),Eq.w_rece);
                     karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
                     if(level==1)
@@ -998,7 +1013,10 @@ int main(int argc, char *argv[])
         }
 
         window.display();
+        poprz_klatka=klatka.getElapsedTime();
+        klatka.restart();
     }
     EnterPressed=false;
+
     return 0;
 }
