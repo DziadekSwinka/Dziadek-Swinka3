@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <time.h>
 #include <math.h>
+#include <fstream>
 #include "side.hpp"
 #include "Equipment.hpp"
 #include "level.hpp"
@@ -39,8 +40,13 @@ obj skrzynka;
 sf::Clock klatka;
 sf::Time poprz_klatka;
 
+sf::ContextSettings setting;
+
 class bullet;
 bullet* bullet_wsk[10]={nullptr};
+
+unsigned int Xokna=1920,Yokna=1080;
+float frameLimit=0;
 
 
 
@@ -62,7 +68,7 @@ float czas_na_klatke()
     //sf::Time time=klatka.getElapsedTime();
     float uTime=poprz_klatka.asSeconds();
     ret=uTime*czasX;
-    cout<<ret<<endl;
+    //cout<<ret<<endl;
     return ret;
 }
 
@@ -860,15 +866,75 @@ bool mozna_strzelac(int w_rece,sf::Clock *przeladowanie)
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
+void Config()
+{
+    unsigned int xSize,ySize;
+    std::string sciezka="Config.txt";
+    std::string line="";
+    std::fstream config_file;
+    config_file.open(sciezka,std::ios::in);
+    if(config_file.good()==true)
+    {
+        for(int i=0;i<2;i++)
+        {
+            getline(config_file,line);
+            switch(i)
+            {
+            case 0:
+                {
+                    unsigned int numberOfX=line.find("x");
+                    if(numberOfX!=std::string::npos)
+                    {
+                        std::string s1,s2;
+                        s1=s2=line;
+                        s1.erase(0,numberOfX+1);
+                        s2.erase(numberOfX,line.size());
+                        //std::cout<<s1<<"\t"<<s2<<std::endl;
+                        ySize=std::stoi(s1);
+                        xSize=std::stoi(s2);
+                    }
+                    break;
+                }
+            case 1:
+                {
+                    if(line=="none")
+                    {
+                        frameLimit=0;
+                    }else
+                        frameLimit=std::stoi(line);
+                    break;
+                }
+            case 2:
+                {
+                    setting.antialiasingLevel=std::stoi(line);
+                    break;
+                }
+            default: break;
+            }
+        }
+
+    }
+    config_file.close();
+    Xokna=xSize;
+    Yokna=ySize;
+    return;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
+    setting.antialiasingLevel=0;
     interior=outside;
     bool Menu_misje=false;
     const int GroundLevel=700;
     sf::Clock liczZrzut;
     sf::Clock przeladowanie;
     srand(time(NULL));
-    sf::RenderWindow window(sf::VideoMode(1920,1080), "Dziadek Swinka");
+    Config();
+    sf::RenderWindow window(sf::VideoMode(Xokna,Yokna,64), "Dziadek Swinka",sf::Style::Default,setting);
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50);
     AI mama(window,"Textures//mama_swinka.png","","Textures//pistolet.png","","",1300,GroundLevel-50);                                                                                      //dorobic brakujace pliki
@@ -887,8 +953,8 @@ int main(int argc, char *argv[])
     gameover.loadFromFile("Textures//end.jpg");
     GameOver.setTexture(gameover);
 
-    //window.setFramerateLimit(15);     to jest do testow
-
+    if(frameLimit!=0)
+        window.setFramerateLimit(frameLimit);
 
     while (window.isOpen())
     {
