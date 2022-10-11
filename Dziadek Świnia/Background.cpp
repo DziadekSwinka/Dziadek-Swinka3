@@ -6,6 +6,8 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     gertruda.loadFromFile("Textures//gertruda.png");
     chmura.loadFromFile("Textures//cloud.png");
+    baza.loadFromFile("Textures//baza.png");
+    Baza.setTexture(baza);
     Chmura.setTexture(chmura);
     Chmura.setScale(0.3,0.3);
     Chmura.setPosition(300,200);
@@ -36,9 +38,9 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
         bcg[i].setScale(2,2);
 
     }
-    bcg[0].setPosition(0-798,window.getSize().y-(txt.getSize().y*1.7));
-    bcg[1].setPosition(0,window.getSize().y-(txt.getSize().y*1.7));
-    bcg[2].setPosition(window.getSize().x-4,window.getSize().y-(txt.getSize().y*1.7));
+    bcg[0].setPosition(0-798,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));
+    bcg[1].setPosition(0,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));
+    bcg[2].setPosition(window.getSize().x-4,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));
 
 }
 void Background::wyswietl_napis(float z1,float z2,float z3)
@@ -60,13 +62,13 @@ void Background::wyswietl_napis(float z1,float z2,float z3)
         pokaz_tekst[2]=1;
     }else pokaz_tekst[2]=0;
 }
-void Background::wejdz(Interior *interior)
+void Background::wejdz(Interior *interior,bool *panelSklep)
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
     {
         if(pokaz_tekst[0])
         {
-            *interior=home;
+            *interior=tajna_baza_wojskowa_pod_domem;
             x_outside=x;
         }else if(pokaz_tekst[1])
         {
@@ -74,12 +76,12 @@ void Background::wejdz(Interior *interior)
             x_outside=x;
         }else if(pokaz_tekst[2])
         {
-            *interior=home;
+            *panelSklep=true;
             x_outside=x;
         }
     }
 }
-void Background::Update(Interior *interior,unsigned short level)
+void Background::Update(Interior *interior,unsigned short level,bool *panelSklep)
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
     {
@@ -87,7 +89,7 @@ void Background::Update(Interior *interior,unsigned short level)
         x=x_outside;
     }
     wyswietl_napis(b1_x,b2_x,b3_x);
-    wejdz(interior);
+    wejdz(interior,panelSklep);
     window.draw(Chmura);
     if(*interior==outside || *interior==pociong)
     {
@@ -117,6 +119,10 @@ void Background::Update(Interior *interior,unsigned short level)
             window.draw(Pociag);
         }
     }
+    if(*interior==tajna_baza_wojskowa_pod_domem)
+    {
+        window.draw(Baza);
+    }
 }
 
 bool Background::background_move(side Side)
@@ -144,15 +150,15 @@ bool Background::background_move(side Side)
 
     if((bcg[2].getPosition().x)<0)
         {
-            bcg[0].setPosition(0-798,window.getSize().y-(txt.getSize().y*1.7));
-            bcg[1].setPosition(0,window.getSize().y-(txt.getSize().y*1.7));
-            bcg[2].setPosition(window.getSize().x-4,window.getSize().y-(txt.getSize().y*1.7));
+            bcg[0].setPosition(0-798,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));
+            bcg[1].setPosition(0,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));
+            bcg[2].setPosition(window.getSize().x-4,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));
         }
     if((bcg[0].getPosition().x)>0)
         {
-            bcg[0].setPosition(0-798,window.getSize().y-(txt.getSize().y*1.7));
-            bcg[1].setPosition(0,window.getSize().y-(txt.getSize().y*1.7));
-            bcg[2].setPosition(window.getSize().x-4,window.getSize().y-(txt.getSize().y*1.7));
+            bcg[0].setPosition(0-798,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));
+            bcg[1].setPosition(0,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));
+            bcg[2].setPosition(window.getSize().x-4,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));
         }
 
     return true;

@@ -1027,7 +1027,7 @@ int main(int argc, char *argv[])
         {
             if(!panelSklep)
             {
-                background.Update(&interior,level,&panelSklep);
+                background.Update(&interior,level);
                 if(interior==outside)
                 {
                     if(skrzynka.active)

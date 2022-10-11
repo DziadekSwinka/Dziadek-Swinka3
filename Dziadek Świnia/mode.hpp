@@ -7,6 +7,7 @@ enum Interior
     shop,
     home,
     pociong,
+    tajna_baza_wojskowa_pod_domem,
     none=-1
 };
 
