@@ -29,7 +29,7 @@ private:
     bool pokaz_tekst[3]={0,0,0};
 public:
     void Update(Interior *interior,unsigned short level,bool *panelSklep);
-    Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3);
+    Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,float stosX,float stosY);
 };
 
 

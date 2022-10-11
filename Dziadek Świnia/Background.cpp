@@ -1,6 +1,6 @@
 #include "Background.hpp"
 
-Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3)
+Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,float stosX,float stosY)
     :window(window1)
 {
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
@@ -35,7 +35,7 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
     for(int i=0;i<3;i++)
     {
         bcg[i].setTexture(txt);
-        bcg[i].setScale(2,2);
+        bcg[i].setScale(2/stosX,2/stosY);
 
     }
     bcg[0].setPosition(0-798,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));

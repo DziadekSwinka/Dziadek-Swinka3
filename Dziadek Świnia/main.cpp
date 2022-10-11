@@ -94,14 +94,15 @@ protected:
     void move_to_side(side Side);
     float vs=0;
     float hand_degree=0;
+    float stosX,stosY;
 public:
-    Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y);
+    Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY);
     void getDmg(unsigned int *Hp);
     float getDegree();
     float posX,posY;
     void Update(unsigned int Hp,sf::Time czas_p,int w_rece);
 };
-Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y):window(window1)
+Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY):window(window1),stosX(stosX),stosY(stosY)
 {
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     red_txt.loadFromFile("Textures//red_.png");
@@ -123,7 +124,7 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     postac.setTexture(txt);
     postac.setScale(0.5,0.5);
     postac.setOrigin((txt.getSize().x)*postac.getScale().x/2,(txt.getSize().y)*postac.getScale().y/2);
-    postac.setPosition(x,y);
+    postac.setPosition(x*stosX,y*stosY);
     posX=x;
     posY=y;
 }
@@ -512,10 +513,10 @@ private:
 public:
     void Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece);
     bool dotykaPostaci(int i);
-    AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y);
+    AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY);
 };
-AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y)
-    :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y)
+AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY)
+    :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y,stosX,stosY)
 {
     mieso.loadFromFile("Textures//porkchop_raw.png");
     b1.loadFromFile(sciezka_bron);
@@ -542,13 +543,13 @@ void AI::ustawBron()
 {
     if(postac.getScale().x>0)
     {
-        B1.setPosition(posX+80,670);
-        B1.setScale(0.08,0.08);
+        B1.setPosition(posX+80*stosX,670*stosY);
+        B1.setScale(0.08*stosX,0.08*stosY);
     }
     else
     {
-        B1.setPosition(posX-80,670);
-        B1.setScale(-0.08,0.08);
+        B1.setPosition(posX-80*stosX,670*stosY);
+        B1.setScale(-0.08*stosX,0.08*stosY);
     }
 
 }
@@ -677,18 +678,18 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
     }
     if(postac.getScale().x>0)
     {
-        white.setPosition(posX-50,posY-100);
+        white.setPosition(stosX*posX-50,stosY*posY-100);
         for(int i=0;i<10;i++)
         {
-            red[i].setPosition(posX-50+20*i,posY-100);
+            red[i].setPosition(stosX*posX-50+20*i,stosY*posY-100);
         }
     }
     else
     {
-        white.setPosition(posX-150,posY-100);
+        white.setPosition(stosX*posX-150,stosY*posY-100);
         for(int i=0;i<10;i++)
         {
-            red[i].setPosition(posX-150+20*i,posY-100);
+            red[i].setPosition(stosX*posX-150+20*i,stosY*posY-100);
         }
     }
     ustawBron();
@@ -890,8 +891,8 @@ void Config()
                         s1.erase(0,numberOfX+1);
                         s2.erase(numberOfX,line.size());
                         //std::cout<<s1<<"\t"<<s2<<std::endl;
-                        ySize=std::stoi(s1);
-                        xSize=std::stoi(s2);
+                        ySize=std::stoi(s2);
+                        xSize=std::stoi(s1);
                     }
                     break;
                 }
@@ -933,12 +934,14 @@ int main(int argc, char *argv[])
     sf::Clock przeladowanie;
     srand(time(NULL));
     Config();
-    sf::RenderWindow window(sf::VideoMode(Xokna,Yokna,64), "Dziadek Swinka",sf::Style::Default,setting);
+    sf::RenderWindow window(sf::VideoMode(Yokna,Xokna,64), "Dziadek Swinka",sf::Style::Default,setting);
+    const float stosX=1080.f/Xokna;   std::cout<<stosX<<std::endl;
+    const float stosY=1920.f/Yokna;   std::cout<<stosY<<std::endl;
     const float GroundLevel=700;
-    Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel);
-    AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50);
-    AI mama(window,"Textures//mama_swinka.png","","Textures//pistolet.png","","",1300,GroundLevel-50);                                                                                      //dorobic brakujace pliki
-    Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png");
+    Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY);
+    AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY);
+    AI mama(window,"Textures//mama_swinka.png","","Textures//pistolet.png","","",1300,GroundLevel-50,stosX,stosY);                                                                                      //dorobic brakujace pliki
+    Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png",stosX,stosY);
     button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1600,20);
     button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1520,80);
     button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1670,80);
