@@ -133,13 +133,13 @@ bool Background::background_move(side Side)
         {
             bcg[i].move(0.2*czas_na_klatke(),0);
             Chmura.move(0.02*czas_na_klatke(),0);
-            x+=0.2*czas_na_klatke();
+            x+=0.2*czas_na_klatke()*1.4;
         }
         if(Side==Right)
         {
             bcg[i].move(-0.2*czas_na_klatke(),0);
             Chmura.move(-0.02*czas_na_klatke(),0);
-            x-=0.2*czas_na_klatke();
+            x-=0.2*czas_na_klatke()*1.4;
         }
 
     }

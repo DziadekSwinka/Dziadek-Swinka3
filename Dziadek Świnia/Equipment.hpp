@@ -5,7 +5,7 @@
 #include <SFML/Audio.hpp>
 #include "button.hpp"
 
-const unsigned int price[6]={80,300,500,150,10,100};
+const unsigned int price[6]={80,300,500,150,10,0};
 const float pierwszy_kup = {160.f};
 
 struct sklep
@@ -38,9 +38,10 @@ private:
                     button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup+520),
                     button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup+650)};
     int Ile;
+    float stosX,stosY;
 public:
     sklep Sklep;
-    Equipment(sf::RenderWindow &window1);
+    Equipment(sf::RenderWindow &window1,float stosX,float stosY);
     unsigned int ammunition;
     unsigned int HP;
     unsigned int pieniadze;

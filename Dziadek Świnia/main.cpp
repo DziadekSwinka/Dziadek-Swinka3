@@ -287,9 +287,9 @@ void Postac::Fall()
             vs+=gravity*czas_na_klatke()*2;
             postac.move(0,vs*czas_na_klatke()*3);
         }
-    }else if((postac.getPosition().y+(txt.getSize().y)/4)>window.getSize().y-380)
+    }else if((postac.getPosition().y+(txt.getSize().y)/4)>window.getSize().y-380.f)
     {
-        postac.setPosition(postac.getPosition().x,window.getSize().y-(txt.getSize().y/4)-380);
+        postac.setPosition(postac.getPosition().x,window.getSize().y-(txt.getSize().y/4)-380.f);
         vs=0;
     }else if((postac.getPosition().y<5))
     {
@@ -894,6 +894,12 @@ void Config()
                         ySize=std::stoi(s2);
                         xSize=std::stoi(s1);
                     }
+                    else
+                    {
+                        ySize=1080;
+                        xSize=1920;
+                    }
+
                     break;
                 }
             case 1:
@@ -937,7 +943,7 @@ int main(int argc, char *argv[])
     sf::RenderWindow window(sf::VideoMode(Yokna,Xokna,64), "Dziadek Swinka",sf::Style::Default,setting);
     const float stosX=1080.f/Xokna;   std::cout<<stosX<<std::endl;
     const float stosY=1920.f/Yokna;   std::cout<<stosY<<std::endl;
-    const float GroundLevel=700;
+    const float GroundLevel=700.f*stosY;
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY);
     AI mama(window,"Textures//mama_swinka.png","","Textures//pistolet.png","","",1300,GroundLevel-50,stosX,stosY);                                                                                      //dorobic brakujace pliki
@@ -948,7 +954,7 @@ int main(int argc, char *argv[])
     button Sklep_bt(window,"Textures//sklep.png","Textures//sklepc.png",550,5);
     Sklep_bt.scaleX=0.45;
     Sklep_bt.scaleY=0.45;
-    Equipment Eq(window);
+    Equipment Eq(window,stosX,stosY);
     bron karabin(window,"Textures//ak47.png","Textures//pistolet.png","Textures//bazooka.png","Textures//uzi.png");
     skrzynki();
     sf::Sprite GameOver;
