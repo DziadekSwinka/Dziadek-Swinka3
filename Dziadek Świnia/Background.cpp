@@ -7,6 +7,10 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
     gertruda.loadFromFile("Textures//gertruda.png");
     chmura.loadFromFile("Textures//cloud.png");
     baza.loadFromFile("Textures//baza.png");
+    wsk.loadFromFile("Textures//wskaznik.png");
+    Wskaznik.setTexture(wsk);
+    Wskaznik.setOrigin(8,8);
+    Wskaznik.setScale(2,2);
     Baza.setTexture(baza);
     Chmura.setTexture(chmura);
     Chmura.setScale(0.3,0.3);
@@ -121,7 +125,11 @@ void Background::Update(Interior *interior,unsigned short level,bool *panelSklep
     }
     if(*interior==tajna_baza_wojskowa_pod_domem)
     {
+        sf::Vector2i mysz=sf::Mouse::getPosition(window);
+        Wskaznik.setPosition(static_cast<sf::Vector2f>(mysz));
+
         window.draw(Baza);
+        window.draw(Wskaznik);
     }
 }
 

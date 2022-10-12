@@ -1,6 +1,6 @@
 #include "button.hpp"
 
-button::button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y):window(window1)
+button::button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y,float sX,float sY):window(window1)
 {
     txt.loadFromFile(sciezka);
     txt2.loadFromFile(sciezka2);
@@ -8,7 +8,7 @@ button::button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     Button.setPosition(x,y);
     scaleX=0.6;
     scaleY=0.6;
-    Button.setScale(scaleX,scaleY);
+    Button.setScale(scaleX/sX,scaleY/sY);
 }
 void button::Update(bool ButtonPressed)
 {

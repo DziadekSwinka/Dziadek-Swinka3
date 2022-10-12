@@ -13,7 +13,7 @@ private:
     sf::Time time;
     bool onclick=false;
 public:
-    button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y);
+    button(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,float x,float y,float sX,float sY);
     void Update(bool ButtonPressed);
     bool isPressed();
     float scaleX,scaleY;

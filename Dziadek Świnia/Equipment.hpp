@@ -31,14 +31,14 @@ private:
     void ustaw_reke();
     void ustaw_sklep();
     void przyciski();
-    button kup[6]={ button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup),
-                    button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup+130),
-                    button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup+260),
-                    button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup+390),
-                    button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup+520),
-                    button(window,"Textures//kup.png","Textures//kupc.png",1200,pierwszy_kup+650)};
-    int Ile;
     float stosX,stosY;
+    button kup[6]={ button(window,"Textures//kup.png","Textures//kupc.png",1200.f*stosX,pierwszy_kup*stosY,stosX,stosY),
+                    button(window,"Textures//kup.png","Textures//kupc.png",1200.f*stosX,(pierwszy_kup+130)*stosY,stosX,stosY),
+                    button(window,"Textures//kup.png","Textures//kupc.png",1200.f*stosX,(pierwszy_kup+260)*stosY,stosX,stosY),
+                    button(window,"Textures//kup.png","Textures//kupc.png",1200.f*stosX,(pierwszy_kup+390)*stosY,stosX,stosY),
+                    button(window,"Textures//kup.png","Textures//kupc.png",1200.f*stosX,(pierwszy_kup+520)*stosY,stosX,stosY),
+                    button(window,"Textures//kup.png","Textures//kupc.png",1200.f*stosX,(pierwszy_kup+650)*stosY,stosX,stosY)};
+    int Ile;
 public:
     sklep Sklep;
     Equipment(sf::RenderWindow &window1,float stosX,float stosY);

@@ -62,13 +62,10 @@ float frameLimit=0;
 //------------------------------------------------------------------------------------------------------------------------------------------
 float czas_na_klatke()
 {
-    using namespace std;
-    const float czasX=300;
+    const float czasX=600;
     float ret={1.f};
-    //sf::Time time=klatka.getElapsedTime();
     float uTime=poprz_klatka.asSeconds();
     ret=uTime*czasX;
-    //cout<<ret<<endl;
     return ret;
 }
 
@@ -869,7 +866,7 @@ bool mozna_strzelac(int w_rece,sf::Clock *przeladowanie)
 //------------------------------------------------------------------------------------------------------------------------------------------
 void Config()
 {
-    unsigned int xSize,ySize;
+    int xSize,ySize;
     std::string sciezka="Config.txt";
     std::string line="";
     std::fstream config_file;
@@ -949,10 +946,10 @@ int main(int argc, char *argv[])
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY);
     AI mama(window,"Textures//mama_swinka.png","","Textures//pistolet.png","","",1300,GroundLevel-50,stosX,stosY);                                                                                      //dorobic brakujace pliki
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png",stosX,stosY);
-    button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1600.f/stosX,20.f/stosY);
-    button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1520.f/stosX,80.f/stosY);
-    button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1670.f/stosX,80.f/stosY);
-    button Sklep_bt(window,"Textures//sklep.png","Textures//sklepc.png",550.f/stosX,5.f/stosY);
+    button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
+    button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1520.f/stosX,80.f/stosY,stosX,stosY);
+    button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1670.f/stosX,80.f/stosY,stosX,stosY);
+    button Sklep_bt(window,"Textures//sklep.png","Textures//sklepc.png",550.f/stosX,5.f/stosY,stosX,stosY);
     Sklep_bt.scaleX=0.45/stosX;
     Sklep_bt.scaleY=0.45/stosY;
     Equipment Eq(window,stosX,stosY);
