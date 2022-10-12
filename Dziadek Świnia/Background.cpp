@@ -1,8 +1,10 @@
 #include "Background.hpp"
 
-Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,float stosX,float stosY)
-    :window(window1)
+Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,float stosX,float stosY):stosX(stosX),stosY(stosY),window(window1)
 {
+
+    tloGra.setSize(sf::Vector2f(stosX*1920,stosY*1080));
+    tloGra.setFillColor(sf::Color(76,5.76,5.76,5));
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     gertruda.loadFromFile("Textures//gertruda.png");
     chmura.loadFromFile("Textures//cloud.png");
@@ -85,7 +87,13 @@ void Background::wejdz(Interior *interior,bool *panelSklep)
         }
     }
 }
-void Background::Update(Interior *interior,unsigned short level,bool *panelSklep)
+unsigned int Background::miniGra()
+{
+    window.draw(tloGra);
+    window.draw(Wskaznik);
+    return 0;
+}
+unsigned int Background::Update(Interior *interior,unsigned short level,bool *panelSklep,bool EnterPressed)
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
     {
@@ -123,14 +131,26 @@ void Background::Update(Interior *interior,unsigned short level,bool *panelSklep
             window.draw(Pociag);
         }
     }
+    unsigned int p=0.f;
     if(*interior==tajna_baza_wojskowa_pod_domem)
     {
         sf::Vector2i mysz=sf::Mouse::getPosition(window);
         Wskaznik.setPosition(static_cast<sf::Vector2f>(mysz));
 
         window.draw(Baza);
-        window.draw(Wskaznik);
+        if(EnterPressed)
+        {
+            if(mGra==true)
+                mGra=false;
+            if(mGra==false)
+                mGra=true;
+        }
+        if(mGra==true)
+            {
+                p=miniGra();
+            }
     }
+    return p;
 }
 
 bool Background::background_move(side Side)

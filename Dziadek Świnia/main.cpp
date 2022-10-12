@@ -111,6 +111,7 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
         red[i].setTexture(red_txt);
         red[i].setScale(0.25,0.25);
     }
+
     buffer1.loadFromFile(sciezka2);
     buffer2.loadFromFile(sciezka3);
     buffer3.loadFromFile(sciezka4);
@@ -939,8 +940,8 @@ int main(int argc, char *argv[])
     srand(time(NULL));
     Config();
     sf::RenderWindow window(sf::VideoMode(Yokna,Xokna,64), "Dziadek Swinka",sf::Style::Default,setting);
-    const float stosX=1080.f/Xokna;   std::cout<<stosX<<std::endl;
-    const float stosY=1920.f/Yokna;   std::cout<<stosY<<std::endl;
+    const float stosX=1080.f/Xokna;   //std::cout<<stosX<<std::endl;
+    const float stosY=1920.f/Yokna;   //std::cout<<stosY<<std::endl;
     const float GroundLevel=700.f/stosY;
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY);
@@ -1034,7 +1035,7 @@ int main(int argc, char *argv[])
         {
             if(!panelSklep)
             {
-                background.Update(&interior,level,&panelSklep);
+                background.Update(&interior,level,&panelSklep,EnterPressed);
                 if(interior==outside)
                 {
                     if(skrzynka.active)
