@@ -16,8 +16,9 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY):window(w
     {
         text[i].setFont(OswaldRegular);
         symbol[i].setTexture(symbol_txt[i]);
-        symbol[i].setPosition(stosX*(70*i+53),30*stosY);
-        text[i].setPosition(stosX*(68*i+38),98*stosY);
+        symbol[i].setPosition((70*i+53)/stosX,30/stosY);
+        text[i].setPosition((68*i+38)/stosX,98/stosY);
+        text[i].setCharacterSize(30/stosX);
     }
     pistolet=true;
     karabin=false;
@@ -28,40 +29,40 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY):window(w
     pieniadze_tekst.setFont(OswaldRegular);
     pieniadze_plus.setFont(OswaldRegular);
     pieniadze_tekst.setColor(sf::Color(5,0,170));
-    pieniadze_tekst.setPosition(900*stosX,5);
+    pieniadze_tekst.setPosition(900/stosX,5);
     pieniadze_tekst.setStyle(sf::Text::Bold);
-    symbol[0].setScale(0.1*stosX,0.1*stosY);
-    symbol[1].setScale(-0.14*stosX,0.14*stosY);
-    symbol[2].setScale(-0.07*stosX,0.07*stosY);
-    symbol[3].setScale(-0.08*stosX,0.1*stosY);
-    symbol[4].setScale(-0.15*stosX,0.15*stosY);
-    symbol[1].setPosition(170*stosX,-8*stosY);
-    symbol[2].setPosition(210*stosX,35*stosY);
-    symbol[3].setPosition(290*stosX,25*stosY);
-    symbol[4].setPosition(430*stosX,39*stosY);
+    symbol[0].setScale(0.1/stosX,0.1/stosY);
+    symbol[1].setScale(-0.14/stosX,0.14/stosY);
+    symbol[2].setScale(-0.07/stosX,0.07/stosY);
+    symbol[3].setScale(-0.08/stosX,0.1/stosY);
+    symbol[4].setScale(-0.15/stosX,0.15/stosY);
+    symbol[1].setPosition(170/stosX,-8/stosY);
+    symbol[2].setPosition(210/stosX,35/stosY);
+    symbol[3].setPosition(290/stosX,25/stosY);
+    symbol[4].setPosition(430/stosX,39/stosY);
     symbol[0].setRotation(45);
     symbol[1].setRotation(-45);
     symbol[2].setRotation(-45);
     symbol[3].setRotation(-45);
     symbol[4].setRotation(0);
 
-    backRect.setSize(sf::Vector2f(426*stosX,125*stosY));
-    backRect.setPosition(10*stosX,10*stosY);
+    backRect.setSize(sf::Vector2f(426/stosX,125/stosY));
+    backRect.setPosition(10/stosX,10/stosY);
     backRect.setOutlineColor(sf::Color(135,135,135));
     backRect.setOutlineThickness(10);
     backRect.setFillColor(sf::Color(180,180,180));
-    pieniadz_bcg.setSize(sf::Vector2f(920*stosX,50*stosY));
-    pieniadz_bcg.setPosition(500*stosX,0);
+    pieniadz_bcg.setSize(sf::Vector2f(920/stosX,50/stosY));
+    pieniadz_bcg.setPosition(500/stosX,0);
     pieniadz_bcg.setOutlineColor(sf::Color(135,135,135));
     pieniadz_bcg.setOutlineThickness(5);
     pieniadz_bcg.setFillColor(sf::Color(180,180,180));
     for(int i=0;i<6;i++)
     {
-        icon[i].setSize(sf::Vector2f(50*stosX,50*stosY));
+        icon[i].setSize(sf::Vector2f(50/stosX,50/stosY));
         icon[i].setFillColor(sf::Color(220,220,220));
         icon[i].setOutlineColor(sf::Color(135,135,135));
         icon[i].setOutlineThickness(5);
-        icon[i].setPosition((70*i+25)*stosX,45*stosY);
+        icon[i].setPosition((70*i+25)/stosX,45/stosY);
     }
     ustaw_sklep();
     main.setBuffer(intro);
@@ -89,11 +90,11 @@ void Equipment::pociag()
 }
 void Equipment::ustaw_sklep()
 {
-    Sklep.background.setSize(sf::Vector2f(1190*stosX,790*stosY));
+    Sklep.background.setSize(sf::Vector2f(1190/stosX,790/stosY));
     Sklep.background.setFillColor(sf::Color(160,140,80));
     Sklep.background.setOutlineColor(sf::Color(70,70,70));
     Sklep.background.setOutlineThickness(5);
-    Sklep.background.setPosition(360*stosX,100*stosY);
+    Sklep.background.setPosition(360/stosX,100/stosY);
     Sklep.ico[0].setTexture(symbol_txt[1]);
     Sklep.ico[1].setTexture(symbol_txt[2]);
     Sklep.ico[2].setTexture(symbol_txt[3]);
@@ -101,12 +102,12 @@ void Equipment::ustaw_sklep()
     Sklep.ico[4].setTexture(symbol_txt[0]);
     for(int i=0;i<6;i++)
     {
-        Sklep.ico[i].setPosition(800*stosX,(140+i*120)*stosY);
-        Sklep.ico[i].setScale(-0.4*stosX,0.34*stosY);
+        Sklep.ico[i].setPosition(800/stosX,(140+i*120)/stosY);
+        Sklep.ico[i].setScale(-0.4/stosX,0.34/stosY);
 
     }
     Sklep.ico[4].setScale(-0.25,0.25);
-    Sklep.ico[4].setPosition(600*stosX,(170+5*120)*stosY);
+    Sklep.ico[4].setPosition(600/stosX,(170+5*120)/stosY);
     Sklep.ico[4].setRotation(90);
 }
 void Equipment::ustaw_reke()
@@ -150,7 +151,7 @@ void Equipment::ustaw_Text()
         Sklep.price_text[i].setFont(OswaldRegular);
         Sklep.price_text[i].setColor(sf::Color(250,200,60));
         Sklep.price_text[i].setString(std::to_string(price[i])+"$");
-        Sklep.price_text[i].setPosition(800*stosX,(170+i*130)*stosY);
+        Sklep.price_text[i].setPosition(800/stosX,(170+i*130)/stosY);
     }
     if(pistolet)
     {

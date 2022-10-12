@@ -63,7 +63,7 @@ float frameLimit=0;
 float czas_na_klatke()
 {
     using namespace std;
-    const float czasX=400;
+    const float czasX=300;
     float ret={1.f};
     //sf::Time time=klatka.getElapsedTime();
     float uTime=poprz_klatka.asSeconds();
@@ -122,9 +122,9 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     txt.loadFromFile(sciezka);
     txt2.loadFromFile(sciezka1);
     postac.setTexture(txt);
-    postac.setScale(0.5,0.5);
-    postac.setOrigin((txt.getSize().x)*postac.getScale().x/2,(txt.getSize().y)*postac.getScale().y/2);
-    postac.setPosition(x*stosX,y*stosY);
+    postac.setScale(0.5/stosX,0.5/stosY);
+    postac.setOrigin((txt.getSize().x)*postac.getScale().x/(stosX*2),(txt.getSize().y)*postac.getScale().y/(stosY*2));
+    postac.setPosition(x/stosX,y/stosY);
     posX=x;
     posY=y;
 }
@@ -181,10 +181,10 @@ void Postac::move_to_side(side Side)
 {
     if(Side==Right)
     {
-        postac.setScale(0.5,postac.getScale().y);
+        postac.setScale(0.5/stosX,postac.getScale().y);
     }else if(Side==Left)
     {
-        postac.setScale(-0.5,postac.getScale().y);
+        postac.setScale(-0.5/stosY,postac.getScale().y);
     }
 }
 
@@ -253,9 +253,9 @@ void Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
     }
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        hand_degree+=0.2;
+        hand_degree+=0.2*czas_na_klatke();
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        hand_degree-=0.2;
+        hand_degree-=0.2*czas_na_klatke();
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
     {
         graj_dzwiek();
@@ -275,7 +275,7 @@ float Postac::getDegree()
 void Postac::Fall()
 {
     float gravity=0.0001;
-    if(postac.getPosition().y+(txt.getSize().y)/4<=window.getSize().y-380&&postac.getPosition().y>=0+5)
+    if(postac.getPosition().y+(txt.getSize().y)/4<=window.getSize().y-380/stosY&&postac.getPosition().y>=0+5)
     {
         if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
@@ -287,9 +287,9 @@ void Postac::Fall()
             vs+=gravity*czas_na_klatke()*2;
             postac.move(0,vs*czas_na_klatke()*3);
         }
-    }else if((postac.getPosition().y+(txt.getSize().y)/4)>window.getSize().y-380.f)
+    }else if((postac.getPosition().y+(txt.getSize().y)/4)>window.getSize().y-380.f/stosY)
     {
-        postac.setPosition(postac.getPosition().x,window.getSize().y-(txt.getSize().y/4)-380.f);
+        postac.setPosition(postac.getPosition().x,window.getSize().y-(txt.getSize().y/4)-380.f/stosY);
         vs=0;
     }else if((postac.getPosition().y<5))
     {
@@ -931,6 +931,7 @@ void Config()
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
+
 int main(int argc, char *argv[])
 {
     setting.antialiasingLevel=0;
@@ -943,17 +944,17 @@ int main(int argc, char *argv[])
     sf::RenderWindow window(sf::VideoMode(Yokna,Xokna,64), "Dziadek Swinka",sf::Style::Default,setting);
     const float stosX=1080.f/Xokna;   std::cout<<stosX<<std::endl;
     const float stosY=1920.f/Yokna;   std::cout<<stosY<<std::endl;
-    const float GroundLevel=700.f*stosY;
+    const float GroundLevel=700.f/stosY;
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY);
     AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY);
     AI mama(window,"Textures//mama_swinka.png","","Textures//pistolet.png","","",1300,GroundLevel-50,stosX,stosY);                                                                                      //dorobic brakujace pliki
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png",stosX,stosY);
-    button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1600,20);
-    button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1520,80);
-    button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1670,80);
-    button Sklep_bt(window,"Textures//sklep.png","Textures//sklepc.png",550,5);
-    Sklep_bt.scaleX=0.45;
-    Sklep_bt.scaleY=0.45;
+    button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1600.f/stosX,20.f/stosY);
+    button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1520.f/stosX,80.f/stosY);
+    button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1670.f/stosX,80.f/stosY);
+    button Sklep_bt(window,"Textures//sklep.png","Textures//sklepc.png",550.f/stosX,5.f/stosY);
+    Sklep_bt.scaleX=0.45/stosX;
+    Sklep_bt.scaleY=0.45/stosY;
     Equipment Eq(window,stosX,stosY);
     bron karabin(window,"Textures//ak47.png","Textures//pistolet.png","Textures//bazooka.png","Textures//uzi.png");
     skrzynki();
@@ -961,7 +962,7 @@ int main(int argc, char *argv[])
     sf::Texture gameover;
     gameover.loadFromFile("Textures//end.jpg");
     GameOver.setTexture(gameover);
-
+    system("cls");
     if(frameLimit!=0)
         window.setFramerateLimit(frameLimit);
 
