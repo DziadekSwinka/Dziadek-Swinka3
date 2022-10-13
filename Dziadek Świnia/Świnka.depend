@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1665594859 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1665676865 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<iostream>
@@ -449,15 +449,17 @@
 
 1663503798 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\enum.hpp
 
-1665594859 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.hpp
+1665682168 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.hpp
 	<SFML/Graphics.hpp>
 	<String>
 	<iostream>
 	<math.h>
+	<cstdlib>
+	<time.h>
 	"side.hpp"
 	"mode.hpp"
 
-1665594859 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
+1665680775 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"Background.hpp"
 
 1665592004 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp

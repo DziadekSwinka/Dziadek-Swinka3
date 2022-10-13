@@ -1035,7 +1035,7 @@ int main(int argc, char *argv[])
         {
             if(!panelSklep)
             {
-                Eq.pieniadze+=background.Update(&interior,level,&panelSklep,EnterPressed);
+                Eq.pieniadze+=background.Update(&interior,level,&panelSklep,&EnterPressed);
                 if(interior==outside)
                 {
                     if(skrzynka.active)

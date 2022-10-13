@@ -3,13 +3,20 @@
 Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,float stosX,float stosY):stosX(stosX),stosY(stosY),window(window1)
 {
 
+    srand(time(NULL));
     tloGra.setSize(sf::Vector2f(stosX*1920,stosY*1080));
-    tloGra.setFillColor(sf::Color(76,5.76,5.76,5));
+    tloGra.setFillColor(sf::Color(76,76,76));
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     gertruda.loadFromFile("Textures//gertruda.png");
     chmura.loadFromFile("Textures//cloud.png");
     baza.loadFromFile("Textures//baza.png");
     wsk.loadFromFile("Textures//wskaznik.png");
+    mStruct.texture.loadFromFile("Textures//Dinozar.png");
+    for(int i=0;i<5;i++)
+    {
+        mStruct.target[i].setScale(0.5/stosX,0.5/stosY);
+        mStruct.target[i].setTexture(mStruct.texture);
+    }
     Wskaznik.setTexture(wsk);
     Wskaznik.setOrigin(8,8);
     Wskaznik.setScale(2,2);
@@ -89,9 +96,44 @@ void Background::wejdz(Interior *interior,bool *panelSklep)
 }
 unsigned int Background::miniGra()
 {
+    short zwroc=0;
+    const int WinX=window.getSize().x;
+    const int WinY=window.getSize().y;
+    mStruct.time=mStruct.clock.getElapsedTime();
+    if(mStruct.time.asSeconds()>=1/mStruct.speed)
+    {
+        mStruct.clock.restart();
+        for(short i=0;i<5;i++)
+        {
+            mStruct.target_pos[i].x=(std::rand()%WinX-100/stosX)+100/stosX;
+            mStruct.target_pos[i].y=(std::rand()%static_cast<int>(WinY-200/stosY)+300.f/stosY);
+            mStruct.target[i].setPosition(mStruct.target_pos[i]);
+            mStruct.display[i]=true;
+        }
+    }
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    for(short i=0;i<5;i++)
+    {
+        if(mousePos.x>mStruct.target_pos[i].x && mousePos.x<mStruct.target_pos[i].x+mStruct.texture.getSize().x*mStruct.target[i].getScale().x)
+        {
+            if(mousePos.y>mStruct.target_pos[i].y && mousePos.y<mStruct.target_pos[i].y+mStruct.texture.getSize().y*mStruct.target[i].getScale().y)
+            {
+                if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && mStruct.display[i]==true)
+                {
+                    zwroc+=3;
+                    mStruct.speed+=0.00001;
+                    mStruct.display[i]=false;
+                    continue;
+                }
+            }
+        }
+    }
     window.draw(tloGra);
+    for(short m=0;m<5;m++)
+        if(mStruct.display[m]==true)
+        window.draw(mStruct.target[m]);
     window.draw(Wskaznik);
-    return 0;
+    return zwroc;
 }
 unsigned int Background::Update(Interior *interior,unsigned short level,bool *panelSklep,bool EnterPressed)
 {
@@ -99,6 +141,7 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
     {
         *interior=outside;
         x=x_outside;
+        mGra=0;
     }
     wyswietl_napis(b1_x,b2_x,b3_x);
     wejdz(interior,panelSklep);
@@ -131,6 +174,7 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
             window.draw(Pociag);
         }
     }
+
     unsigned int p=0.f;
     if(*interior==tajna_baza_wojskowa_pod_domem)
     {
@@ -138,18 +182,19 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
         Wskaznik.setPosition(static_cast<sf::Vector2f>(mysz));
 
         window.draw(Baza);
-        if(EnterPressed)
-        {
-            if(mGra==true)
-                mGra=false;
-            if(mGra==false)
-                mGra=true;
-        }
+
         if(mGra==true)
-            {
-                p=miniGra();
-            }
+        {
+            p=miniGra();
+        }
     }
+
+    if(EnterPressed==true && mGra==false)
+    {
+        mGra=true;
+    }
+
+
     return p;
 }
 
@@ -191,3 +236,5 @@ bool Background::background_move(side Side)
 
     return true;
 }
+
+

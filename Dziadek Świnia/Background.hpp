@@ -5,10 +5,23 @@
 #include <String>
 #include <iostream>
 #include <math.h>
+#include <cstdlib>
+#include <time.h>
 #include "side.hpp"
 #include "mode.hpp"
 
 float czas_na_klatke();
+
+struct mGraStruct
+{
+    double speed=1;
+    sf::Texture texture;
+    sf::Sprite target[5];
+    sf::Clock clock;
+    sf::Time time;
+    sf::Vector2f target_pos[5];
+    bool display[5];
+};
 
 class Background
 {
@@ -32,6 +45,7 @@ private:
     bool pokaz_tekst[3]={0,0,0};
     bool mGra=false;
     sf::RectangleShape tloGra;
+    mGraStruct mStruct;
 public:
 
     unsigned int Update(Interior *interior,unsigned short level,bool *panelSklep,bool EnterPressed);
