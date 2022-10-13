@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1665676865 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1665695421 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<iostream>
@@ -459,13 +459,13 @@
 	"side.hpp"
 	"mode.hpp"
 
-1665680775 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
+1665682339 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"Background.hpp"
 
-1665592004 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
+1665690222 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
 	"Equipment.hpp"
 
-1665590346 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
+1665690222 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	"button.hpp"
@@ -473,12 +473,12 @@
 1663935746 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\globalne.hpp
 	"obsluga_broni.hpp"
 
-1664472557 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.hpp
+1665693527 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.hpp
 	<SFML/Graphics.hpp>
 	"Equipment.hpp"
 	"side.hpp"
 
-1664472489 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.cpp
+1665690741 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.cpp
 	"level.hpp"
 
 1660370567 d:\biblioteki c++\sfml-2.5.1\include\sfml\audio.hpp

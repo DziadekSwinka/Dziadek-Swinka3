@@ -1,6 +1,6 @@
 #include "Equipment.hpp"
 
-Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY):window(window1),stosX(stosX),stosY(stosY)
+Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol0,float Vol1):window(window1),stosX(stosX),stosY(stosY)
 {
     symbol_txt[0].loadFromFile("Textures//bullet.png");
     symbol_txt[1].loadFromFile("Textures//pistolet.png");
@@ -66,7 +66,7 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY):window(w
     }
     ustaw_sklep();
     main.setBuffer(intro);
-    main.setVolume(40);
+    main.setVolume(Vol0*Vol1/100);
     main.setLoop(true);
     main.play();
 

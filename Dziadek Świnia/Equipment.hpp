@@ -41,7 +41,7 @@ private:
     int Ile;
 public:
     sklep Sklep;
-    Equipment(sf::RenderWindow &window1,float stosX,float stosY);
+    Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol0,float Vol1);
     unsigned int ammunition;
     unsigned int HP;
     unsigned int pieniadze;

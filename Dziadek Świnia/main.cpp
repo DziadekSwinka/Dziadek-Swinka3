@@ -48,6 +48,7 @@ bullet* bullet_wsk[10]={nullptr};
 unsigned int Xokna=1920,Yokna=1080;
 float frameLimit=0;
 
+const float Vol[10]={100,40,50,20,40,0,0,0,0,0};              // 0-main volume,1-muzyka w tle, 2-dzidek dzialogi, 3-bron,4-inne dialogi
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -93,6 +94,8 @@ protected:
     float hand_degree=0;
     float stosX,stosY;
 public:
+    operator=(Postac &obj);
+    //Postac();
     Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY);
     void getDmg(unsigned int *Hp);
     float getDegree();
@@ -125,6 +128,12 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     postac.setPosition(x/stosX,y/stosY);
     posX=x;
     posY=y;
+}
+Postac::operator=(Postac &obj)
+{
+    obj.posY=posY;
+    obj.posX=posX;
+    obj.hand_degree=hand_degree;
 }
 float Postac::oblicz_czas(int w_rece,float czas)
 {
@@ -207,6 +216,7 @@ void Postac::graj_dzwiek(unsigned short i)
         sound.setBuffer(buffer4);
         break;
     }
+    sound.setVolume(Vol[2]*Vol[0]/100);
     sound.play();
 }
 void Postac::graj_dzwiek()
@@ -389,6 +399,8 @@ private:
     sf::RenderWindow &window;
     sf::Texture txt[5];
     sf::RectangleShape sprite;
+    sf::Sound piu_piu;
+    sf::SoundBuffer buffer;
     void move_to_side(side Side);
     void wystrzel(float degreee);
     void ustawPocisk(short i,float degre);
@@ -408,6 +420,9 @@ public:
 };
 bron::bron(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,std::string sciezka3,std::string sciezka4):window(window1)
 {
+    buffer.loadFromFile("Sounds//piu_piu.wav");
+    piu_piu.setBuffer(buffer);
+    piu_piu.setVolume(Vol[3]*Vol[0]/100);
     sprite.setSize(sf::Vector2f(1024,370));
     txt[0].loadFromFile(sciezka2);
     txt[2].loadFromFile(sciezka);
@@ -426,6 +441,7 @@ void bron::wystrzel(float degree)
     {
         if(Bullet[i].fly==false)
         {
+            piu_piu.play();
             Bullet[i].fly=true;
             ustawPocisk(i,degree);
             break;
@@ -508,8 +524,10 @@ private:
     void ustawBron();
     void graj_dzwiek();
     float dist();
+    double liczKat(Postac &target);
 public:
     void Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece);
+    void Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target);
     bool dotykaPostaci(int i);
     AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY);
 };
@@ -535,6 +553,7 @@ void AI::graj_dzwiek()
     {
         sound.setBuffer(buffer2);
     }
+    sound.setVolume(Vol[4]*Vol[0]/100);
     sound.play();
 }
 void AI::ustawBron()
@@ -581,6 +600,12 @@ bool AI::dotykaPostaci(int i)
 float AI::dist()
 {
     return abs(posX-window.getSize().x/2);
+}
+void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
+{
+    Postac &target=*Target;
+    hand_degree=liczKat(target);
+    Update(Eq,targetHP,w_rece);
 }
 void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
 {
@@ -691,10 +716,6 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
         }
     }
     ustawBron();
-    if(false)
-        hand_degree+=0.2;
-    if(false)
-        hand_degree-=0.2;
     if(Eq->HP<=10)
     {
         postac.setTexture(mieso);
@@ -708,7 +729,20 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
         window.draw(red[i]);
 
 }
-
+double AI::liczKat(Postac &target)
+{
+    double x,y;
+    double x1,y1;
+    double x2,y2;
+    x1=this->postac.getPosition().x;
+    y1=this->postac.getPosition().y;
+    x2=target.posX;
+    y2=target.posY;
+    x=x2-x1;
+    y=y1-y2;
+    std::cout<< atan2(x,y)*180/M_PI-90<<std::endl;
+    return 0;
+}
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -953,7 +987,7 @@ int main(int argc, char *argv[])
     button Sklep_bt(window,"Textures//sklep.png","Textures//sklepc.png",550.f/stosX,5.f/stosY,stosX,stosY);
     Sklep_bt.scaleX=0.45/stosX;
     Sklep_bt.scaleY=0.45/stosY;
-    Equipment Eq(window,stosX,stosY);
+    Equipment Eq(window,stosX,stosY,Vol[0],Vol[1]);
     bron karabin(window,"Textures//ak47.png","Textures//pistolet.png","Textures//bazooka.png","Textures//uzi.png");
     skrzynki();
     sf::Sprite GameOver;
@@ -961,6 +995,7 @@ int main(int argc, char *argv[])
     gameover.loadFromFile("Textures//end.jpg");
     GameOver.setTexture(gameover);
     system("cls");
+
     if(frameLimit!=0)
         window.setFramerateLimit(frameLimit);
 
@@ -1059,7 +1094,7 @@ int main(int argc, char *argv[])
                     if(level==2)
                     {
                         if(mamaEq.HP>0)
-                            mama.Update(&mamaEq,&Eq.HP,Eq.w_rece);
+                            mama.Update(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
                         if(mamaEq.HP==0)
                         {
                             level=0;
