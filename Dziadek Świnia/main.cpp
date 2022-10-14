@@ -324,7 +324,8 @@ public:
     float dir;
     bool fly;
     bool k;
-    float p;
+    double p;
+    int u;
 };
 bullet::bullet(sf::RenderWindow &window1,std::string sciezka,int i):window(window1)
 {
@@ -368,7 +369,9 @@ void bullet::Update()
     posY=sprite.getPosition().y;
     float alfa;
     float a,b,c=0.5;
-    alfa=sprite.getRotation()+90+p;
+    alfa=sprite.getRotation()+90;
+    alfa*=p;
+    alfa+=u;
     alfa=alfa/60;         //+270
     a=c*(sin(alfa));
     b=c*(cos(alfa));
@@ -746,12 +749,14 @@ void AI::ustawPocisk(short i,float degree)
     if(postac.getScale().x<0)
     {
         Bullet_AI[i].k=true;
-        Bullet_AI[i].p=-220;
+        Bullet_AI[i].p=-1;
+        Bullet_AI[i].u=180;
     }
     else
     {
         Bullet_AI[i].k=false;
-        Bullet_AI[i].p=0;
+        Bullet_AI[i].p=1;
+        Bullet_AI[i].u=0;
     }
 
 }
