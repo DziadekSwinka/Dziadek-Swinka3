@@ -324,6 +324,7 @@ public:
     float dir;
     bool fly;
     bool k;
+    float p;
 };
 bullet::bullet(sf::RenderWindow &window1,std::string sciezka,int i):window(window1)
 {
@@ -367,7 +368,7 @@ void bullet::Update()
     posY=sprite.getPosition().y;
     float alfa;
     float a,b,c=0.5;
-    alfa=sprite.getRotation()+90;
+    alfa=sprite.getRotation()+90+p;
     alfa=alfa/60;         //+270
     a=c*(sin(alfa));
     b=c*(cos(alfa));
@@ -695,6 +696,7 @@ void AI::ustawBron()
         B1.setPosition(posX+corX*stosX,corY*stosY);
         B1.setScale(-scaleX*stosX,scaleY*stosY);
         B1.setRotation(hand_degree);
+
     }
     else
     {
@@ -736,38 +738,49 @@ float AI::dist()
 {
     return abs(posX-window.getSize().x/2);
 }
-void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
-{
-    Postac &target=*Target;
-    hand_degree=liczKat(target);
-    std::cout<<hand_degree<<std::endl;
-    Update(Eq,targetHP,w_rece);
-}
+
 void AI::ustawPocisk(short i,float degree)
 {
     Bullet_AI[i].setPosition(B1.getPosition().x,B1.getPosition().y);
     Bullet_AI[i].setRotation(degree);
-    if(B1.getScale().x>0)
+    if(postac.getScale().x<0)
+    {
         Bullet_AI[i].k=true;
+        Bullet_AI[i].p=-220;
+    }
     else
+    {
         Bullet_AI[i].k=false;
+        Bullet_AI[i].p=0;
+    }
+
 }
 void AI::wystrzel()
 {
-    float degree=hand_degree;
+    float degree=-hand_degree;
     short i=0;
     while(i<10)
     {
-        if(Bullet_AI[i].fly==false)
+        if(Bullet_AI[i].fly==false && time.asSeconds()>2.f)
         {
             piu.play();
             Bullet_AI[i].fly=true;
             ustawPocisk(i,degree);
+            przeladowanie.restart();
             break;
+
         }
         else
             i++;
     }
+}
+void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
+{
+    time=przeladowanie.getElapsedTime();
+    Postac &target=*Target;
+    hand_degree=liczKat(target);
+    wystrzel();
+    Update(Eq,targetHP,w_rece);
 }
 void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
 {
@@ -1176,7 +1189,7 @@ int main(int argc, char *argv[])
     sf::Texture gameover;
     gameover.loadFromFile("Textures//end.jpg");
     GameOver.setTexture(gameover);
-    system("cls");
+    //system("cls");
 
     if(frameLimit!=0)
         window.setFramerateLimit(frameLimit);

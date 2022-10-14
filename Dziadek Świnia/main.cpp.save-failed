@@ -312,7 +312,7 @@ class bullet
 {
 private:
     sf::RenderWindow &window;
-    static sf::Texture txt;
+    sf::Texture txt;
     sf::Sprite sprite;
 public:
     void Update();
@@ -608,6 +608,8 @@ class AI
     :public Postac
 {
 private:
+    sf::SoundBuffer buffer;
+    sf::Sound piu;
     sf::Clock przeladowanie;
     sf::Time time;
     sf::Texture b1;
@@ -616,6 +618,7 @@ private:
     void ustawBron();
     void graj_dzwiek();
     void wystrzel();
+    void ustawPocisk(short i,float degree);
     float dist();
     double liczKat(Postac &target);
     double scaleX,scaleY;
@@ -640,9 +643,12 @@ public:
 AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY)
     :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y,stosX,stosY),type(type)
 {
+    buffer.loadFromFile("Sounds//piu_piu.wav");
     mieso.loadFromFile("Textures//porkchop_raw.png");
     b1.loadFromFile(sciezka_bron);
     B1.setTexture(b1);
+    piu.setBuffer(buffer);
+    piu.setVolume(Vol[0]*Vol[3]/100);
     hand_degree=0;
     switch(type)
     {
@@ -730,28 +736,43 @@ float AI::dist()
 {
     return abs(posX-window.getSize().x/2);
 }
-void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
+
+void AI::ustawPocisk(short i,float degree)
 {
-    Postac &target=*Target;
-    hand_degree=liczKat(target);
-    std::cout<<hand_degree<<std::endl;
-    Update(Eq,targetHP,w_rece);
+    Bullet_AI[i].setPosition(B1.getPosition().x,B1.getPosition().y);
+    Bullet_AI[i].setRotation(degree);
+    if(B1.getScale().x>0)
+        Bullet_AI[i].k=true;
+    else
+        Bullet_AI[i].k=false;
 }
 void AI::wystrzel()
 {
+    std::cout<<time.asMilliseconds()<<std::endl;
+    float degree=-hand_degree;
     short i=0;
     while(i<10)
     {
-        if(Bullet_AI[i].fly==false)
+        if(Bullet_AI[i].fly==false && time.asSeconds()>2.f)
         {
-            piu_piu.play();
-            Bullet[i].fly=true;
+            piu.play();
+            Bullet_AI[i].fly=true;
             ustawPocisk(i,degree);
+            przeladowanie.restart();
             break;
+
         }
         else
             i++;
     }
+}
+void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
+{
+    time=przeladowanie.getElapsedTime();
+    Postac &target=*Target;
+    hand_degree=liczKat(target);
+    wystrzel();
+    Update(Eq,targetHP,w_rece);
 }
 void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
 {
@@ -874,6 +895,13 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
         }
     }
     ustawBron();
+    for(short i=0;i<10;i++)
+    {
+        if(Bullet_AI[i].fly=true)
+        {
+            Bullet_AI[i].Update();
+        }
+    }
     if(Eq->HP<=10)
     {
         postac.setTexture(mieso);
@@ -1153,7 +1181,7 @@ int main(int argc, char *argv[])
     sf::Texture gameover;
     gameover.loadFromFile("Textures//end.jpg");
     GameOver.setTexture(gameover);
-    system("cls");
+    //system("cls");
 
     if(frameLimit!=0)
         window.setFramerateLimit(frameLimit);
