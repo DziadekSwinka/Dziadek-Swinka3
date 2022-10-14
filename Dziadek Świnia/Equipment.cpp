@@ -161,11 +161,11 @@ void Equipment::ustaw_Text()
     {
         text[2].setColor(sf::Color(5,0,170));
     }else  text[2].setColor(sf::Color(0,0,0));
-    if(uzi)
+    if(bazooka)
     {
         text[3].setColor(sf::Color(5,0,170));
     }else  text[3].setColor(sf::Color(0,0,0));
-    if(bazooka)
+    if(uzi)
     {
         text[4].setColor(sf::Color(5,0,170));
     }else  text[4].setColor(sf::Color(0,0,0));

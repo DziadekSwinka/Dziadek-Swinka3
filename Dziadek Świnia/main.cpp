@@ -396,15 +396,16 @@ void bullet::Update()
 class bron
 {
 private:
-    sf::RenderWindow &window;
     sf::Texture txt[5];
+protected:
+    sf::RenderWindow &window;
     sf::RectangleShape sprite;
-    sf::Sound piu_piu;
     sf::SoundBuffer buffer;
-    void move_to_side(side Side);
     void wystrzel(float degreee);
     void ustawPocisk(short i,float degre);
 public:
+    sf::Sound piu_piu;
+    void move_to_side(side Side);
     bullet Bullet[10] = {   bullet(window,"Textures//bullet.png",0),
                             bullet(window,"Textures//bullet.png",1),
                             bullet(window,"Textures//bullet.png",2),
@@ -509,35 +510,166 @@ void bron::Update(float posX,float posY,float degree,bool *EnterP,short type)
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+/*
+class AI_Bron
+    :public bron
+{
+private:
+    sf::Texture txt;
+    void wystrzel(float degreee);
+    void ustawPocisk(short i,float degre);
+public:
+    bullet Bullet[10] = {   bullet(window,"Textures//bullet.png",0),
+                            bullet(window,"Textures//bullet.png",1),
+                            bullet(window,"Textures//bullet.png",2),
+                            bullet(window,"Textures//bullet.png",3),
+                            bullet(window,"Textures//bullet.png",4),
+                            bullet(window,"Textures//bullet.png",5),
+                            bullet(window,"Textures//bullet.png",6),
+                            bullet(window,"Textures//bullet.png",7),
+                            bullet(window,"Textures//bullet.png",8),
+                            bullet(window,"Textures//bullet.png",9)};
+
+    void Update(float posX,float posY,float degree,bool *EnterP);
+    AI_Bron(sf::RenderWindow &window1,std::string sciezka);
+};
+AI_Bron::AI_Bron(sf::RenderWindow &window1,std::string sciezka)
+    :bron(window,sciezka,"","","")
+{
+    sprite.setSize(sf::Vector2f(1024,370));
+    txt.loadFromFile(sciezka);
+    sprite.setTexture(&txt);
+    sprite.setScale(-0.3,0.3);
+    sprite.setOrigin(700,250);
+    sprite.setRotation(0);
+}
+void AI_Bron::wystrzel(float degree)
+{
+    short i=0;
+    while(i<10)
+    {
+        if(Bullet[i].fly==false)
+        {
+            piu_piu.play();
+            Bullet[i].fly=true;
+            ustawPocisk(i,degree);
+            break;
+        }
+        else
+            i++;
+    }
+}
+void AI_Bron::ustawPocisk(short i,float degree)
+{
+    Bullet[i].setPosition(sprite.getPosition().x,sprite.getPosition().y);
+    Bullet[i].setRotation(degree);
+    if(sprite.getScale().x>0)
+        Bullet[i].k=true;
+    else
+        Bullet[i].k=false;
+}
+void AI_Bron::Update(float posX,float posY,float degree,bool *EnterP)
+{
+    sprite.setTexture(&txt);
+    if(*EnterP==true)
+    {
+        wystrzel(degree);
+        *EnterP=false;
+    }
+    if(sprite.getScale().x>0)
+    {
+        sprite.setPosition(posX-150,posY+70);
+        sprite.setRotation(degree);
+    }else
+    {
+        sprite.setPosition(posX+150,posY+70);
+        sprite.setRotation(degree*-1);
+    }
+    for(short i=0;i<10;i++)
+    {
+        if(Bullet[i].fly==true)
+            Bullet[i].Update();
+    }
+    window.draw(sprite);
+}
+*/
 
 
-
-
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
 
 class AI
     :public Postac
 {
 private:
+    sf::SoundBuffer buffer;
+    sf::Sound piu;
+    sf::Clock przeladowanie;
+    sf::Time time;
     sf::Texture b1;
     sf::Texture mieso;
     sf::Sprite B1;
     void ustawBron();
     void graj_dzwiek();
+    void wystrzel();
+    void ustawPocisk(short i,float degree);
     float dist();
     double liczKat(Postac &target);
+    double scaleX,scaleY;
+    double corX,corY;
+    int type;
 public:
     void Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece);
     void Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target);
     bool dotykaPostaci(int i);
-    AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY);
+    AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY);
+    bullet Bullet_AI[10] = {bullet(window,"Textures//bullet.png",0),
+                            bullet(window,"Textures//bullet.png",1),
+                            bullet(window,"Textures//bullet.png",2),
+                            bullet(window,"Textures//bullet.png",3),
+                            bullet(window,"Textures//bullet.png",4),
+                            bullet(window,"Textures//bullet.png",5),
+                            bullet(window,"Textures//bullet.png",6),
+                            bullet(window,"Textures//bullet.png",7),
+                            bullet(window,"Textures//bullet.png",8),
+                            bullet(window,"Textures//bullet.png",9)};
 };
-AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY)
-    :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y,stosX,stosY)
+AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY)
+    :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y,stosX,stosY),type(type)
 {
+    buffer.loadFromFile("Sounds//piu_piu.wav");
     mieso.loadFromFile("Textures//porkchop_raw.png");
     b1.loadFromFile(sciezka_bron);
     B1.setTexture(b1);
-    B1.setScale(0.08,0.08);
+    piu.setBuffer(buffer);
+    piu.setVolume(Vol[0]*Vol[3]/100);
+    hand_degree=0;
+    switch(type)
+    {
+    case 0:
+        {
+            corX=60;
+            corY=680;
+            scaleX=-0.08;
+            scaleY=0.08;
+            break;
+        }
+    default:
+        {
+            scaleY=scaleX=0.3;
+            corX=140;
+            corY=730;
+            B1.setOrigin(700,250);
+            break;
+        }
+    }
+    B1.setScale(scaleX,scaleY);
 }
 void AI::graj_dzwiek()
 {
@@ -560,13 +692,16 @@ void AI::ustawBron()
 {
     if(postac.getScale().x>0)
     {
-        B1.setPosition(posX+80*stosX,670*stosY);
-        B1.setScale(0.08*stosX,0.08*stosY);
+        B1.setPosition(posX+corX*stosX,corY*stosY);
+        B1.setScale(-scaleX*stosX,scaleY*stosY);
+        B1.setRotation(hand_degree);
     }
     else
     {
-        B1.setPosition(posX-80*stosX,670*stosY);
-        B1.setScale(-0.08*stosX,0.08*stosY);
+        B1.setPosition(posX-corX*stosX,corY*stosY);
+        B1.setScale(scaleX*stosX,scaleY*stosY);
+        if(type!=0)
+            B1.setRotation(hand_degree+180);
     }
 
 }
@@ -605,14 +740,53 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
 {
     Postac &target=*Target;
     hand_degree=liczKat(target);
+    std::cout<<hand_degree<<std::endl;
     Update(Eq,targetHP,w_rece);
+}
+void AI::ustawPocisk(short i,float degree)
+{
+    Bullet_AI[i].setPosition(B1.getPosition().x,B1.getPosition().y);
+    Bullet_AI[i].setRotation(degree);
+    if(B1.getScale().x>0)
+        Bullet_AI[i].k=true;
+    else
+        Bullet_AI[i].k=false;
+}
+void AI::wystrzel()
+{
+    float degree=hand_degree;
+    short i=0;
+    while(i<10)
+    {
+        if(Bullet_AI[i].fly==false)
+        {
+            piu.play();
+            Bullet_AI[i].fly=true;
+            ustawPocisk(i,degree);
+            break;
+        }
+        else
+            i++;
+    }
 }
 void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
 {
+    if(type>0)
+    {
+        if(hand_degree>(-84))
+        {
+            move_to_side(Right);
+        }else if(hand_degree<(-84))
+        {
+            move_to_side(Left);
+        }
+    }
+
     int przedzial;
     int losowa=std::rand()%2000;
-    if(losowa==1)
+    if(losowa==1 && type==0)
     {
+
         move_to_side(Right);
         do
         {
@@ -621,7 +795,7 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
             przedzial++;
         }while(std::rand()%przedzial==1 && przedzial<=200*czas_na_klatke());
     }
-    if(losowa==0)
+    if(losowa==0 && type==0)
     {
         move_to_side(Left);
         do
@@ -631,7 +805,7 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
             przedzial++;
         }while(std::rand()%przedzial==1 && przedzial<=200*czas_na_klatke());
     }
-    if(losowa==3 && dist()<300 /*&& std::rand()%3==1*/)
+    if(losowa==3 && dist()<300 /*&& std::rand()%3==1*/ && type==0)
     {
         if(*targetHP>0)
         {
@@ -716,6 +890,13 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
         }
     }
     ustawBron();
+    for(short i=0;i<10;i++)
+    {
+        if(Bullet_AI[i].fly=true)
+        {
+            Bullet_AI[i].Update();
+        }
+    }
     if(Eq->HP<=10)
     {
         postac.setTexture(mieso);
@@ -740,8 +921,7 @@ double AI::liczKat(Postac &target)
     y2=target.posY;
     x=x2-x1;
     y=y1-y2;
-    std::cout<< atan2(x,y)*180/M_PI-90<<std::endl;
-    return 0;
+    return atan2(x,y)*180/M_PI-90;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -978,12 +1158,14 @@ int main(int argc, char *argv[])
     const float stosY=1920.f/Yokna;   //std::cout<<stosY<<std::endl;
     const float GroundLevel=700.f/stosY;
     Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY);
-    AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png","Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY);
-    AI mama(window,"Textures//mama_swinka.png","","Textures//pistolet.png","","",1300,GroundLevel-50,stosX,stosY);                                                                                      //dorobic brakujace pliki
+    AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png",0,"Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY);
+    AI mama(window,"Textures//mama_swinka.png","","Textures//pistolet.png",1,"","",1300,GroundLevel-50,stosX,stosY);                                                                                      //dorobic brakujace pliki
     Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png",stosX,stosY);
     button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
     button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1520.f/stosX,80.f/stosY,stosX,stosY);
     button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1670.f/stosX,80.f/stosY,stosX,stosY);
+    button Misja3_bt(window,"Textures//m3.png","Textures//m3c.png",1520.f/stosX,140.f/stosY,stosX,stosY);
+    button Misja4_bt(window,"Textures//m4.png","Textures//m4c.png",1670.f/stosX,140.f/stosY,stosX,stosY);
     button Sklep_bt(window,"Textures//sklep.png","Textures//sklepc.png",550.f/stosX,5.f/stosY,stosX,stosY);
     Sklep_bt.scaleX=0.45/stosX;
     Sklep_bt.scaleY=0.45/stosY;
@@ -1058,6 +1240,22 @@ int main(int argc, char *argv[])
                 level_setUp(2,&Eq,&peppaEq,&mamaEq);
             }
         }
+        if(Misja3_bt.isPressed())
+        {
+            if(level==2 || true)
+            {
+                level=3;
+                level_setUp(3,&Eq,&peppaEq,&mamaEq);
+            }
+        }
+        if(Misja4_bt.isPressed())
+        {
+            if(level==3 || true)
+            {
+                level=4;
+                level_setUp(4,&Eq,&peppaEq,&mamaEq);
+            }
+        }
         if(Sklep_bt.isPressed())
         {
             if(panelSklep)
@@ -1101,15 +1299,31 @@ int main(int argc, char *argv[])
                             Eq.dodaj_za_zabojstwo(70);
                         }
                     }
+                    if(level==3)
+                    {
+                        if(mamaEq.HP>0)
+                            mama.Update(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(mamaEq.HP==0)
+                        {
+                            level=0;
+                            Eq.dodaj_za_zabojstwo(70);
+                        }
+                        if(peppaEq.HP>0)
+                            peppa.Update(&peppaEq,&Eq.HP,Eq.w_rece);
+                        if(peppaEq.HP==0)
+                        {
+                            level=0;
+                            Eq.dodaj_za_zabojstwo(50);
+                        }
+                    }
                 }
                 Misje_bt.Update(ButtonPressed);
                 if(Menu_misje)
                 {
                     Misja1_bt.Update(ButtonPressed);
-                }
-                if(Menu_misje)
-                {
                     Misja2_bt.Update(ButtonPressed);
+                    Misja3_bt.Update(ButtonPressed);
+                    Misja4_bt.Update(ButtonPressed);
                 }
             }
             Eq.Update(panelSklep,ButtonPressed);
