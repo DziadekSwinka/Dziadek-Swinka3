@@ -45,6 +45,8 @@ sf::Time poprz_klatka;
 
 sf::ContextSettings setting;
 
+class AI;
+class Postac;
 class bullet;
 bullet* bullet_wsk[10]={nullptr};
 
@@ -77,6 +79,128 @@ float czas_na_klatke()
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
+class bullet
+{
+private:
+    sf::RenderWindow &window;
+    sf::Texture txt;
+    sf::Sprite sprite;
+public:
+    void Update();
+    bool pozaEkranem();
+    bullet(sf::RenderWindow &window1,std::string sciezka,int i);
+    bullet(sf::RenderWindow &window1,std::string sciezka,int i,AI_Eq *newEq);
+    void setPosition(float posX, float posY);
+    void setRotation(float dir);
+    void setRotationAI(float dir);
+    float posX,posY;
+    float dir;
+    float AI_fix={0.f};
+    bool fly;
+    bool k={0.f};
+};
+bullet::bullet(sf::RenderWindow &window1,std::string sciezka,int i):window(window1)
+{
+    txt.loadFromFile(sciezka);
+    sprite.setTexture(txt);
+    sprite.setScale(0.05,0.05);
+    fly=false;
+    bullet_wsk[i]=this;
+}
+bullet::bullet(sf::RenderWindow &window1,std::string sciezka,int i,AI_Eq *newEq):window(window1)
+{
+    txt.loadFromFile(sciezka);
+    sprite.setTexture(txt);
+    sprite.setScale(0.05,0.05);
+    fly=false;
+    newEq->bullet_wsk[i]=this;
+}
+
+bool bullet::pozaEkranem()
+{
+    if(posX<0 || posY<0 || posX>window.getSize().x || posY>window.getSize().y )
+    {
+        return true;
+    }
+
+    else return false;
+}
+void bullet::setPosition(float X, float Y)
+{
+    sprite.setPosition(X,Y);
+}
+void bullet::setRotation(float dir)
+{
+
+    if(!k)
+    {
+        sprite.setRotation(-dir+90);
+        sprite.setScale(0.05,0.05);
+    }
+    else
+    {
+         sprite.setRotation(dir-90+180);
+         sprite.setScale(-0.05,-0.05);
+    }
+}
+void bullet::setRotationAI(float dir)
+{
+    if(dir>-85)
+    {
+        sprite.setRotation(-dir+90);
+        sprite.setScale(0.05,0.05);
+    }
+    else
+    {
+         sprite.setRotation(dir-90);
+         sprite.setScale(-0.05,-0.05);
+    }
+}
+
+void bullet::Update()
+{
+    posX=sprite.getPosition().x;
+    posY=sprite.getPosition().y;
+    double alfa;
+    double a,b,c=1.2;
+
+    alfa=sprite.getRotation()+90;
+    alfa*=M_PI/180.f;
+
+    if(k)
+    {
+        AI_fix*=M_PI/180.f;
+        alfa+=AI_fix;
+        a=c*(sin(alfa));
+        b=c*(cos(alfa));
+        sprite.move(b*czas_na_klatke(),a*czas_na_klatke());
+    }
+    if(!k)
+    {
+
+        a=c*(sin(alfa));
+        b=c*(cos(alfa));
+        sprite.move(-b*czas_na_klatke(),-a*czas_na_klatke());
+    }
+
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        sprite.move(-0.2*czas_na_klatke(),0);
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+        sprite.move(0.2*czas_na_klatke(),0);
+    }
+    if(pozaEkranem())
+        fly=false;
+
+    window.draw(sprite);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
 class Postac
 {
 private:
@@ -85,7 +209,10 @@ private:
     float oblicz_czas(int w_rece,float czas);
     sf::Font OswaldRegular;
     sf::Text czas;
-    bool dotykaPostaci(int i);
+    bool dotykaPostaci(int i,AI_Eq *myEq);
+    AI_Eq *t1;
+    AI_Eq *t2;
+    AI_Eq *t3;
 protected:
     sf::SoundBuffer buffer1,buffer2,buffer3,buffer4;
     sf::Sound sound;
@@ -101,12 +228,42 @@ public:
     operator=(Postac &obj);
     //Postac();
     Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY);
+    Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY,AI_Eq *t1,AI_Eq *t2,AI_Eq *t3);
     void getDmg(unsigned int *Hp);
     float getDegree();
     float posX,posY;
-    void Update(unsigned int Hp,sf::Time czas_p,int w_rece);
+    unsigned int Update(unsigned int Hp,sf::Time czas_p,int w_rece);
 };
-Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY):window(window1),stosX(stosX),stosY(stosY)
+Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY)
+    :window(window1),stosX(stosX),stosY(stosY)
+{
+    OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
+    red_txt.loadFromFile("Textures//GUI//red_.png");
+    white_txt.loadFromFile("Textures//GUI//white_.png");
+    czas.setFont(OswaldRegular);
+
+    for(int i=0;i<10;i++)
+    {
+        red[i].setTexture(red_txt);
+        red[i].setScale(0.25,0.25);
+    }
+
+    buffer1.loadFromFile(sciezka2);
+    buffer2.loadFromFile(sciezka3);
+    buffer3.loadFromFile(sciezka4);
+    buffer4.loadFromFile(sciezka5);
+    white.setTexture(white_txt);
+    txt.loadFromFile(sciezka);
+    txt2.loadFromFile(sciezka1);
+    postac.setTexture(txt);
+    postac.setScale(0.5/stosX,0.5/stosY);
+    postac.setOrigin((txt.getSize().x)*postac.getScale().x/(stosX*2),(txt.getSize().y)*postac.getScale().y/(stosY*2));
+    postac.setPosition(x/stosX,y/stosY);
+    posX=x;
+    posY=y;
+}
+Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY,AI_Eq *t1,AI_Eq *t2,AI_Eq *t3)
+    :window(window1),stosX(stosX),stosY(stosY),t1(t1),t2(t2),t3(t3)
 {
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     red_txt.loadFromFile("Textures//GUI//red_.png");
@@ -139,10 +296,10 @@ Postac::operator=(Postac &obj)
     obj.posX=posX;
     obj.hand_degree=hand_degree;
 }
-/*bool Postac::dotykaPostaci(int i)
+bool Postac::dotykaPostaci(int i,AI_Eq *myEq)
 {
-        float bX=bullet_wsk[i]->posX;
-        float bY=bullet_wsk[i]->posY;
+        float bX=myEq->bullet_wsk[i]->posX;
+        float bY=myEq->bullet_wsk[i]->posY;
         //float originX=postac.getOrigin().x;
         //float originY=postac.getOrigin().y;
         float x=postac.getPosition().x;
@@ -157,22 +314,23 @@ Postac::operator=(Postac &obj)
             isRight=false;
         else isRight=true;
 
-        x-=postac.getScale().x*isRight;
+        x-=txt.getSize().x*isRight;
 
         sizeX*=abs(postac.getScale().x);
         sizeY*=abs(postac.getScale().y);
+
         if(bX>(x) && bX<(x+sizeX))
         {
             if(bY>(y) && bY<(y+sizeY))
             {
-                if(bullet_wsk[i]->fly==true)
+                if(myEq->bullet_wsk[i]->fly==true)
                 {
-                    bullet_wsk[i]->fly=false;
+                    myEq->bullet_wsk[i]->fly=false;
                     return true;
                 }else return false;
             }else return false;
         }else return false;
-}*/
+}//*/
 float Postac::oblicz_czas(int w_rece,float czas)
 {
     switch(w_rece)
@@ -263,7 +421,7 @@ void Postac::graj_dzwiek()
     unsigned short i=(std::rand()%5);
     graj_dzwiek(i);
 }
-void Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
+unsigned int Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
 {
     czas.setString(std::to_string(oblicz_czas(w_rece,czas_p.asSeconds())));
     Fall();
@@ -306,6 +464,17 @@ void Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
     {
         graj_dzwiek();
     }
+
+    unsigned int hp_=0;
+    for(int i=0;i<10;i++)
+    {
+        if(dotykaPostaci(i,t1)==true)
+            hp_+=10;
+        if(dotykaPostaci(i,t2)==true)
+            hp_+=10;
+        if(dotykaPostaci(i,t3)==true)
+            hp_+=20;
+    }
     window.draw(postac);
     window.draw(white);
     window.draw(czas);
@@ -313,6 +482,7 @@ void Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
     for(int i=0;static_cast<unsigned int>(i)<Hp;i++)
         window.draw(red[i]);
 
+    return hp_;
 }
 float Postac::getDegree()
 {
@@ -341,134 +511,6 @@ void Postac::Fall()
     {
         postac.setPosition(postac.getPosition().x,5);
     }
-}
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-class bullet
-{
-private:
-    sf::RenderWindow &window;
-    sf::Texture txt;
-    sf::Sprite sprite;
-    bullet *bullet_w[10];
-public:
-    void Update();
-    bool pozaEkranem();
-    bullet(sf::RenderWindow &window1,std::string sciezka,int i);
-    bullet(sf::RenderWindow &window1,std::string sciezka,int i,AI_Eq *newEq);
-    void setPosition(float posX, float posY);
-    void setRotation(float dir);
-    void setRotationAI(float dir);
-    float posX,posY;
-    float dir;
-    float AI_fix={0.f};
-    bool fly;
-    bool k={0.f};
-};
-bullet::bullet(sf::RenderWindow &window1,std::string sciezka,int i):window(window1)
-{
-    for(short i=0;i<10;i++)
-        bullet_w[i]=bullet_wsk[i];
-    txt.loadFromFile(sciezka);
-    sprite.setTexture(txt);
-    sprite.setScale(0.05,0.05);
-    fly=false;
-    bullet_wsk[i]=this;
-}
-bullet::bullet(sf::RenderWindow &window1,std::string sciezka,int i,AI_Eq *newEq):window(window1)
-{
-    for(short i=0;i<10;i++)
-        bullet_w[i]=newEq->bullet_wsk[i];
-
-    txt.loadFromFile(sciezka);
-    sprite.setTexture(txt);
-    sprite.setScale(0.05,0.05);
-    fly=false;
-    bullet_wsk[i]=this;
-}
-
-bool bullet::pozaEkranem()
-{
-    if(posX<0 || posY<0 || posX>window.getSize().x || posY>window.getSize().y )
-    {
-        return true;
-    }
-
-    else return false;
-}
-void bullet::setPosition(float X, float Y)
-{
-    sprite.setPosition(X,Y);
-}
-void bullet::setRotation(float dir)
-{
-
-    if(!k)
-    {
-        sprite.setRotation(-dir+90);
-        sprite.setScale(0.05,0.05);
-    }
-    else
-    {
-         sprite.setRotation(dir-90+180);
-         sprite.setScale(-0.05,-0.05);
-    }
-}
-void bullet::setRotationAI(float dir)
-{
-    if(dir>-85)
-    {
-        sprite.setRotation(-dir+90);
-        sprite.setScale(0.05,0.05);
-    }
-    else
-    {
-         sprite.setRotation(dir-90);
-         sprite.setScale(-0.05,-0.05);
-    }
-}
-
-void bullet::Update()
-{
-    posX=sprite.getPosition().x;
-    posY=sprite.getPosition().y;
-    double alfa;
-    double a,b,c=1.2;
-
-    alfa=sprite.getRotation()+90;
-    alfa*=M_PI/180.f;
-
-    if(k)
-    {
-        AI_fix*=M_PI/180.f;
-        alfa+=AI_fix;
-        a=c*(sin(alfa));
-        b=c*(cos(alfa));
-        sprite.move(b*czas_na_klatke(),a*czas_na_klatke());
-    }
-    if(!k)
-    {
-
-        a=c*(sin(alfa));
-        b=c*(cos(alfa));
-        sprite.move(-b*czas_na_klatke(),-a*czas_na_klatke());
-    }
-
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        sprite.move(-0.2*czas_na_klatke(),0);
-    }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    {
-        sprite.move(0.2*czas_na_klatke(),0);
-    }
-    if(pozaEkranem())
-        fly=false;
-
-    window.draw(sprite);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -727,7 +769,7 @@ AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::s
     :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y,stosX,stosY),type(type),mEq(*mEq)
 {
     buffer.loadFromFile("Sounds//piu_piu.wav");
-    mieso.loadFromFile("Textures//porkchop_raw.png");
+    mieso.loadFromFile("Textures//Charakters//porkchop_raw.png");
     b1.loadFromFile(sciezka_bron);
     B1.setTexture(b1);
     piu.setBuffer(buffer);
@@ -807,7 +849,7 @@ bool AI::dotykaPostaci(int i)
             isRight=false;
         else isRight=true;
 
-        x-=postac.getScale().x*isRight;
+        x-=txt.getSize().x*isRight;
 
         sizeX*=abs(postac.getScale().x);
         sizeY*=abs(postac.getScale().y);
@@ -867,6 +909,14 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
     hand_degree=liczKat(target);
     wystrzel();
     Update(Eq,targetHP,w_rece);
+    for(short i=0;i<10;i++)
+    {
+        Bullet_AI[i].AI_fix=180.f;
+        if(Bullet_AI[i].fly==true)
+        {
+            Bullet_AI[i].Update();
+        }
+    }
 }
 void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
 {
@@ -989,14 +1039,7 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
         }
     }
     ustawBron();
-    for(short i=0;i<10;i++)
-    {
-        Bullet_AI[i].AI_fix=180.f;
-        if(Bullet_AI[i].fly=true)
-        {
-            Bullet_AI[i].Update();
-        }
-    }
+
     if(Eq->HP<=10)
     {
         postac.setTexture(mieso);
@@ -1257,16 +1300,18 @@ int main(int argc, char *argv[])
     const float stosX=1080.f/Xokna;   //std::cout<<stosX<<std::endl;
     const float stosY=1920.f/Yokna;   //std::cout<<stosY<<std::endl;
     const float GroundLevel=700.f/stosY;
-    Postac Dziadek(window,"Textures//Charakters//dziadek.png","Textures//Charakters//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY);
+    Postac Dziadek(window,"Textures//Charakters//dziadek.png","Textures//Charakters//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY,&peppaEq,&mamaEq,&tataEq);
     AI peppa(window,"Textures//Charakters//obrazek.png","Textures//Charakters//obrazek_dmg.png","Textures//Items//noz.png",0,"Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY,&peppaEq);
-    AI mama(window,"Textures//Charakters//mama_swinka.png","","Textures//Items//pistolet.png",1,"","",1300,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
-    AI tata(window,"Textures//Charakters//tata_swinka.png","","Textures//Items//ak47.png",1,"","",1300,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
+    AI mama(window,"Textures//Charakters//mama_swinka.png","","Textures//Items//pistolet.png",1,"","",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
+    AI tata(window,"Textures//Charakters//tata_swinka.png","","Textures//Items//ak47.png",1,"","",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
     Background background(window,"Textures//Background//grass.png",100,"Textures//Background//grandpahouse.png",-800,"Textures//Background//house.png",900,"Textures//Background//shop.png",stosX,stosY);
     button Misje_bt(window,"Textures//GUI//bm.png","Textures//GUI//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
     button Misja1_bt(window,"Textures//GUI//m1.png","Textures//GUI//m1c.png",1520.f/stosX,80.f/stosY,stosX,stosY);
     button Misja2_bt(window,"Textures//GUI//m2.png","Textures//GUI//m2c.png",1670.f/stosX,80.f/stosY,stosX,stosY);
     button Misja3_bt(window,"Textures//GUI//m3.png","Textures//GUI//m3c.png",1520.f/stosX,140.f/stosY,stosX,stosY);
     button Misja4_bt(window,"Textures//GUI//m4.png","Textures//GUI//m4c.png",1670.f/stosX,140.f/stosY,stosX,stosY);
+    button Misja5_bt(window,"Textures//GUI//m4.png","Textures//GUI//m4c.png",1520.f/stosX,200.f/stosY,stosX,stosY);
+    button Misja6_bt(window,"Textures//GUI//m4.png","Textures//GUI//m4c.png",1670.f/stosX,200.f/stosY,stosX,stosY);
     button Sklep_bt(window,"Textures//GUI//sklep.png","Textures//GUI//sklepc.png",550.f/stosX,5.f/stosY,stosX,stosY);
     Sklep_bt.scaleX=0.45/stosX;
     Sklep_bt.scaleY=0.45/stosY;
@@ -1305,8 +1350,8 @@ int main(int argc, char *argv[])
 
                 }
             }
-            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)    ///To jest do wywalenia potem ,teraz  do testów
-                Dziadek.getDmg(&Eq.HP);
+            //if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)    ///To jest do wywalenia potem ,teraz  do testów
+                //Dziadek.getDmg(&Eq.HP);
         }
         sf::Time time1=liczZrzut.getElapsedTime();
         if(time1.asSeconds()>15)
@@ -1357,6 +1402,22 @@ int main(int argc, char *argv[])
                 level_setUp(4,&Eq,&peppaEq,&mamaEq,&tataEq);
             }
         }
+        if(Misja5_bt.isPressed())
+        {
+            if(level==5 || true)
+            {
+                level=5;
+                level_setUp(4,&Eq,&peppaEq,&mamaEq,&tataEq);
+            }
+        }
+        if(Misja6_bt.isPressed())
+        {
+            if(level==5 || true)
+            {
+                level=6;
+                level_setUp(4,&Eq,&peppaEq,&mamaEq,&tataEq);
+            }
+        }
         if(Sklep_bt.isPressed())
         {
             if(panelSklep)
@@ -1378,7 +1439,7 @@ int main(int argc, char *argv[])
                         window.draw(skrzynka.rect);
                     }
 
-                    Dziadek.Update(Eq.HP,przeladowanie.getElapsedTime(),Eq.w_rece);
+                    Eq.HP-=Dziadek.Update(Eq.HP,przeladowanie.getElapsedTime(),Eq.w_rece);
                     karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
                     if(level==1)
                     {
@@ -1404,17 +1465,12 @@ int main(int argc, char *argv[])
                     {
                         if(mamaEq.HP>0)
                             mama.Update(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
-                        if(mamaEq.HP==0)
-                        {
-                            level=0;
-                            Eq.dodaj_za_zabojstwo(70);
-                        }
                         if(peppaEq.HP>0)
                             peppa.Update(&peppaEq,&Eq.HP,Eq.w_rece);
-                        if(peppaEq.HP==0)
+                        if(mamaEq.HP==0 && peppaEq.HP==0)
                         {
                             level=0;
-                            Eq.dodaj_za_zabojstwo(50);
+                            Eq.dodaj_za_zabojstwo(125);
                         }
                     }
                     if(level==4)
@@ -1424,7 +1480,33 @@ int main(int argc, char *argv[])
                         if(tataEq.HP==0)
                         {
                             level=0;
-                            Eq.dodaj_za_zabojstwo(70);
+                            Eq.dodaj_za_zabojstwo(140);
+                        }
+                    }
+                    if(level==5)
+                    {
+                        if(tataEq.HP>0)
+                            tata.Update(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(peppaEq.HP>0)
+                            peppa.Update(&peppaEq,&Eq.HP,Eq.w_rece);
+                        if(tataEq.HP==0 && peppaEq.HP==0)
+                        {
+                            level=0;
+                            Eq.dodaj_za_zabojstwo(180);
+                        }
+                    }
+                    if(level==6)
+                    {
+                        if(peppaEq.HP>0)
+                            peppa.Update(&peppaEq,&Eq.HP,Eq.w_rece);
+                        if(mamaEq.HP>0)
+                            mama.Update(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(tataEq.HP>0)
+                            tata.Update(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(tataEq.HP==0 && mamaEq.HP==0 && peppaEq.HP==0)
+                        {
+                            level=0;
+                            Eq.dodaj_za_zabojstwo(200);
                         }
                     }
                 }
@@ -1435,6 +1517,8 @@ int main(int argc, char *argv[])
                     Misja2_bt.Update(ButtonPressed);
                     Misja3_bt.Update(ButtonPressed);
                     Misja4_bt.Update(ButtonPressed);
+                    Misja5_bt.Update(ButtonPressed);
+                    Misja6_bt.Update(ButtonPressed);
                 }
             }
             Eq.Update(panelSklep,ButtonPressed);

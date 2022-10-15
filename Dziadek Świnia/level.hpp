@@ -18,6 +18,8 @@ void level1(AI_Eq *peppa);
 void level2(AI_Eq *mama);
 void level3(AI_Eq *mama,AI_Eq *peppa);
 void level4(AI_Eq *tata);
+void level5(AI_Eq *tata,AI_Eq *peppa);
+void level6(AI_Eq *mama,AI_Eq *tata,AI_Eq *peppa);
 
 
 
