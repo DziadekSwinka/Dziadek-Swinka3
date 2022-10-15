@@ -2,11 +2,11 @@
 
 Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol0,float Vol1):window(window1),stosX(stosX),stosY(stosY)
 {
-    symbol_txt[0].loadFromFile("Textures//bullet.png");
-    symbol_txt[1].loadFromFile("Textures//pistolet.png");
-    symbol_txt[2].loadFromFile("Textures//ak47.png");
-    symbol_txt[3].loadFromFile("Textures//bazooka.png");
-    symbol_txt[4].loadFromFile("Textures//uzi.png");
+    symbol_txt[0].loadFromFile("Textures//Items//bullet.png");
+    symbol_txt[1].loadFromFile("Textures//Items//pistolet.png");
+    symbol_txt[2].loadFromFile("Textures//Items//ak47.png");
+    symbol_txt[3].loadFromFile("Textures//Items//bazooka.png");
+    symbol_txt[4].loadFromFile("Textures//Items//uzi.png");
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     intro.loadFromFile("Sounds//intro.wav");
     ammunition=15;

@@ -18,6 +18,9 @@
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 
+using std::cout;
+using std::endl;
+
 bool ButtonPressed=0;
 bool EnterPressed=0;
 bool panelSklep=0;
@@ -35,7 +38,7 @@ struct obj
 };
 void level_setUp(unsigned short level);
 Interior interior=outside;
-AI_Eq peppaEq,mamaEq;
+AI_Eq peppaEq,mamaEq,tataEq;
 obj skrzynka;
 sf::Clock klatka;
 sf::Time poprz_klatka;
@@ -82,6 +85,7 @@ private:
     float oblicz_czas(int w_rece,float czas);
     sf::Font OswaldRegular;
     sf::Text czas;
+    bool dotykaPostaci(int i);
 protected:
     sf::SoundBuffer buffer1,buffer2,buffer3,buffer4;
     sf::Sound sound;
@@ -105,8 +109,8 @@ public:
 Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY):window(window1),stosX(stosX),stosY(stosY)
 {
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
-    red_txt.loadFromFile("Textures//red_.png");
-    white_txt.loadFromFile("Textures//white_.png");
+    red_txt.loadFromFile("Textures//GUI//red_.png");
+    white_txt.loadFromFile("Textures//GUI//white_.png");
     czas.setFont(OswaldRegular);
 
     for(int i=0;i<10;i++)
@@ -135,6 +139,40 @@ Postac::operator=(Postac &obj)
     obj.posX=posX;
     obj.hand_degree=hand_degree;
 }
+/*bool Postac::dotykaPostaci(int i)
+{
+        float bX=bullet_wsk[i]->posX;
+        float bY=bullet_wsk[i]->posY;
+        //float originX=postac.getOrigin().x;
+        //float originY=postac.getOrigin().y;
+        float x=postac.getPosition().x;
+        float y=postac.getPosition().y;
+       //y-=originY;
+       //x-=originX;
+        bY+=100;
+        float sizeX=txt.getSize().x;
+        float sizeY=txt.getSize().y;
+        bool isRight;
+        if(postac.getScale().x>0)
+            isRight=false;
+        else isRight=true;
+
+        x-=postac.getScale().x*isRight;
+
+        sizeX*=abs(postac.getScale().x);
+        sizeY*=abs(postac.getScale().y);
+        if(bX>(x) && bX<(x+sizeX))
+        {
+            if(bY>(y) && bY<(y+sizeY))
+            {
+                if(bullet_wsk[i]->fly==true)
+                {
+                    bullet_wsk[i]->fly=false;
+                    return true;
+                }else return false;
+            }else return false;
+        }else return false;
+}*/
 float Postac::oblicz_czas(int w_rece,float czas)
 {
     switch(w_rece)
@@ -314,21 +352,36 @@ private:
     sf::RenderWindow &window;
     sf::Texture txt;
     sf::Sprite sprite;
+    bullet *bullet_w[10];
 public:
     void Update();
     bool pozaEkranem();
     bullet(sf::RenderWindow &window1,std::string sciezka,int i);
+    bullet(sf::RenderWindow &window1,std::string sciezka,int i,AI_Eq *newEq);
     void setPosition(float posX, float posY);
     void setRotation(float dir);
+    void setRotationAI(float dir);
     float posX,posY;
     float dir;
+    float AI_fix={0.f};
     bool fly;
-    bool k;
-    double p;
-    int u;
+    bool k={0.f};
 };
 bullet::bullet(sf::RenderWindow &window1,std::string sciezka,int i):window(window1)
 {
+    for(short i=0;i<10;i++)
+        bullet_w[i]=bullet_wsk[i];
+    txt.loadFromFile(sciezka);
+    sprite.setTexture(txt);
+    sprite.setScale(0.05,0.05);
+    fly=false;
+    bullet_wsk[i]=this;
+}
+bullet::bullet(sf::RenderWindow &window1,std::string sciezka,int i,AI_Eq *newEq):window(window1)
+{
+    for(short i=0;i<10;i++)
+        bullet_w[i]=newEq->bullet_wsk[i];
+
     txt.loadFromFile(sciezka);
     sprite.setTexture(txt);
     sprite.setScale(0.05,0.05);
@@ -351,6 +404,7 @@ void bullet::setPosition(float X, float Y)
 }
 void bullet::setRotation(float dir)
 {
+
     if(!k)
     {
         sprite.setRotation(-dir+90);
@@ -362,23 +416,47 @@ void bullet::setRotation(float dir)
          sprite.setScale(-0.05,-0.05);
     }
 }
+void bullet::setRotationAI(float dir)
+{
+    if(dir>-85)
+    {
+        sprite.setRotation(-dir+90);
+        sprite.setScale(0.05,0.05);
+    }
+    else
+    {
+         sprite.setRotation(dir-90);
+         sprite.setScale(-0.05,-0.05);
+    }
+}
 
 void bullet::Update()
 {
     posX=sprite.getPosition().x;
     posY=sprite.getPosition().y;
-    float alfa;
-    float a,b,c=0.5;
+    double alfa;
+    double a,b,c=1.2;
+
     alfa=sprite.getRotation()+90;
-    alfa*=p;
-    alfa+=u;
-    alfa=alfa/60;         //+270
-    a=c*(sin(alfa));
-    b=c*(cos(alfa));
+    alfa*=M_PI/180.f;
+
     if(k)
+    {
+        AI_fix*=M_PI/180.f;
+        alfa+=AI_fix;
+        a=c*(sin(alfa));
+        b=c*(cos(alfa));
         sprite.move(b*czas_na_klatke(),a*czas_na_klatke());
+    }
     if(!k)
+    {
+
+        a=c*(sin(alfa));
+        b=c*(cos(alfa));
         sprite.move(-b*czas_na_klatke(),-a*czas_na_klatke());
+    }
+
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         sprite.move(-0.2*czas_na_klatke(),0);
@@ -410,16 +488,16 @@ protected:
 public:
     sf::Sound piu_piu;
     void move_to_side(side Side);
-    bullet Bullet[10] = {   bullet(window,"Textures//bullet.png",0),
-                            bullet(window,"Textures//bullet.png",1),
-                            bullet(window,"Textures//bullet.png",2),
-                            bullet(window,"Textures//bullet.png",3),
-                            bullet(window,"Textures//bullet.png",4),
-                            bullet(window,"Textures//bullet.png",5),
-                            bullet(window,"Textures//bullet.png",6),
-                            bullet(window,"Textures//bullet.png",7),
-                            bullet(window,"Textures//bullet.png",8),
-                            bullet(window,"Textures//bullet.png",9)};
+    bullet Bullet[10] = {   bullet(window,"Textures//Items//bullet.png",0),
+                            bullet(window,"Textures//Items//bullet.png",1),
+                            bullet(window,"Textures//Items//bullet.png",2),
+                            bullet(window,"Textures//Items//bullet.png",3),
+                            bullet(window,"Textures//Items//bullet.png",4),
+                            bullet(window,"Textures//Items//bullet.png",5),
+                            bullet(window,"Textures//Items//bullet.png",6),
+                            bullet(window,"Textures//Items//bullet.png",7),
+                            bullet(window,"Textures//Items//bullet.png",8),
+                            bullet(window,"Textures//Items//bullet.png",9)};
     bron(sf::RenderWindow &window1,std::string sciezka,std::string sciezka2,std::string sciezka3,std::string sciezka4);
     void Update(float posX,float posY,float degree,bool *EnterP,short type);
 };
@@ -457,7 +535,7 @@ void bron::wystrzel(float degree)
 }
 void bron::ustawPocisk(short i,float degree)
 {
-    Bullet[i].setPosition(sprite.getPosition().x,sprite.getPosition().y);
+    Bullet[i].setPosition(sprite.getPosition().x,sprite.getPosition().y-20);
     Bullet[i].setRotation(degree);
     if(sprite.getScale().x>0)
         Bullet[i].k=true;
@@ -527,16 +605,16 @@ private:
     void wystrzel(float degreee);
     void ustawPocisk(short i,float degre);
 public:
-    bullet Bullet[10] = {   bullet(window,"Textures//bullet.png",0),
-                            bullet(window,"Textures//bullet.png",1),
-                            bullet(window,"Textures//bullet.png",2),
-                            bullet(window,"Textures//bullet.png",3),
-                            bullet(window,"Textures//bullet.png",4),
-                            bullet(window,"Textures//bullet.png",5),
-                            bullet(window,"Textures//bullet.png",6),
-                            bullet(window,"Textures//bullet.png",7),
-                            bullet(window,"Textures//bullet.png",8),
-                            bullet(window,"Textures//bullet.png",9)};
+    bullet Bullet[10] = {   bullet(window,"Textures//Items//bullet.png",0),
+                            bullet(window,"Textures//Items//bullet.png",1),
+                            bullet(window,"Textures//Items//bullet.png",2),
+                            bullet(window,"Textures//Items//bullet.png",3),
+                            bullet(window,"Textures//Items//bullet.png",4),
+                            bullet(window,"Textures//Items//bullet.png",5),
+                            bullet(window,"Textures//Items//bullet.png",6),
+                            bullet(window,"Textures//Items//bullet.png",7),
+                            bullet(window,"Textures//Items//bullet.png",8),
+                            bullet(window,"Textures//Items//bullet.png",9)};
 
     void Update(float posX,float posY,float degree,bool *EnterP);
     AI_Bron(sf::RenderWindow &window1,std::string sciezka);
@@ -619,6 +697,7 @@ private:
     sf::Texture b1;
     sf::Texture mieso;
     sf::Sprite B1;
+    AI_Eq &mEq;
     void ustawBron();
     void graj_dzwiek();
     void wystrzel();
@@ -632,20 +711,20 @@ public:
     void Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece);
     void Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target);
     bool dotykaPostaci(int i);
-    AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY);
-    bullet Bullet_AI[10] = {bullet(window,"Textures//bullet.png",0),
-                            bullet(window,"Textures//bullet.png",1),
-                            bullet(window,"Textures//bullet.png",2),
-                            bullet(window,"Textures//bullet.png",3),
-                            bullet(window,"Textures//bullet.png",4),
-                            bullet(window,"Textures//bullet.png",5),
-                            bullet(window,"Textures//bullet.png",6),
-                            bullet(window,"Textures//bullet.png",7),
-                            bullet(window,"Textures//bullet.png",8),
-                            bullet(window,"Textures//bullet.png",9)};
+    AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY,AI_Eq *mEg);
+    bullet Bullet_AI[10] = {bullet(window,"Textures//Items//bullet.png",0,&mEq),
+                            bullet(window,"Textures//Items//bullet.png",1,&mEq),
+                            bullet(window,"Textures//Items//bullet.png",2,&mEq),
+                            bullet(window,"Textures//Items//bullet.png",3,&mEq),
+                            bullet(window,"Textures//Items//bullet.png",4,&mEq),
+                            bullet(window,"Textures//Items//bullet.png",5,&mEq),
+                            bullet(window,"Textures//Items//bullet.png",6,&mEq),
+                            bullet(window,"Textures//Items//bullet.png",7,&mEq),
+                            bullet(window,"Textures//Items//bullet.png",8,&mEq),
+                            bullet(window,"Textures//Items//bullet.png",9,&mEq)};
 };
-AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY)
-    :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y,stosX,stosY),type(type)
+AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY,AI_Eq *mEq)
+    :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y,stosX,stosY),type(type),mEq(*mEq)
 {
     buffer.loadFromFile("Sounds//piu_piu.wav");
     mieso.loadFromFile("Textures//porkchop_raw.png");
@@ -723,8 +802,15 @@ bool AI::dotykaPostaci(int i)
         bY+=100;
         float sizeX=txt.getSize().x;
         float sizeY=txt.getSize().y;
-        sizeX*=postac.getScale().x;
-        sizeY*=postac.getScale().y;
+        bool isRight;
+        if(postac.getScale().x>0)
+            isRight=false;
+        else isRight=true;
+
+        x-=postac.getScale().x*isRight;
+
+        sizeX*=abs(postac.getScale().x);
+        sizeY*=abs(postac.getScale().y);
         if(bX>(x) && bX<(x+sizeX))
         {
             if(bY>(y) && bY<(y+sizeY))
@@ -744,21 +830,16 @@ float AI::dist()
 
 void AI::ustawPocisk(short i,float degree)
 {
-    Bullet_AI[i].setPosition(B1.getPosition().x,B1.getPosition().y);
-    Bullet_AI[i].setRotation(degree);
-    if(postac.getScale().x<0)
+    Bullet_AI[i].setPosition(B1.getPosition().x,B1.getPosition().y-20);
+    Bullet_AI[i].setRotationAI(degree);
+    if(B1.getScale().x<0)
     {
         Bullet_AI[i].k=true;
-        Bullet_AI[i].p=-1;
-        Bullet_AI[i].u=180;
     }
-    else
+    else if(B1.getScale().x>0)
     {
         Bullet_AI[i].k=false;
-        Bullet_AI[i].p=1;
-        Bullet_AI[i].u=0;
     }
-
 }
 void AI::wystrzel()
 {
@@ -768,9 +849,9 @@ void AI::wystrzel()
     {
         if(Bullet_AI[i].fly==false && time.asSeconds()>2.f)
         {
+            ustawPocisk(i,degree);
             piu.play();
             Bullet_AI[i].fly=true;
-            ustawPocisk(i,degree);
             przeladowanie.restart();
             break;
 
@@ -910,6 +991,7 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
     ustawBron();
     for(short i=0;i<10;i++)
     {
+        Bullet_AI[i].AI_fix=180.f;
         if(Bullet_AI[i].fly=true)
         {
             Bullet_AI[i].Update();
@@ -1030,8 +1112,8 @@ void skrzynki()
 {
     skrzynka.rect.setSize(sf::Vector2f(50,50));
     skrzynka.active=false;
-    skrzynka.txt1.loadFromFile("Textures//apteczka.png");
-    skrzynka.txt2.loadFromFile("Textures//ammo.png");
+    skrzynka.txt1.loadFromFile("Textures//Items//apteczka.png");
+    skrzynka.txt2.loadFromFile("Textures//Items//ammo.png");
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -1175,24 +1257,25 @@ int main(int argc, char *argv[])
     const float stosX=1080.f/Xokna;   //std::cout<<stosX<<std::endl;
     const float stosY=1920.f/Yokna;   //std::cout<<stosY<<std::endl;
     const float GroundLevel=700.f/stosY;
-    Postac Dziadek(window,"Textures//dziadek.png","Textures//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY);
-    AI peppa(window,"Textures//obrazek.png","Textures//obrazek_dmg.png","Textures//noz.png",0,"Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY);
-    AI mama(window,"Textures//mama_swinka.png","","Textures//pistolet.png",1,"","",1300,GroundLevel-50,stosX,stosY);                                                                                      //dorobic brakujace pliki
-    Background background(window,"Textures//grass.png",100,"Textures//grandpahouse.png",-800,"Textures//house.png",900,"Textures//shop.png",stosX,stosY);
-    button Misje_bt(window,"Textures//bm.png","Textures//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
-    button Misja1_bt(window,"Textures//m1.png","Textures//m1c.png",1520.f/stosX,80.f/stosY,stosX,stosY);
-    button Misja2_bt(window,"Textures//m2.png","Textures//m2c.png",1670.f/stosX,80.f/stosY,stosX,stosY);
-    button Misja3_bt(window,"Textures//m3.png","Textures//m3c.png",1520.f/stosX,140.f/stosY,stosX,stosY);
-    button Misja4_bt(window,"Textures//m4.png","Textures//m4c.png",1670.f/stosX,140.f/stosY,stosX,stosY);
-    button Sklep_bt(window,"Textures//sklep.png","Textures//sklepc.png",550.f/stosX,5.f/stosY,stosX,stosY);
+    Postac Dziadek(window,"Textures//Charakters//dziadek.png","Textures//Charakters//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY);
+    AI peppa(window,"Textures//Charakters//obrazek.png","Textures//Charakters//obrazek_dmg.png","Textures//Items//noz.png",0,"Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY,&peppaEq);
+    AI mama(window,"Textures//Charakters//mama_swinka.png","","Textures//Items//pistolet.png",1,"","",1300,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
+    AI tata(window,"Textures//Charakters//tata_swinka.png","","Textures//Items//ak47.png",1,"","",1300,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
+    Background background(window,"Textures//Background//grass.png",100,"Textures//Background//grandpahouse.png",-800,"Textures//Background//house.png",900,"Textures//Background//shop.png",stosX,stosY);
+    button Misje_bt(window,"Textures//GUI//bm.png","Textures//GUI//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
+    button Misja1_bt(window,"Textures//GUI//m1.png","Textures//GUI//m1c.png",1520.f/stosX,80.f/stosY,stosX,stosY);
+    button Misja2_bt(window,"Textures//GUI//m2.png","Textures//GUI//m2c.png",1670.f/stosX,80.f/stosY,stosX,stosY);
+    button Misja3_bt(window,"Textures//GUI//m3.png","Textures//GUI//m3c.png",1520.f/stosX,140.f/stosY,stosX,stosY);
+    button Misja4_bt(window,"Textures//GUI//m4.png","Textures//GUI//m4c.png",1670.f/stosX,140.f/stosY,stosX,stosY);
+    button Sklep_bt(window,"Textures//GUI//sklep.png","Textures//GUI//sklepc.png",550.f/stosX,5.f/stosY,stosX,stosY);
     Sklep_bt.scaleX=0.45/stosX;
     Sklep_bt.scaleY=0.45/stosY;
     Equipment Eq(window,stosX,stosY,Vol[0],Vol[1]);
-    bron karabin(window,"Textures//ak47.png","Textures//pistolet.png","Textures//bazooka.png","Textures//uzi.png");
+    bron karabin(window,"Textures//Items//ak47.png","Textures//Items//pistolet.png","Textures//Items//bazooka.png","Textures//Items//uzi.png");
     skrzynki();
     sf::Sprite GameOver;
     sf::Texture gameover;
-    gameover.loadFromFile("Textures//end.jpg");
+    gameover.loadFromFile("Textures//Background//end.jpg");
     GameOver.setTexture(gameover);
     //system("cls");
 
@@ -1247,7 +1330,7 @@ int main(int argc, char *argv[])
             if(level==0 || true)
             {
                 level=1;
-                level_setUp(1,&Eq,&peppaEq,&mamaEq);
+                level_setUp(1,&Eq,&peppaEq,&mamaEq,&tataEq);
             }
         }
         if(Misja2_bt.isPressed())
@@ -1255,7 +1338,7 @@ int main(int argc, char *argv[])
             if(level==1 || true)
             {
                 level=2;
-                level_setUp(2,&Eq,&peppaEq,&mamaEq);
+                level_setUp(2,&Eq,&peppaEq,&mamaEq,&tataEq);
             }
         }
         if(Misja3_bt.isPressed())
@@ -1263,7 +1346,7 @@ int main(int argc, char *argv[])
             if(level==2 || true)
             {
                 level=3;
-                level_setUp(3,&Eq,&peppaEq,&mamaEq);
+                level_setUp(3,&Eq,&peppaEq,&mamaEq,&tataEq);
             }
         }
         if(Misja4_bt.isPressed())
@@ -1271,7 +1354,7 @@ int main(int argc, char *argv[])
             if(level==3 || true)
             {
                 level=4;
-                level_setUp(4,&Eq,&peppaEq,&mamaEq);
+                level_setUp(4,&Eq,&peppaEq,&mamaEq,&tataEq);
             }
         }
         if(Sklep_bt.isPressed())
@@ -1332,6 +1415,16 @@ int main(int argc, char *argv[])
                         {
                             level=0;
                             Eq.dodaj_za_zabojstwo(50);
+                        }
+                    }
+                    if(level==4)
+                    {
+                        if(tataEq.HP>0)
+                            tata.Update(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(tataEq.HP==0)
+                        {
+                            level=0;
+                            Eq.dodaj_za_zabojstwo(70);
                         }
                     }
                 }

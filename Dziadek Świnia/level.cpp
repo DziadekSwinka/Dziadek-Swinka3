@@ -1,7 +1,7 @@
 #include "level.hpp"
 
 
-void level_setUp(unsigned short level,Equipment *Eq,AI_Eq *peppa,AI_Eq *mama)
+void level_setUp(unsigned short level,Equipment *Eq,AI_Eq *peppa,AI_Eq *mama,AI_Eq *tata)
 {
     resetuj();
     Eq->HP=100;
@@ -19,6 +19,7 @@ void level_setUp(unsigned short level,Equipment *Eq,AI_Eq *peppa,AI_Eq *mama)
         level3(mama,peppa);
         break;
     case 4:
+        level4(tata);
         break;
 
     }
@@ -44,4 +45,9 @@ void level3(AI_Eq *mama,AI_Eq *peppa)
     //mama z pistoletem i peppa z nozem
     mama->HP=100;
     peppa->HP=100;
+}
+void level4(AI_Eq *tata)
+{
+    //tata z karabinem
+    tata->HP=100;
 }

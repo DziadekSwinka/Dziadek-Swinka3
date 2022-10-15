@@ -32,12 +32,12 @@ private:
     void ustaw_sklep();
     void przyciski();
     float stosX,stosY;
-    button kup[6]={ button(window,"Textures//kup.png","Textures//kupc.png",1200.f*stosX,pierwszy_kup*stosY,stosX,stosY),
-                    button(window,"Textures//kup.png","Textures//kupc.png",1200.f*stosX,(pierwszy_kup+130)*stosY,stosX,stosY),
-                    button(window,"Textures//kup.png","Textures//kupc.png",1200.f*stosX,(pierwszy_kup+260)*stosY,stosX,stosY),
-                    button(window,"Textures//kup.png","Textures//kupc.png",1200.f*stosX,(pierwszy_kup+390)*stosY,stosX,stosY),
-                    button(window,"Textures//kup.png","Textures//kupc.png",1200.f*stosX,(pierwszy_kup+520)*stosY,stosX,stosY),
-                    button(window,"Textures//kup.png","Textures//kupc.png",1200.f*stosX,(pierwszy_kup+650)*stosY,stosX,stosY)};
+    button kup[6]={ button(window,"Textures//GUI//kup.png","Textures//GUI//kupc.png",1200.f*stosX,pierwszy_kup*stosY,stosX,stosY),
+                    button(window,"Textures//GUI//kup.png","Textures//GUI//kupc.png",1200.f*stosX,(pierwszy_kup+130)*stosY,stosX,stosY),
+                    button(window,"Textures//GUI//kup.png","Textures//GUI//kupc.png",1200.f*stosX,(pierwszy_kup+260)*stosY,stosX,stosY),
+                    button(window,"Textures//GUI//kup.png","Textures//GUI//kupc.png",1200.f*stosX,(pierwszy_kup+390)*stosY,stosX,stosY),
+                    button(window,"Textures//GUI//kup.png","Textures//GUI//kupc.png",1200.f*stosX,(pierwszy_kup+520)*stosY,stosX,stosY),
+                    button(window,"Textures//GUI//kup.png","Textures//GUI//kupc.png",1200.f*stosX,(pierwszy_kup+650)*stosY,stosX,stosY)};
     int Ile;
 public:
     sklep Sklep;

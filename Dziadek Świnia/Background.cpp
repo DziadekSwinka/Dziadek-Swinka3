@@ -7,11 +7,11 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
     tloGra.setSize(sf::Vector2f(stosX*1920,stosY*1080));
     tloGra.setFillColor(sf::Color(76,76,76));
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
-    gertruda.loadFromFile("Textures//gertruda.png");
-    chmura.loadFromFile("Textures//cloud.png");
-    baza.loadFromFile("Textures//baza.png");
-    wsk.loadFromFile("Textures//wskaznik.png");
-    mStruct.texture.loadFromFile("Textures//Dinozar.png");
+    gertruda.loadFromFile("Textures//Background//gertruda.png");
+    chmura.loadFromFile("Textures//Background//cloud.png");
+    baza.loadFromFile("Textures//Background//baza.png");
+    wsk.loadFromFile("Textures//GUI//wskaznik.png");
+    mStruct.texture.loadFromFile("Textures//Charakters//Dinozar.png");
     for(int i=0;i<5;i++)
     {
         mStruct.target[i].setScale(0.5/stosX,0.5/stosY);
