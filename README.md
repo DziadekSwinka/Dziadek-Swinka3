@@ -1,1 +1,0 @@
-# Dziadek-Swinka3
