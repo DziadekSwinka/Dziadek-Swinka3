@@ -219,6 +219,8 @@ protected:
     sf::RenderWindow &window;
     sf::Texture txt,txt2,red_txt,white_txt;
     sf::Sprite postac,red[10],white;
+    sf::Clock od_obrazenia;
+    sf::Time czas_od_dmg;
     void Fall();
     void move_to_side(side Side);
     float vs=0;
@@ -226,10 +228,10 @@ protected:
     float stosX,stosY;
 public:
     operator=(Postac &obj);
+    void clockRestart();
     //Postac();
     Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY);
     Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY,AI_Eq *t1,AI_Eq *t2,AI_Eq *t3);
-    void getDmg(unsigned int *Hp);
     float getDegree();
     float posX,posY;
     unsigned int Update(unsigned int Hp,sf::Time czas_p,int w_rece);
@@ -295,6 +297,10 @@ Postac::operator=(Postac &obj)
     obj.posY=posY;
     obj.posX=posX;
     obj.hand_degree=hand_degree;
+}
+void Postac::clockRestart()
+{
+    od_obrazenia.restart();
 }
 bool Postac::dotykaPostaci(int i,AI_Eq *myEq)
 {
@@ -372,13 +378,6 @@ float Postac::oblicz_czas(int w_rece,float czas)
         }
     default: return(0);
     }
-}
-void Postac::getDmg(unsigned int *Hp)
-{
-    postac.setTexture(txt2);
-    if(*Hp>10)
-        *Hp-=10;
-    postac.setTexture(txt);
 }
 void Postac::move_to_side(side Side)
 {
@@ -475,6 +474,15 @@ unsigned int Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
         if(dotykaPostaci(i,t3)==true)
             hp_+=20;
     }
+    if(hp_>0)
+        od_obrazenia.restart();
+
+    czas_od_dmg=od_obrazenia.getElapsedTime();
+    if(czas_od_dmg.asSeconds()<0.4)
+    {
+        postac.setTexture(txt2);
+    }else postac.setTexture(txt);
+
     window.draw(postac);
     window.draw(white);
     window.draw(czas);
@@ -750,7 +758,7 @@ private:
     double corX,corY;
     int type;
 public:
-    void Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece);
+    bool Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece);
     void Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target);
     bool dotykaPostaci(int i);
     AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY,AI_Eq *mEg);
@@ -908,7 +916,8 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
     Postac &target=*Target;
     hand_degree=liczKat(target);
     wystrzel();
-    Update(Eq,targetHP,w_rece);
+    if(Update(Eq,targetHP,w_rece)==true)                    //NIe zwraca wartosci jakims cudem!!!
+        Target->clockRestart();
     for(short i=0;i<10;i++)
     {
         Bullet_AI[i].AI_fix=180.f;
@@ -918,8 +927,9 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
         }
     }
 }
-void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
+bool AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
 {
+    bool p_c=false;
     if(type>0)
     {
         if(hand_degree>(-84))
@@ -959,6 +969,7 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
         if(*targetHP>0)
         {
             *targetHP-=10;
+            p_c=true;
             graj_dzwiek();
         }
     }
@@ -976,6 +987,7 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
     {
         if(dotykaPostaci(i)==true)
         {
+            od_obrazenia.restart();
             switch(w_rece)
             {
             case 0 || 1:
@@ -1040,6 +1052,11 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
     }
     ustawBron();
 
+    czas_od_dmg=od_obrazenia.getElapsedTime();
+    if(czas_od_dmg.asSeconds()<0.3)
+    {
+        postac.setTexture(txt2);
+    }else postac.setTexture(txt);
     if(Eq->HP<=10)
     {
         postac.setTexture(mieso);
@@ -1052,6 +1069,7 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
     for(int i=0;static_cast<unsigned int>(i)<Eq->HP/10;i++)
         window.draw(red[i]);
 
+    return p_c;
 }
 double AI::liczKat(Postac &target)
 {
@@ -1224,7 +1242,7 @@ bool mozna_strzelac(int w_rece,sf::Clock *przeladowanie)
 //------------------------------------------------------------------------------------------------------------------------------------------
 void Config()
 {
-    int xSize,ySize;
+    int xSize=0,ySize=0;
     std::string sciezka="Config.txt";
     std::string line="";
     std::fstream config_file;
@@ -1302,8 +1320,8 @@ int main(int argc, char *argv[])
     const float GroundLevel=700.f/stosY;
     Postac Dziadek(window,"Textures//Charakters//dziadek.png","Textures//Charakters//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY,&peppaEq,&mamaEq,&tataEq);
     AI peppa(window,"Textures//Charakters//obrazek.png","Textures//Charakters//obrazek_dmg.png","Textures//Items//noz.png",0,"Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY,&peppaEq);
-    AI mama(window,"Textures//Charakters//mama_swinka.png","","Textures//Items//pistolet.png",1,"","",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
-    AI tata(window,"Textures//Charakters//tata_swinka.png","","Textures//Items//ak47.png",1,"","",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
+    AI mama(window,"Textures//Charakters//mama_swinka.png","Textures//Charakters//mama_swinka_dmg.png","Textures//Items//pistolet.png",1,"","",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
+    AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",1,"","",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
     Background background(window,"Textures//Background//grass.png",100,"Textures//Background//grandpahouse.png",-800,"Textures//Background//house.png",900,"Textures//Background//shop.png",stosX,stosY);
     button Misje_bt(window,"Textures//GUI//bm.png","Textures//GUI//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
     button Misja1_bt(window,"Textures//GUI//m1.png","Textures//GUI//m1c.png",1520.f/stosX,80.f/stosY,stosX,stosY);
@@ -1350,8 +1368,6 @@ int main(int argc, char *argv[])
 
                 }
             }
-            //if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)    ///To jest do wywalenia potem ,teraz  do testów
-                //Dziadek.getDmg(&Eq.HP);
         }
         sf::Time time1=liczZrzut.getElapsedTime();
         if(time1.asSeconds()>15)
