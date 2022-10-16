@@ -93,7 +93,13 @@ Jedna z nich polega na wywożeniu imigrantów do niemiec, a w drugiej musimy kli
 </p>
 
 <H2>Screenshots:</H2>
-<image>![g1](https://user-images.githubusercontent.com/113696735/196045722-4e899c5c-fff5-4c37-9fb3-12dfdde2716c.PNG)</image>
-<image>![g2](https://user-images.githubusercontent.com/113696735/196047402-1ef81b7e-7d05-4c07-af9f-e537bedb16b1.PNG)</image>
 
-  
+<image>![g1](https://user-images.githubusercontent.com/113696735/196045722-4e899c5c-fff5-4c37-9fb3-12dfdde2716c.PNG)
+
+[g2](https://user-images.githubusercontent.com/113696735/196047402-1ef81b7e-7d05-4c07-af9f-e537bedb16b1.PNG)
+
+![g4](https://user-images.githubusercontent.com/113696735/196047585-c6792442-016d-4c83-95ee-447ee46e5d67.PNG)
+
+![g3](https://user-images.githubusercontent.com/113696735/196047579-b09ffbd9-2354-4ab6-9e50-ae022d178de4.PNG)
+
+![g5](https://user-images.githubusercontent.com/113696735/196047640-e59597a3-79d9-472b-9a93-4b7a3159f4a0.PNG)
