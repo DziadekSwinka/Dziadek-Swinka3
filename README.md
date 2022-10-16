@@ -92,5 +92,8 @@ Jedna z nich polega na wywożeniu imigrantów do niemiec, a w drugiej musimy kli
   Ważne jest aby w pliku zawarte były wszystkie linijki, nawet jeśli ich wartość wynosi 0. W przeciwnym wypadku gra może nie działać poprawnie.
 </p>
 
+<H2>Screenshots:</H2>
+<image>![g1](https://user-images.githubusercontent.com/113696735/196045722-4e899c5c-fff5-4c37-9fb3-12dfdde2716c.PNG)</image>
+<image>![g2](https://user-images.githubusercontent.com/113696735/196047402-1ef81b7e-7d05-4c07-af9f-e537bedb16b1.PNG)</image>
 
-<image>![g1](https://user-images.githubusercontent.com/113696735/196045722-4e899c5c-fff5-4c37-9fb3-12dfdde2716c.PNG)
+  
