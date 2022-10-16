@@ -53,7 +53,7 @@ bullet* bullet_wsk[10]={nullptr};
 unsigned int Xokna=1920,Yokna=1080;
 float frameLimit=0;
 
-const float Vol[10]={100,40,50,20,40,0,0,0,0,0};              // 0-main volume,1-muzyka w tle, 2-dzidek dzialogi, 3-bron,4-inne dialogi
+float Vol[10]={60,20,50,5,40,0,0,0,0,0};              // 0-main volume,1-muzyka w tle, 2-dzidek dzialogi, 3-bron,4-inne dialogi
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -757,9 +757,11 @@ private:
     double scaleX,scaleY;
     double corX,corY;
     int type;
+    float przeladowanie_time[4]={2,1,5,0.5};
+    bool dmg_from_peppa=false;
 public:
-    bool Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece);
-    void Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target);
+    void Update1(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *T);
+    void Update2(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target);
     bool dotykaPostaci(int i);
     AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY,AI_Eq *mEg);
     bullet Bullet_AI[10] = {bullet(window,"Textures//Items//bullet.png",0,&mEq),
@@ -810,14 +812,14 @@ void AI::graj_dzwiek()
     {
         return;
     }
-    unsigned short i=(std::rand()%3)+1;
+    unsigned short i=(std::rand()%6)+1;
     if(i==1)
     {
         sound.setBuffer(buffer1);
     }else if(i==2)
     {
         sound.setBuffer(buffer2);
-    }
+    }else return;
     sound.setVolume(Vol[4]*Vol[0]/100);
     sound.play();
 }
@@ -897,7 +899,7 @@ void AI::wystrzel()
     short i=0;
     while(i<10)
     {
-        if(Bullet_AI[i].fly==false && time.asSeconds()>2.f)
+        if(Bullet_AI[i].fly==false && time.asSeconds()>przeladowanie_time[type-1])
         {
             ustawPocisk(i,degree);
             piu.play();
@@ -910,14 +912,14 @@ void AI::wystrzel()
             i++;
     }
 }
-void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
+void AI::Update2(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
 {
     time=przeladowanie.getElapsedTime();
     Postac &target=*Target;
     hand_degree=liczKat(target);
     wystrzel();
-    if(Update(Eq,targetHP,w_rece)==true)                    //NIe zwraca wartosci jakims cudem!!!
-        Target->clockRestart();
+    graj_dzwiek();
+    Update1(Eq,targetHP,w_rece,Target);
     for(short i=0;i<10;i++)
     {
         Bullet_AI[i].AI_fix=180.f;
@@ -927,9 +929,8 @@ void AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
         }
     }
 }
-bool AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
+void AI::Update1(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *T)
 {
-    bool p_c=false;
     if(type>0)
     {
         if(hand_degree>(-84))
@@ -969,7 +970,7 @@ bool AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
         if(*targetHP>0)
         {
             *targetHP-=10;
-            p_c=true;
+            T->clockRestart();
             graj_dzwiek();
         }
     }
@@ -1069,7 +1070,6 @@ bool AI::Update(AI_Eq *Eq,unsigned int *targetHP,short w_rece)
     for(int i=0;static_cast<unsigned int>(i)<Eq->HP/10;i++)
         window.draw(red[i]);
 
-    return p_c;
 }
 double AI::liczKat(Postac &target)
 {
@@ -1249,7 +1249,7 @@ void Config()
     config_file.open(sciezka,std::ios::in);
     if(config_file.good()==true)
     {
-        for(int i=0;i<2;i++)
+        for(int i=0;i<12||config_file.eof()==true;i++)
         {
             getline(config_file,line);
             switch(i)
@@ -1289,7 +1289,17 @@ void Config()
                     setting.antialiasingLevel=std::stoi(line);
                     break;
                 }
-            default: break;
+            default:
+                {
+                    if(i<=12 && i>2)
+                    {
+                        if(line!="" && line!="\n")
+                        {
+                            Vol[i-2]=std::stof(line);
+                        }
+                    }
+                    break;
+                }
             }
         }
 
@@ -1320,16 +1330,16 @@ int main(int argc, char *argv[])
     const float GroundLevel=700.f/stosY;
     Postac Dziadek(window,"Textures//Charakters//dziadek.png","Textures//Charakters//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY,&peppaEq,&mamaEq,&tataEq);
     AI peppa(window,"Textures//Charakters//obrazek.png","Textures//Charakters//obrazek_dmg.png","Textures//Items//noz.png",0,"Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY,&peppaEq);
-    AI mama(window,"Textures//Charakters//mama_swinka.png","Textures//Charakters//mama_swinka_dmg.png","Textures//Items//pistolet.png",1,"","",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
-    AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",1,"","",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
+    AI mama(window,"Textures//Charakters//mama_swinka.png","Textures//Charakters//mama_swinka_dmg.png","Textures//Items//pistolet.png",1,"Sounds//mama1.wav","Sounds//mama2.wav",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
+    AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",2,"Sounds//tata1.wav","Sounds//tata2.wav",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
     Background background(window,"Textures//Background//grass.png",100,"Textures//Background//grandpahouse.png",-800,"Textures//Background//house.png",900,"Textures//Background//shop.png",stosX,stosY);
     button Misje_bt(window,"Textures//GUI//bm.png","Textures//GUI//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
     button Misja1_bt(window,"Textures//GUI//m1.png","Textures//GUI//m1c.png",1520.f/stosX,80.f/stosY,stosX,stosY);
     button Misja2_bt(window,"Textures//GUI//m2.png","Textures//GUI//m2c.png",1670.f/stosX,80.f/stosY,stosX,stosY);
     button Misja3_bt(window,"Textures//GUI//m3.png","Textures//GUI//m3c.png",1520.f/stosX,140.f/stosY,stosX,stosY);
     button Misja4_bt(window,"Textures//GUI//m4.png","Textures//GUI//m4c.png",1670.f/stosX,140.f/stosY,stosX,stosY);
-    button Misja5_bt(window,"Textures//GUI//m4.png","Textures//GUI//m4c.png",1520.f/stosX,200.f/stosY,stosX,stosY);
-    button Misja6_bt(window,"Textures//GUI//m4.png","Textures//GUI//m4c.png",1670.f/stosX,200.f/stosY,stosX,stosY);
+    button Misja5_bt(window,"Textures//GUI//m5.png","Textures//GUI//m5c.png",1520.f/stosX,200.f/stosY,stosX,stosY);
+    button Misja6_bt(window,"Textures//GUI//m6.png","Textures//GUI//m6c.png",1670.f/stosX,200.f/stosY,stosX,stosY);
     button Sklep_bt(window,"Textures//GUI//sklep.png","Textures//GUI//sklepc.png",550.f/stosX,5.f/stosY,stosX,stosY);
     Sklep_bt.scaleX=0.45/stosX;
     Sklep_bt.scaleY=0.45/stosY;
@@ -1454,13 +1464,15 @@ int main(int argc, char *argv[])
                         skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
                         window.draw(skrzynka.rect);
                     }
-
-                    Eq.HP-=Dziadek.Update(Eq.HP,przeladowanie.getElapsedTime(),Eq.w_rece);
+                    unsigned int minusHP=Dziadek.Update(Eq.HP,przeladowanie.getElapsedTime(),Eq.w_rece);
+                    if(minusHP<=Eq.HP)
+                        Eq.HP-=minusHP;
+                    else Eq.HP=0;
                     karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
                     if(level==1)
                     {
                         if(peppaEq.HP>0)
-                            peppa.Update(&peppaEq,&Eq.HP,Eq.w_rece);
+                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
                         if(peppaEq.HP==0)
                         {
                             level=0;
@@ -1470,7 +1482,7 @@ int main(int argc, char *argv[])
                     if(level==2)
                     {
                         if(mamaEq.HP>0)
-                            mama.Update(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            mama.Update2(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
                         if(mamaEq.HP==0)
                         {
                             level=0;
@@ -1480,9 +1492,9 @@ int main(int argc, char *argv[])
                     if(level==3)
                     {
                         if(mamaEq.HP>0)
-                            mama.Update(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            mama.Update2(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
                         if(peppaEq.HP>0)
-                            peppa.Update(&peppaEq,&Eq.HP,Eq.w_rece);
+                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
                         if(mamaEq.HP==0 && peppaEq.HP==0)
                         {
                             level=0;
@@ -1492,7 +1504,7 @@ int main(int argc, char *argv[])
                     if(level==4)
                     {
                         if(tataEq.HP>0)
-                            tata.Update(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            tata.Update2(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
                         if(tataEq.HP==0)
                         {
                             level=0;
@@ -1502,9 +1514,9 @@ int main(int argc, char *argv[])
                     if(level==5)
                     {
                         if(tataEq.HP>0)
-                            tata.Update(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            tata.Update2(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
                         if(peppaEq.HP>0)
-                            peppa.Update(&peppaEq,&Eq.HP,Eq.w_rece);
+                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
                         if(tataEq.HP==0 && peppaEq.HP==0)
                         {
                             level=0;
@@ -1514,11 +1526,11 @@ int main(int argc, char *argv[])
                     if(level==6)
                     {
                         if(peppaEq.HP>0)
-                            peppa.Update(&peppaEq,&Eq.HP,Eq.w_rece);
+                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
                         if(mamaEq.HP>0)
-                            mama.Update(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            mama.Update2(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
                         if(tataEq.HP>0)
-                            tata.Update(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            tata.Update2(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
                         if(tataEq.HP==0 && mamaEq.HP==0 && peppaEq.HP==0)
                         {
                             level=0;
@@ -1543,6 +1555,7 @@ int main(int argc, char *argv[])
                     Eq.pociag();
         }else
         {
+            Eq.main.setLoop(false);
             window.draw(GameOver);
         }
 

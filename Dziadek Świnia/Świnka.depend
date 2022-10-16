@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1665864443 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1665913984 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<iostream>
@@ -465,7 +465,7 @@
 1665836959 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
 	"Equipment.hpp"
 
-1665837431 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
+1665913479 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	"button.hpp"

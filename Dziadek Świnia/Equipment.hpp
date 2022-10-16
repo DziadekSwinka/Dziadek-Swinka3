@@ -19,7 +19,6 @@ class Equipment
 {
 private:
     sf::RenderWindow &window;
-    sf::Sound main;
     sf::SoundBuffer intro;
     sf::Font OswaldRegular;
     sf::RectangleShape backRect,icon[6],pieniadz_bcg;
@@ -40,6 +39,7 @@ private:
                     button(window,"Textures//GUI//kup.png","Textures//GUI//kupc.png",1200.f*stosX,(pierwszy_kup+650)*stosY,stosX,stosY)};
     int Ile;
 public:
+    sf::Sound main;
     sklep Sklep;
     Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol0,float Vol1);
     unsigned int ammunition;
