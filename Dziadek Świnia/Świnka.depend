@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1665913984 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1666013676 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<iostream>
@@ -473,12 +473,12 @@
 1663935746 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\globalne.hpp
 	"obsluga_broni.hpp"
 
-1665855546 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.hpp
+1666013393 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.hpp
 	<SFML/Graphics.hpp>
 	"Equipment.hpp"
 	"side.hpp"
 
-1665855576 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.cpp
+1666013314 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.cpp
 	"level.hpp"
 
 1660370567 d:\biblioteki c++\sfml-2.5.1\include\sfml\audio.hpp

@@ -1,7 +1,7 @@
 #include "level.hpp"
 
 
-void level_setUp(unsigned short level,Equipment *Eq,AI_Eq *peppa,AI_Eq *mama,AI_Eq *tata)
+void level_setUp(unsigned short level,Equipment *Eq,AI_Eq *peppa,AI_Eq *mama,AI_Eq *tata,AI_Eq *george)
 {
     resetuj();
     Eq->HP=100;
@@ -26,6 +26,18 @@ void level_setUp(unsigned short level,Equipment *Eq,AI_Eq *peppa,AI_Eq *mama,AI_
         break;
     case 6:
         level6(mama,tata,peppa);
+        break;
+    case 7:
+        level7(george);
+        break;
+    case 8:
+        level8(george,peppa);
+        break;
+    case 9:
+        level9(george,mama,peppa);
+        break;
+    case 10:
+        level10(mama,tata,peppa,george);
         break;
 
     }
@@ -67,4 +79,26 @@ void level6(AI_Eq *mama,AI_Eq *tata,AI_Eq *peppa)
     tata->HP=100;
     mama->HP=100;
     peppa->HP=100;
+}
+void level7(AI_Eq *george)
+{
+    george->HP=100;
+}
+void level8(AI_Eq *george,AI_Eq *peppa)
+{
+    george->HP=100;
+    peppa->HP=100;
+}
+void level9(AI_Eq *george,AI_Eq *mama,AI_Eq *peppa)
+{
+    peppa->HP=100;
+    mama->HP=100;
+    george->HP=100;
+}
+void level10(AI_Eq *mama,AI_Eq *tata,AI_Eq *peppa,AI_Eq *george)
+{
+    peppa->HP=100;
+    mama->HP=100;
+    george->HP=100;
+    tata->HP=100;
 }

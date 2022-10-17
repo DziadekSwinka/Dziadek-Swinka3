@@ -38,7 +38,7 @@ struct obj
 };
 void level_setUp(unsigned short level);
 Interior interior=outside;
-AI_Eq peppaEq,mamaEq,tataEq;
+AI_Eq peppaEq,mamaEq,tataEq,georgeEq;
 obj skrzynka;
 sf::Clock klatka;
 sf::Time poprz_klatka;
@@ -917,7 +917,8 @@ void AI::Update2(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
     time=przeladowanie.getElapsedTime();
     Postac &target=*Target;
     hand_degree=liczKat(target);
-    wystrzel();
+    if(Eq->HP>10)
+        wystrzel();
     graj_dzwiek();
     Update1(Eq,targetHP,w_rece,Target);
     for(short i=0;i<10;i++)
@@ -1242,71 +1243,80 @@ bool mozna_strzelac(int w_rece,sf::Clock *przeladowanie)
 //------------------------------------------------------------------------------------------------------------------------------------------
 void Config()
 {
-    int xSize=0,ySize=0;
-    std::string sciezka="Config.txt";
-    std::string line="";
-    std::fstream config_file;
-    config_file.open(sciezka,std::ios::in);
-    if(config_file.good()==true)
+    try
     {
-        for(int i=0;i<12||config_file.eof()==true;i++)
+        int xSize=0,ySize=0;
+        std::string sciezka="Config.txt";
+        std::string line="";
+        std::fstream config_file;
+        config_file.open(sciezka,std::ios::in);
+        if(config_file.good()==true)
         {
-            getline(config_file,line);
-            switch(i)
+            for(int i=0;i<12||config_file.eof()==true;i++)
             {
-            case 0:
+                getline(config_file,line);
+                switch(i)
                 {
-                    unsigned int numberOfX=line.find("x");
-                    if(numberOfX!=std::string::npos)
+                case 0:
                     {
-                        std::string s1,s2;
-                        s1=s2=line;
-                        s1.erase(0,numberOfX+1);
-                        s2.erase(numberOfX,line.size());
-                        //std::cout<<s1<<"\t"<<s2<<std::endl;
-                        ySize=std::stoi(s2);
-                        xSize=std::stoi(s1);
-                    }
-                    else
-                    {
-                        ySize=1080;
-                        xSize=1920;
-                    }
-
-                    break;
-                }
-            case 1:
-                {
-                    if(line=="none")
-                    {
-                        frameLimit=0;
-                    }else
-                        frameLimit=std::stoi(line);
-                    break;
-                }
-            case 2:
-                {
-                    setting.antialiasingLevel=std::stoi(line);
-                    break;
-                }
-            default:
-                {
-                    if(i<=12 && i>2)
-                    {
-                        if(line!="" && line!="\n")
+                        unsigned int numberOfX=line.find("x");
+                        if(numberOfX!=std::string::npos)
                         {
-                            Vol[i-2]=std::stof(line);
+                            std::string s1,s2;
+                            s1=s2=line;
+                            s1.erase(0,numberOfX+1);
+                            s2.erase(numberOfX,line.size());
+                            //std::cout<<s1<<"\t"<<s2<<std::endl;
+                            ySize=std::stoi(s2);
+                            xSize=std::stoi(s1);
                         }
+                        else
+                        {
+                            ySize=1080;
+                            xSize=1920;
+                        }
+
+                        break;
                     }
-                    break;
+                case 1:
+                    {
+                        if(line=="none")
+                        {
+                            frameLimit=0;
+                        }else
+                            frameLimit=std::stoi(line);
+                        break;
+                    }
+                case 2:
+                    {
+                        setting.antialiasingLevel=std::stoi(line);
+                        break;
+                    }
+                default:
+                    {
+                        if(i<=12 && i>2)
+                        {
+                            if(line!="" && line!="\n")
+                            {
+                                Vol[i-2]=std::stof(line);
+                            }
+                        }
+                        break;
+                    }
                 }
             }
-        }
 
+        }
+        config_file.close();
+        Xokna=xSize;
+        Yokna=ySize;
     }
-    config_file.close();
-    Xokna=xSize;
-    Yokna=ySize;
+    catch(...)
+    {
+        Xokna=1920;
+        Yokna=1080;
+        frameLimit=0;
+    }
     return;
 }
 
@@ -1330,6 +1340,7 @@ int main(int argc, char *argv[])
     const float GroundLevel=700.f/stosY;
     Postac Dziadek(window,"Textures//Charakters//dziadek.png","Textures//Charakters//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY,&peppaEq,&mamaEq,&tataEq);
     AI peppa(window,"Textures//Charakters//obrazek.png","Textures//Charakters//obrazek_dmg.png","Textures//Items//noz.png",0,"Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY,&peppaEq);
+    AI george(window,"Textures//Charakters//George.png","Textures//Charakters//George_dmg.png","Textures//Items//uzi.png",4,"","",300,GroundLevel-50,stosX,stosY,&peppaEq);
     AI mama(window,"Textures//Charakters//mama_swinka.png","Textures//Charakters//mama_swinka_dmg.png","Textures//Items//pistolet.png",1,"Sounds//mama1.wav","Sounds//mama2.wav",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
     AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",2,"Sounds//tata1.wav","Sounds//tata2.wav",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
     Background background(window,"Textures//Background//grass.png",100,"Textures//Background//grandpahouse.png",-800,"Textures//Background//house.png",900,"Textures//Background//shop.png",stosX,stosY);
@@ -1340,6 +1351,10 @@ int main(int argc, char *argv[])
     button Misja4_bt(window,"Textures//GUI//m4.png","Textures//GUI//m4c.png",1670.f/stosX,140.f/stosY,stosX,stosY);
     button Misja5_bt(window,"Textures//GUI//m5.png","Textures//GUI//m5c.png",1520.f/stosX,200.f/stosY,stosX,stosY);
     button Misja6_bt(window,"Textures//GUI//m6.png","Textures//GUI//m6c.png",1670.f/stosX,200.f/stosY,stosX,stosY);
+    button Misja7_bt(window,"Textures//GUI//m7.png","Textures//GUI//m7c.png",1520.f/stosX,260.f/stosY,stosX,stosY);
+    button Misja8_bt(window,"Textures//GUI//m8.png","Textures//GUI//m8c.png",1670.f/stosX,260.f/stosY,stosX,stosY);
+    button Misja9_bt(window,"Textures//GUI//m9.png","Textures//GUI//m9c.png",1520.f/stosX,320.f/stosY,stosX,stosY);
+    button Misja10_bt(window,"Textures//GUI//m10.png","Textures//GUI//m10c.png",1670.f/stosX,320.f/stosY,stosX,stosY);
     button Sklep_bt(window,"Textures//GUI//sklep.png","Textures//GUI//sklepc.png",550.f/stosX,5.f/stosY,stosX,stosY);
     Sklep_bt.scaleX=0.45/stosX;
     Sklep_bt.scaleY=0.45/stosY;
@@ -1401,7 +1416,7 @@ int main(int argc, char *argv[])
             if(level==0 || true)
             {
                 level=1;
-                level_setUp(1,&Eq,&peppaEq,&mamaEq,&tataEq);
+                level_setUp(1,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
             }
         }
         if(Misja2_bt.isPressed())
@@ -1409,7 +1424,7 @@ int main(int argc, char *argv[])
             if(level==1 || true)
             {
                 level=2;
-                level_setUp(2,&Eq,&peppaEq,&mamaEq,&tataEq);
+                level_setUp(2,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
             }
         }
         if(Misja3_bt.isPressed())
@@ -1417,7 +1432,7 @@ int main(int argc, char *argv[])
             if(level==2 || true)
             {
                 level=3;
-                level_setUp(3,&Eq,&peppaEq,&mamaEq,&tataEq);
+                level_setUp(3,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
             }
         }
         if(Misja4_bt.isPressed())
@@ -1425,15 +1440,15 @@ int main(int argc, char *argv[])
             if(level==3 || true)
             {
                 level=4;
-                level_setUp(4,&Eq,&peppaEq,&mamaEq,&tataEq);
+                level_setUp(4,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
             }
         }
         if(Misja5_bt.isPressed())
         {
-            if(level==5 || true)
+            if(level==4 || true)
             {
                 level=5;
-                level_setUp(4,&Eq,&peppaEq,&mamaEq,&tataEq);
+                level_setUp(5,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
             }
         }
         if(Misja6_bt.isPressed())
@@ -1441,7 +1456,35 @@ int main(int argc, char *argv[])
             if(level==5 || true)
             {
                 level=6;
-                level_setUp(4,&Eq,&peppaEq,&mamaEq,&tataEq);
+                level_setUp(6,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
+            }
+        }if(Misja7_bt.isPressed())
+        {
+            if(level==6 || true)
+            {
+                level=7;
+                level_setUp(7,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
+            }
+        }if(Misja8_bt.isPressed())
+        {
+            if(level==7 || true)
+            {
+                level=8;
+                level_setUp(8,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
+            }
+        }if(Misja9_bt.isPressed())
+        {
+            if(level==8 || true)
+            {
+                level=9;
+                level_setUp(9,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
+            }
+        }if(Misja10_bt.isPressed())
+        {
+            if(level==5 || true)
+            {
+                level=10;
+                level_setUp(10,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
             }
         }
         if(Sklep_bt.isPressed())
@@ -1537,6 +1580,58 @@ int main(int argc, char *argv[])
                             Eq.dodaj_za_zabojstwo(200);
                         }
                     }
+                    if(level==7)
+                    {
+                        if(georgeEq.HP>0)
+                            george.Update2(&georgeEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(georgeEq.HP==0)
+                        {
+                            level=0;
+                            Eq.dodaj_za_zabojstwo(220);
+                        }
+                    }
+                    if(level==8)
+                    {
+                        if(georgeEq.HP>0)
+                            george.Update2(&georgeEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(peppaEq.HP>0)
+                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(georgeEq.HP==0 && peppaEq.HP==0)
+                        {
+                            level=0;
+                            Eq.dodaj_za_zabojstwo(250);
+                        }
+                    }
+                    if(level==9)
+                    {
+                        if(georgeEq.HP>0)
+                            george.Update2(&georgeEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(peppaEq.HP>0)
+                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(mamaEq.HP>0)
+                            mama.Update2(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(georgeEq.HP==0 && mamaEq.HP==0 && peppaEq.HP==0)
+                        {
+                            level=0;
+                            Eq.dodaj_za_zabojstwo(500);
+                        }
+                    }
+                    if(level==10)
+                    {
+                        if(georgeEq.HP>0)
+                            george.Update2(&georgeEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(peppaEq.HP>0)
+                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(mamaEq.HP>0)
+                            mama.Update2(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(tataEq.HP>0)
+                            tata.Update2(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                        if(georgeEq.HP==0 && tataEq.HP==0 && mamaEq.HP==0 && peppaEq.HP==0)
+                        {
+                            level=0;
+                            Eq.dodaj_za_zabojstwo(500);
+                        }
+                    }
                 }
                 Misje_bt.Update(ButtonPressed);
                 if(Menu_misje)
@@ -1547,6 +1642,10 @@ int main(int argc, char *argv[])
                     Misja4_bt.Update(ButtonPressed);
                     Misja5_bt.Update(ButtonPressed);
                     Misja6_bt.Update(ButtonPressed);
+                    Misja7_bt.Update(ButtonPressed);
+                    Misja8_bt.Update(ButtonPressed);
+                    Misja9_bt.Update(ButtonPressed);
+                    Misja10_bt.Update(ButtonPressed);
                 }
             }
             Eq.Update(panelSklep,ButtonPressed);
