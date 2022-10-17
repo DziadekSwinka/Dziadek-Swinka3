@@ -256,7 +256,7 @@ void Equipment::Update(bool panelSklep,bool ButtonPressed)
     window.draw(pieniadz_bcg);
     window.draw(pieniadze_tekst);
     window.draw(backRect);
-    for(int i=0;i<6;i++)
+    for(int i=0;i<5;i++)
     {
         window.draw(icon[i]);
         window.draw(text[i]);
@@ -265,7 +265,7 @@ void Equipment::Update(bool panelSklep,bool ButtonPressed)
     if(panelSklep)
     {
         window.draw(Sklep.background);
-        for(int i=0;i<6;i++)
+        for(int i=0;i<5;i++)
         {
             window.draw(Sklep.ico[i]);
             window.draw(Sklep.price_text[i]);
