@@ -2,7 +2,7 @@
 <p>
   <H2>O grze</H2>
 Gra opowiada o Dziadku Śwince, który jest w rzeczywistości seryjnym mordercą.</br>
-W grze mamy do dyspozycji 6 poziomów, sklep, i dwie minigry.
+W grze mamy do dyspozycji 10 poziomów, sklep, i dwie minigry.
 Jedna z nich polega na wywożeniu imigrantów do niemiec, a w drugiej musimy klikać na pojawiające się na ekranie dinozaury.
 </p>
 Plik *.exe gry znajdyje śię w Dziadek-Swinka//bin//Release//Świnka.exe
@@ -10,6 +10,14 @@ Plik *.exe gry znajdyje śię w Dziadek-Swinka//bin//Release//Świnka.exe
 
 ![g1](https://user-images.githubusercontent.com/113696735/196045722-4e899c5c-fff5-4c37-9fb3-12dfdde2716c.PNG)
 
+<p>
+  <H2>Minimalne wymagania sprzętowe:</H2>
+  <strong>Procesor:</strong> 2ghz lub więcej<br>
+  <strong>Pamięć RAM:</strong> 512MB</br>
+  <strong>Miejsce na dysku:</strong> 100MB</br>
+  </br></br>
+  
+</p>
 <p>
   <H2>Sterowanie</H2>
   Sterowanie w grze odbywa się za pomocą następujących przycisków:
