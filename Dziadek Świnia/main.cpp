@@ -1395,7 +1395,7 @@ int main(int argc, char *argv[])
             }
         }
         sf::Time time1=liczZrzut.getElapsedTime();
-        if(time1.asSeconds()>15)
+        if(time1.asSeconds()>4)
         {
             liczZrzut.restart();
             losuj_zrzut();
