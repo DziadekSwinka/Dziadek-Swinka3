@@ -19,7 +19,7 @@ Plik *.exe gry znajdyje śię w Dziadek-Swinka//bin//Release//Świnka.exe
   
 </p>
 <p>
-  <H2>Nad czym jeszcze pracuję?</H2>
+  <H2>Nad czym jeszcze pracuje?</H2>
   Trwają obecnie prace nad trybem multiplayer opartym na protokole TCP;
 </p>
 <p>
