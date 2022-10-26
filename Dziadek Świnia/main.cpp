@@ -760,6 +760,7 @@ private:
     double liczKat(Postac &target);
     double scaleX,scaleY;
     double corX,corY;
+    float x=0;
     int type;
     float przeladowanie_time[4]={2,1,5,0.5};
     bool dmg_from_peppa=false;

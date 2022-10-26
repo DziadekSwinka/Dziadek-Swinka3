@@ -26,7 +26,6 @@ struct mGraStruct
 class Background
 {
 private:
-
     sf::RenderWindow &window;
     sf::Sprite bcg[3],B1,B2,B3;
     sf::Texture txt,b1,b2,b3,baza;
@@ -39,7 +38,6 @@ private:
     void wejdz(Interior *interior,bool *panelSklep);
     unsigned int miniGra();
     float b1_x,b2_x,b3_x;
-    float x=0;
     float stosX,stosY;
     float x_outside=0;
     bool pokaz_tekst[3]={0,0,0};
@@ -47,7 +45,7 @@ private:
     sf::RectangleShape tloGra;
     mGraStruct mStruct;
 public:
-
+    float x=0;
     unsigned int Update(Interior *interior,unsigned short level,bool *panelSklep,bool EnterPressed);
     Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,float stosX,float stosY);
 };

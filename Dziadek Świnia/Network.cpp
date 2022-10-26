@@ -7,7 +7,7 @@ Network::Network()
 {
     std::fstream file;
     file.open("netConfig.txt",std::ios::in);
-    if(file.good() && !file.eof())
+    if(file.good())
     {
         std::string content;
         getline(file,content);
@@ -15,6 +15,9 @@ Network::Network()
             Type=serwer;
         }else if(content=="klient"){
             Type=klient;
+        }else if(content=="" || file.eof())
+        {
+
         }else
         {
             std::string e="Zly tekst pliku";
@@ -45,7 +48,40 @@ Network::Network()
     }
 }
 
-void Network::Update()
+Network::~Network()
+{
+    //socket.close();
+}
+void Network::Odbierz(AI &przeciwnik,unsigned int HP1)
+{
+    sf::Vector2f bulletPos[10];
+    bool leci[10];
+
+    //unsigned int received;
+    sf::Packet pack;
+    socket.receive(pack);
+    pack>>HP1;
+}
+void Network::Wyslij(Postac &postac,float x,unsigned int HP2,bron *Bron)
+{
+    sf::Packet pack;
+    socket.send(pack);
+    pack>>HP2>>Bron->Bullet>>x;
+}
+void Network::Update(Postac &postac,AI &przeciwnik,float x,unsigned int HP1,unsigned int HP2,bron *Bron)
 {
 
+    if(Type==serwer)
+    {
+        listener.accept(socket);
+    }
+    Wyslij(postac);
+    Odbierz(przeciwnik);
 }
+/*
+Zawartosc paczki:
+-HP
+-Vectory Pociskow
+-Czy pocisk leci
+
+*/
