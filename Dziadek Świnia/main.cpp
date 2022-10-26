@@ -1,11 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/Network.hpp>
 #include <iostream>
 #include <string>
 #include <cstdlib>
 #include <time.h>
 #include <math.h>
 #include <fstream>
+#include "Network.hpp"
 #include "side.hpp"
 #include "Equipment.hpp"
 #include "level.hpp"
@@ -18,8 +20,8 @@
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 
-using std::cout;
-using std::endl;
+//using std::cout;
+//using std::endl;
 
 bool ButtonPressed=0;
 bool EnterPressed=0;
@@ -204,6 +206,7 @@ void bullet::Update()
 class Postac
 {
 private:
+    friend class Network;
     void graj_dzwiek();
     void graj_dzwiek(unsigned short i);
     float oblicz_czas(int w_rece,float czas);
@@ -740,6 +743,7 @@ class AI
     :public Postac
 {
 private:
+    friend class Network;
     sf::SoundBuffer buffer;
     sf::Sound piu;
     sf::Clock przeladowanie;
