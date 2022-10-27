@@ -50,6 +50,8 @@ sf::ContextSettings setting;
 class AI;
 class Postac;
 class bullet;
+class Bron;
+
 bullet* bullet_wsk[10]={nullptr};
 
 unsigned int Xokna=1920,Yokna=1080;
@@ -207,6 +209,7 @@ class Postac
 {
 private:
     friend class Network;
+    friend void setMulti(Network *Net,Postac *postac,AI *ai,AI_Eq *aiEq,unsigned int HP,float x,bron *Bron);
     void graj_dzwiek();
     void graj_dzwiek(unsigned short i);
     float oblicz_czas(int w_rece,float czas);
@@ -227,16 +230,15 @@ protected:
     void Fall();
     void move_to_side(side Side);
     float vs=0;
+    float hand_degree=0;
     float stosX,stosY;
 public:
-    float hand_degree=0;
     operator=(Postac &obj);
     void clockRestart();
     //Postac();
     Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY);
     Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY,AI_Eq *t1,AI_Eq *t2,AI_Eq *t3);
     float getDegree();
-    side Wside();
     float posX,posY;
     unsigned int Update(unsigned int Hp,sf::Time czas_p,int w_rece);
 };
@@ -301,12 +303,6 @@ Postac::operator=(Postac &obj)
     obj.posY=posY;
     obj.posX=posX;
     obj.hand_degree=hand_degree;
-}
-side Postac::Wside()
-{
-    if(postac.getScale().x>0)
-        return Right;
-    else return Left;
 }
 void Postac::clockRestart()
 {
@@ -1255,25 +1251,14 @@ bool mozna_strzelac(int w_rece,sf::Clock *przeladowanie)
 //------------------------------------------------------------------------------------------------------------------------------------------
 void setMulti(Network *Net,Postac *postac,AI *ai,AI_Eq *aiEq,unsigned int HP,float x,bron *Bron)
 {
-/*
-    float PosX[10],PosY[10],Dir[10],isFly[10];
-    side Side;
-    for(int i=0;i<10;i++)
-    {
-        PosX[i]=Bron->Bullet[i].posX;
-        PosY[i]=Bron->Bullet[i].posY;
-        Dir[i]=Bron->Bullet[i].dir;
-        isFly[i]=Bron->Bullet[i].fly;
-    }
     Net->Update(x,postac->posY,
                 postac->hand_degree,
                 HP,
-                *Dir,
-                *PosX,
-                *PosY,
-                *isFly,
-                postac->Wside());   */
-//void Update(float x,float y,float angle,unsigned int HP1,float *dir,float *posX,float *posY,bool *isFly,side Side);
+                Bron->Bullet.dir,
+                Bron->Bullet.posX,
+                Bron->Bullet.posY,
+                bool *isFly,
+                side Side);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -1383,7 +1368,7 @@ int main(int argc, char *argv[])
     AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",2,"Sounds//tata1.wav","Sounds//tata2.wav",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
 
     AI_Eq multiEq;
-   // AI multiCharacter(window,"Textures//Charakters//dziadek.png",100,GroundLevel-50,stosX,stosY,&multiEq);
+    AI multiCharacter(window,"Textures//Charakters//dziadek.png",100,GroundLevel-50,stosX,stosY,&multiEq);
 
     Background background(window,"Textures//Background//grass.png",100,"Textures//Background//grandpahouse.png",-800,"Textures//Background//house.png",900,"Textures//Background//shop.png",stosX,stosY);
 
@@ -1551,8 +1536,8 @@ int main(int argc, char *argv[])
                         skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
                         window.draw(skrzynka.rect);
                     }
-                    /*if(multiplayer==true)
-                        setMulti(&net,&Dziadek,AI *ai,AI_Eq *aiEq,Eq.HP,Background.x);*/
+                    if(multiplayer==true)
+                        setMulti(&net,&Dziadek,AI *ai,AI_Eq *aiEq,Eq.HP,Background.x);
 
                     unsigned int minusHP=Dziadek.Update(Eq.HP,przeladowanie.getElapsedTime(),Eq.w_rece);
                     if(minusHP<=Eq.HP)

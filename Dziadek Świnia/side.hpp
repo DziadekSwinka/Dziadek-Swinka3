@@ -3,7 +3,7 @@
 
 enum side{
     Right=0,
-    Left
+    Left=1
 };
 
 #endif // SIDE_HPP_INCLUDED

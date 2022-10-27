@@ -4,11 +4,7 @@
 #include <SFML/Network.hpp>
 
 #include "Equipment.hpp"
-class Equipment;
-class Postac;
-class AI;
-class bron;
-struct AI_Eq;
+#include "side.hpp"
 
 class Network
 {
@@ -22,13 +18,23 @@ private:
     sf::IpAddress IP;
     sf::TcpListener listener;
     sf::TcpSocket socket;
+    sf::SocketSelector sel;
     unsigned int port=54000;
-    void Wyslij(float x,float y,float angle,unsigned int HP1,float *dir,float *posX,float *posY,bool *isFly);
-    void Odbierz(unsigned int HP2);
+    void Wyslij(float x,float y,float angle,unsigned int HP1,float *dir,float *posX,float *posY,bool *isFly,side Side);
+    void Odbierz();
 public:
+    float newPosX[10];
+    float newPosY[10];
+    float newDir[10];
+    bool newIsFly[10];
+    float newAngle;
+    unsigned int HP2;
+    float newX,newY;
+    side newSide;
+
     Network();
     ~Network();
-    void Update(float x,float y,float angle,unsigned int HP1,float *dir,float *posX,float *posY,bool *isFly,unsigned int HP2);
+    void Update(float x,float y,float angle,unsigned int HP1,float *dir,float *posX,float *posY,bool *isFly,side Side);
 };
 
 #endif // NETWORK_HPP_INCLUDED

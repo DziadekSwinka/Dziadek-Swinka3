@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1666803889 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1666891216 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
@@ -438,7 +438,7 @@
 	"Background.hpp"
 	"mode.hpp"
 
-1666882318 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\side.hpp
+1666884510 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\side.hpp
 
 1664098661 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\obsluga_broni.hpp
 	<SFML/Graphics.hpp>
@@ -680,11 +680,12 @@
 	<SFML/Network/IpAddress.hpp>
 	<vector>
 
-1666882577 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\network.hpp
+1666891118 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\network.hpp
 	<SFML/Network.hpp>
 	"Equipment.hpp"
+	"side.hpp"
 
-1666880272 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\network.cpp
+1666891118 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\network.cpp
 	<fstream>
 	<string>
 	"Network.hpp"
