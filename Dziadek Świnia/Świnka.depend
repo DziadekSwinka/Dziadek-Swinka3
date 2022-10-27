@@ -438,7 +438,7 @@
 	"Background.hpp"
 	"mode.hpp"
 
-1664111971 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\side.hpp
+1666882318 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\side.hpp
 
 1664098661 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\obsluga_broni.hpp
 	<SFML/Graphics.hpp>
@@ -680,11 +680,11 @@
 	<SFML/Network/IpAddress.hpp>
 	<vector>
 
-1666804336 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\network.hpp
+1666882577 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\network.hpp
 	<SFML/Network.hpp>
 	"Equipment.hpp"
 
-1666797720 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\network.cpp
+1666880272 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\network.cpp
 	<fstream>
 	<string>
 	"Network.hpp"

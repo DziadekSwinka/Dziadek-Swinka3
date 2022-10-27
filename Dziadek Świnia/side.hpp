@@ -2,7 +2,7 @@
 #define SIDE_HPP_INCLUDED
 
 enum side{
-    Right,
+    Right=0,
     Left
 };
 

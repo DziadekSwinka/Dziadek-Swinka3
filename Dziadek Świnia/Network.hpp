@@ -23,12 +23,12 @@ private:
     sf::TcpListener listener;
     sf::TcpSocket socket;
     unsigned int port=54000;
-    void Wyslij(Postac &postac,float x,unsigned int HP1,bron *Bron);
-    void Odbierz(AI &przeciwnik,unsigned int HP2);
+    void Wyslij(float x,float y,float angle,unsigned int HP1,float *dir,float *posX,float *posY,bool *isFly);
+    void Odbierz(unsigned int HP2);
 public:
     Network();
     ~Network();
-    void Update(Postac &postac,AI &przeciwnik,float x,unsigned int HP1,unsigned int HP2,bron *Bron);
+    void Update(float x,float y,float angle,unsigned int HP1,float *dir,float *posX,float *posY,bool *isFly,unsigned int HP2);
 };
 
 #endif // NETWORK_HPP_INCLUDED
