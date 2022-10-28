@@ -1,5 +1,6 @@
 #include <fstream>
 #include <string>
+#include <iostream>
 
 #include "Network.hpp"
 
@@ -46,6 +47,9 @@ Network::Network()
         std::string e="Nie mozna otworzyc pliku";
         throw (e);
     }
+    std::cout<<"Moj IP: "<<sf::IpAddress::getLocalAddress()<<std::endl;
+    if(Type==serwer)
+        std::cout<<"Port: "<<socket.getLocalPort()<<std::endl;
 }
 
 Network::~Network()

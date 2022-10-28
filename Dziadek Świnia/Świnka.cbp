@@ -28,6 +28,7 @@
 					<Add library="sfml-graphics-s" />
 					<Add library="sfml-window-s" />
 					<Add library="sfml-audio-s" />
+					<Add library="sfml-network-s" />
 					<Add library="sfml-system-s" />
 					<Add library="gdi32" />
 					<Add library="winmm" />
@@ -39,6 +40,7 @@
 					<Add library="vorbisfile" />
 					<Add library="vorbis" />
 					<Add library="ogg" />
+					<Add library="ws2_32" />
 				</Linker>
 			</Target>
 		</Build>
@@ -61,6 +63,12 @@
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="Equipment.hpp">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="Network.cpp">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="Network.hpp">
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="button.cpp">

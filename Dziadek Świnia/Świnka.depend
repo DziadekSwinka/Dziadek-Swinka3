@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1666891216 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1666963208 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
@@ -680,14 +680,15 @@
 	<SFML/Network/IpAddress.hpp>
 	<vector>
 
-1666891118 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\network.hpp
+1666960777 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\network.hpp
 	<SFML/Network.hpp>
 	"Equipment.hpp"
 	"side.hpp"
 
-1666891118 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\network.cpp
+1666961397 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\network.cpp
 	<fstream>
 	<string>
+	<iostream>
 	"Network.hpp"
 
 1660370567 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\sfml-2.5.1\include\sfml\graphics.hpp

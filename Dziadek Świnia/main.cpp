@@ -1255,8 +1255,9 @@ bool mozna_strzelac(int w_rece,sf::Clock *przeladowanie)
 //------------------------------------------------------------------------------------------------------------------------------------------
 void setMulti(Network *Net,Postac *postac,AI *ai,AI_Eq *aiEq,unsigned int HP,float x,bron *Bron)
 {
-/*
-    float PosX[10],PosY[10],Dir[10],isFly[10];
+
+    float PosX[10],PosY[10],Dir[10];
+    bool isFly[10];
     side Side;
     for(int i=0;i<10;i++)
     {
@@ -1265,15 +1266,15 @@ void setMulti(Network *Net,Postac *postac,AI *ai,AI_Eq *aiEq,unsigned int HP,flo
         Dir[i]=Bron->Bullet[i].dir;
         isFly[i]=Bron->Bullet[i].fly;
     }
-    Net->Update(x,postac->posY,
+    Net->Update(x,
+                postac->posY,
                 postac->hand_degree,
                 HP,
-                *Dir,
-                *PosX,
-                *PosY,
-                *isFly,
-                postac->Wside());   */
-//void Update(float x,float y,float angle,unsigned int HP1,float *dir,float *posX,float *posY,bool *isFly,side Side);
+                Dir,
+                PosX,
+                PosY,
+                isFly,
+                postac->Wside());   //*/
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -1367,6 +1368,7 @@ int main(int argc, char *argv[])
 {
     setting.antialiasingLevel=0;
     interior=outside;
+    bool multiplayer=true;
     bool Menu_misje=false;
     sf::Clock liczZrzut;
     sf::Clock przeladowanie;
@@ -1382,8 +1384,8 @@ int main(int argc, char *argv[])
     AI mama(window,"Textures//Charakters//mama_swinka.png","Textures//Charakters//mama_swinka_dmg.png","Textures//Items//pistolet.png",1,"Sounds//mama1.wav","Sounds//mama2.wav",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
     AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",2,"Sounds//tata1.wav","Sounds//tata2.wav",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
 
-    AI_Eq multiEq;
-   // AI multiCharacter(window,"Textures//Charakters//dziadek.png",100,GroundLevel-50,stosX,stosY,&multiEq);
+    AI_Eq aiEq;
+    AI multiCharacter(window,"Textures//Charakters//dziadek.png","","",0,"","",100,GroundLevel-50,stosX,stosY,&aiEq);
 
     Background background(window,"Textures//Background//grass.png",100,"Textures//Background//grandpahouse.png",-800,"Textures//Background//house.png",900,"Textures//Background//shop.png",stosX,stosY);
 
@@ -1409,6 +1411,8 @@ int main(int argc, char *argv[])
     sf::Texture gameover;
     gameover.loadFromFile("Textures//Background//end.jpg");
     GameOver.setTexture(gameover);
+
+
     //system("cls");
 
     if(frameLimit!=0)
@@ -1552,7 +1556,7 @@ int main(int argc, char *argv[])
                         window.draw(skrzynka.rect);
                     }
                     /*if(multiplayer==true)
-                        setMulti(&net,&Dziadek,AI *ai,AI_Eq *aiEq,Eq.HP,Background.x);*/
+                        setMulti(net,&Dziadek,&multiCharacter,&aiEq,Eq.HP,background.x);*/
 
                     unsigned int minusHP=Dziadek.Update(Eq.HP,przeladowanie.getElapsedTime(),Eq.w_rece);
                     if(minusHP<=Eq.HP)
