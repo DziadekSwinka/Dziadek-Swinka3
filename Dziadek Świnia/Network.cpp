@@ -6,6 +6,8 @@
 
 Network::Network()
 {
+    isConnect=false;
+    system("cls");
     std::fstream file;
     file.open("netConfig.txt",std::ios::in);
     if(file.good())
@@ -21,31 +23,31 @@ Network::Network()
 
         }else
         {
-            std::string e="Zly tekst pliku";
-            throw (e);
+            Type=klient;
+            throw std::runtime_error ("Zly tekst pliku");
         }
-
         if(Type==klient)
         {
             std::string ip;
             getline(file,ip);
             IP=static_cast<sf::IpAddress>(ip);
             if(socket.connect(IP,port)!=sf::Socket::Done){
-                std::string e="Nie udalo sie polaczyc z "+IP.toString();
-                throw (e);
+                throw std::runtime_error ("Nie udalo sie polaczyc z "+IP.toString());
+            }
+            else
+            {
+                isConnect=true;
             }
         }
         if(Type==serwer)
         {
             if(listener.listen(port)!=sf::Socket::Done){
-                std::string e="Nie moge rozpoczac nasluchiwania na porcie "+std::to_string(port);
-                throw (e);
+                throw std::runtime_error("Nie moge rozpoczac nasluchiwania na porcie "+std::to_string(port));
             }
         }
     }else
     {
-        std::string e="Nie mozna otworzyc pliku";
-        throw (e);
+        throw std::runtime_error ("Nie mozna otworzyc pliku");
     }
     std::cout<<"Moj IP: "<<sf::IpAddress::getLocalAddress()<<std::endl;
     if(Type==serwer)

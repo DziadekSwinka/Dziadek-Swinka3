@@ -1418,9 +1418,9 @@ int main(int argc, char *argv[])
     {
         net=new Network;
     }
-    catch(std::runtime_error e)
+    catch(std::string<char>a)
     {
-        std::cout<<"Network class error\n"<<e.what()<<std::endl;
+        std::cout<<"Network class error\n"<<e<<std::endl;
     }
 
     if(frameLimit!=0)
@@ -1563,7 +1563,7 @@ int main(int argc, char *argv[])
                         skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
                         window.draw(skrzynka.rect);
                     }
-                    if(multiplayer==true && net->isConnect)
+                    if(multiplayer==true)
                     {
                         try
                         {
