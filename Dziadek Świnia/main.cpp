@@ -1378,6 +1378,10 @@ int main(int argc, char *argv[])
     srand(time(NULL));
     Config();
     sf::RenderWindow window(sf::VideoMode(Yokna,Xokna,64), "Dziadek Swinka",sf::Style::Default,setting);
+    auto image = sf::Image{};
+    image.loadFromFile("Textures//Charakters//dziadek.png");
+    window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
+
     const float stosX=1080.f/Xokna;   //std::cout<<stosX<<std::endl;
     const float stosY=1920.f/Yokna;   //std::cout<<stosY<<std::endl;
     const float GroundLevel=700.f/stosY;

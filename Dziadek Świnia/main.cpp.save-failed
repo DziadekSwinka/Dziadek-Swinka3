@@ -1378,6 +1378,10 @@ int main(int argc, char *argv[])
     srand(time(NULL));
     Config();
     sf::RenderWindow window(sf::VideoMode(Yokna,Xokna,64), "Dziadek Swinka",sf::Style::Default,setting);
+    auto image = sf::Image{};
+    image.loadFromFile("dziadek.ico");
+    window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
+
     const float stosX=1080.f/Xokna;   //std::cout<<stosX<<std::endl;
     const float stosY=1920.f/Yokna;   //std::cout<<stosY<<std::endl;
     const float GroundLevel=700.f/stosY;
@@ -1418,9 +1422,9 @@ int main(int argc, char *argv[])
     {
         net=new Network;
     }
-    catch(std::string<char>a)
+    catch(std::runtime_error e)
     {
-        std::cout<<"Network class error\n"<<e<<std::endl;
+        std::cout<<"Network class error\n"<<e.what()<<std::endl;
     }
 
     if(frameLimit!=0)
@@ -1563,7 +1567,7 @@ int main(int argc, char *argv[])
                         skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
                         window.draw(skrzynka.rect);
                     }
-                    if(multiplayer==true)
+                    if(multiplayer==true && net->isConnect)
                     {
                         try
                         {
