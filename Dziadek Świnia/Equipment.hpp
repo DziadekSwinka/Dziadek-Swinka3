@@ -18,6 +18,8 @@ struct sklep
 class Equipment
 {
 private:
+    friend void save();
+    friend void load();
     sf::RenderWindow &window;
     sf::SoundBuffer intro;
     sf::Font OswaldRegular;
@@ -42,9 +44,9 @@ public:
     sf::Sound main;
     sklep Sklep;
     Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol0,float Vol1);
-    unsigned int ammunition;
-    unsigned int HP;
-    unsigned int pieniadze;
+    int ammunition;
+    int HP;
+    int pieniadze;
     bool pistolet,karabin,bazooka,uzi;
     short w_rece;
     void Update(bool panelSklep,bool ButtonPressed);

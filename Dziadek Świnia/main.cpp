@@ -15,6 +15,7 @@
 #include "button.hpp"
 #include "Background.hpp"
 #include "mode.hpp"
+#include "Saves.hpp"
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -775,8 +776,8 @@ private:
     float przeladowanie_time[4]={2,1,5,0.5};
     bool dmg_from_peppa=false;
 public:
-    void Update1(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *T);
-    void Update2(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target);
+    void Update1(AI_Eq *Eq,int *targetHP,short w_rece,Postac *T);
+    void Update2(AI_Eq *Eq,int *targetHP,short w_rece,Postac *Target);
     bool dotykaPostaci(int i);
     AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY,AI_Eq *mEg);
     bullet Bullet_AI[10] = {bullet(window,"Textures//Items//bullet.png",0,&mEq),
@@ -927,7 +928,7 @@ void AI::wystrzel()
             i++;
     }
 }
-void AI::Update2(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
+void AI::Update2(AI_Eq *Eq,int *targetHP,short w_rece,Postac *Target)
 {
     time=przeladowanie.getElapsedTime();
     Postac &target=*Target;
@@ -945,7 +946,7 @@ void AI::Update2(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
         }
     }
 }
-void AI::Update1(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *T)
+void AI::Update1(AI_Eq *Eq,int *targetHP,short w_rece,Postac *T)
 {
     if(type>0)
     {
@@ -1378,10 +1379,11 @@ int main(int argc, char *argv[])
     srand(time(NULL));
     Config();
     sf::RenderWindow window(sf::VideoMode(Yokna,Xokna,64), "Dziadek Swinka",sf::Style::Default,setting);
-    auto image = sf::Image{};
-    image.loadFromFile("Textures//Charakters//dziadek.png");
-    window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
-
+    {
+        auto image = sf::Image{};
+        image.loadFromFile("Textures//Charakters//dziadek.png");
+        window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
+    }
     const float stosX=1080.f/Xokna;   //std::cout<<stosX<<std::endl;
     const float stosY=1920.f/Yokna;   //std::cout<<stosY<<std::endl;
     const float GroundLevel=700.f/stosY;
@@ -1391,8 +1393,8 @@ int main(int argc, char *argv[])
     AI mama(window,"Textures//Charakters//mama_swinka.png","Textures//Charakters//mama_swinka_dmg.png","Textures//Items//pistolet.png",1,"Sounds//mama1.wav","Sounds//mama2.wav",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
     AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",2,"Sounds//tata1.wav","Sounds//tata2.wav",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
 
-    AI_Eq aiEq;
-    AI multiCharacter(window,"Textures//Charakters//dziadek.png","","",0,"","",100,GroundLevel-50,stosX,stosY,&aiEq);
+    //AI_Eq aiEq;
+    //AI multiCharacter(window,"Textures//Charakters//dziadek.png","","",0,"","",100,GroundLevel-50,stosX,stosY,&aiEq);
 
     Background background(window,"Textures//Background//grass.png",100,"Textures//Background//grandpahouse.png",-800,"Textures//Background//house.png",900,"Textures//Background//shop.png",stosX,stosY);
 
@@ -1408,8 +1410,16 @@ int main(int argc, char *argv[])
     button Misja9_bt(window,"Textures//GUI//m9.png","Textures//GUI//m9c.png",1520.f/stosX,320.f/stosY,stosX,stosY);
     button Misja10_bt(window,"Textures//GUI//m10.png","Textures//GUI//m10c.png",1670.f/stosX,320.f/stosY,stosX,stosY);
     button Sklep_bt(window,"Textures//GUI//sklep.png","Textures//GUI//sklepc.png",550.f/stosX,5.f/stosY,stosX,stosY);
+
+    button saveBt(window,"Textures//GUI//zapisz.png","Textures//GUI//zapiszc.png",1100.f/stosX,5.f/stosY,stosX,stosY);
+    button loadBt(window,"Textures//GUI//wczytaj.png","Textures//GUI//wczytajc.png",1250.f/stosX,5.f/stosY,stosX,stosY);
+
     Sklep_bt.scaleX=0.45/stosX;
     Sklep_bt.scaleY=0.45/stosY;
+    saveBt.scaleY=0.45/stosY;
+    saveBt.scaleY=0.45/stosX;
+    loadBt.scaleY=0.45/stosY;
+    loadBt.scaleY=0.45/stosX;
     Equipment Eq(window,stosX,stosY,Vol[0],Vol[1]);
     bron karabin(window,"Textures//Items//ak47.png","Textures//Items//pistolet.png","Textures//Items//bazooka.png","Textures//Items//uzi.png");
     skrzynki();
@@ -1417,7 +1427,8 @@ int main(int argc, char *argv[])
     sf::Texture gameover;
     gameover.loadFromFile("Textures//Background//end.jpg");
     GameOver.setTexture(gameover);
-    Network *net;
+    system("cls");
+    /*Network *net;
     try
     {
         net=new Network;
@@ -1425,7 +1436,7 @@ int main(int argc, char *argv[])
     catch(std::runtime_error e)
     {
         std::cout<<"Network class error\n"<<e.what()<<std::endl;
-    }
+    }*/
 
     if(frameLimit!=0)
         window.setFramerateLimit(frameLimit);
@@ -1547,6 +1558,10 @@ int main(int argc, char *argv[])
                 level_setUp(10,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
             }
         }
+        if(saveBt.isPressed())
+            save(&Eq);
+        if(loadBt.isPressed())
+            load(&Eq);
         if(Sklep_bt.isPressed())
         {
             if(panelSklep)
@@ -1567,7 +1582,7 @@ int main(int argc, char *argv[])
                         skrzynka_fall(GroundLevel,Dziadek.posX,Dziadek.posY,&Eq);
                         window.draw(skrzynka.rect);
                     }
-                    if(multiplayer==true && net->isConnect)
+                    /*if(multiplayer==true && net->isConnect)
                     {
                         try
                         {
@@ -1581,7 +1596,7 @@ int main(int argc, char *argv[])
                         {
                             std::cout<<"setMulti function error\n";
                         }
-                    }
+                    }*/
 
                     unsigned int minusHP=Dziadek.Update(Eq.HP,przeladowanie.getElapsedTime(),Eq.w_rece);
                     if(minusHP<=Eq.HP)
@@ -1726,6 +1741,8 @@ int main(int argc, char *argv[])
             }
             Eq.Update(panelSklep,ButtonPressed);
             Sklep_bt.Update(ButtonPressed);
+            saveBt.Update(ButtonPressed);
+            loadBt.Update(ButtonPressed);
             if(interior==pociong)
                     Eq.pociag();
         }else

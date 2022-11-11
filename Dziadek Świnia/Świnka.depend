@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1667760011 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1668206178 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
@@ -437,6 +437,7 @@
 	"button.hpp"
 	"Background.hpp"
 	"mode.hpp"
+	"Saves.hpp"
 
 1666880910 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\side.hpp
 
@@ -467,7 +468,7 @@
 1666012714 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
 	"Equipment.hpp"
 
-1665909879 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
+1668206113 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	"button.hpp"
@@ -1278,4 +1279,17 @@
 	<SFML/Network/Socket.hpp>
 	<SFML/Network/IpAddress.hpp>
 	<vector>
+
+1668206088 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\saves.cpp
+	<ctime>
+	<fstream>
+	<iomanip>
+	<sstream>
+	<string>
+	<iostream>
+	<cstdio>
+	"Saves.hpp"
+
+1668201522 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\saves.hpp
+	"Equipment.hpp"
 
