@@ -1422,6 +1422,7 @@ int main(int argc, char *argv[])
     loadBt.scaleY=0.45/stosX;
     Equipment Eq(window,stosX,stosY,Vol[0],Vol[1]);
     bron karabin(window,"Textures//Items//ak47.png","Textures//Items//pistolet.png","Textures//Items//bazooka.png","Textures//Items//uzi.png");
+    saveList List(window,stosX,stosY);
     skrzynki();
     sf::Sprite GameOver;
     sf::Texture gameover;
@@ -1559,9 +1560,11 @@ int main(int argc, char *argv[])
             }
         }
         if(saveBt.isPressed())
-            save(&Eq);
+            List.save(&Eq);
         if(loadBt.isPressed())
-            load(&Eq);
+            if(List.showList)
+                List.showList=false;
+            else List.showList=true;
         if(Sklep_bt.isPressed())
         {
             if(panelSklep)
@@ -1572,7 +1575,7 @@ int main(int argc, char *argv[])
         window.clear(sf::Color(138,191,255));
         if(Eq.HP>0)
         {
-            if(!panelSklep)
+            if(!panelSklep && List.showList==false)
             {
                 Eq.pieniadze+=background.Update(&interior,level,&panelSklep,EnterPressed);
                 if(interior==outside)
@@ -1740,6 +1743,7 @@ int main(int argc, char *argv[])
                 }
             }
             Eq.Update(panelSklep,ButtonPressed);
+            List.Update();
             Sklep_bt.Update(ButtonPressed);
             saveBt.Update(ButtonPressed);
             loadBt.Update(ButtonPressed);

@@ -47,6 +47,7 @@ public:
     int ammunition;
     int HP;
     int pieniadze;
+    int boostHP;
     bool pistolet,karabin,bazooka,uzi;
     short w_rece;
     void Update(bool panelSklep,bool ButtonPressed);

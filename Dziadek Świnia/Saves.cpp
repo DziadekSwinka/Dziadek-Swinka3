@@ -1,54 +1,88 @@
 #include <ctime>
 #include <fstream>
-#include <iomanip>
-#include <sstream>
 #include <string>
 #include <iostream>
 #include <cstdio>
+#include <vector>
 #include "Saves.hpp"
 
-void load(Equipment *Eq)
+saveList::saveList(sf::RenderWindow &window1,float stosX,float stosY):window(window1),stosX(stosX),stosY(stosY)
+{
+    rectangle.setSize(sf::Vector2f(1190.f/stosX,790.f/stosY));
+    rectangle.setFillColor(sf::Color(160,140,80));
+    rectangle.setOutlineColor(sf::Color(70,70,70));
+    rectangle.setOutlineThickness(5);
+    rectangle.setPosition(360.f/stosX,100.f/stosY);
+}
+void saveList::Update()
+{
+    if(showList)
+    {
+        std::vector<button*>LoadButton;
+        int ile=LoadList();
+        LoadButton.reserve(ile);
+        for(int i=0;i<ile;i++)
+        {
+            LoadButton=new button(window,"Textures//GUI//noneText","Textures//GUI//noneTextc",1200.f*stosX,(160(+130*i)*stosY),stosX,stosY);
+        }
+        window.draw(rectangle);
+    }
+}
+unsigned int saveList::LoadList()
 {
     std::fstream Allsave;
     std::string line="";
     Allsave.open("saves//allSaves.txt",std::ios::in);
     if(!Allsave.good())
+    {
         std::cout<<"Open file error"<<std::endl;
+        return 0;
+    }
     int count=0;
     while(getline(Allsave,line))
     {
         count++;
     }
+    return count;
+}
+void saveList::load(Equipment *Eq,int i)
+{
+
+    std::string line="";
     std::fstream mySave;
-    mySave.open("saves//save"+std::to_string(count)+".txt",std::ios::in);
-    for(int i=0;i<7;i++)
+    mySave.open("saves//save"+std::to_string(i)+".txt",std::ios::in);
+    if(!mySave.good())
     {
-        getline(mySave,line);
-        if(mySave.eof())
-            break;
-        /*switch(i)
+        std::cout<<"Save file error";
+        return;
+    }
+
+    int j=0;
+    while(getline(mySave,line))
+    {
+        //std::cout<<line<<std::endl;
+        switch(j)
         {
         case 0:
-            Eq->ammunition=stoul(line);
+            Eq->ammunition=stoi(line);
             break;
         case 1:
-            Eq->HP=stoul(line);
+            Eq->HP=stoi(line);
             break;
         case 2:
-            Eq->pieniadze=stoul(line);
+            Eq->pieniadze=stoi(line);
             break;
         case 3:
             {
-            if(stoi(line)==1)
+            if(static_cast<int>(line[0])==49)
                 Eq->pistolet=true;
             else
                 Eq->pistolet=false;
             break;
             }
-
         case 4:
             {
-            if(stoi(line)==1)
+            if(static_cast<int>(line[0])==49)
                 Eq->karabin=true;
             else
                 Eq->karabin=false;
@@ -56,7 +90,7 @@ void load(Equipment *Eq)
             }
         case 5:
             {
-            if(stoi(line)==1)
+            if(static_cast<int>(line[0])==49)
                 Eq->bazooka=true;
             else
                 Eq->bazooka=false;
@@ -64,26 +98,27 @@ void load(Equipment *Eq)
             }
         case 6:
             {
-            if(stoi(line)==1)
+            if(static_cast<int>(line[0])==49)
                 Eq->uzi=true;
             else
                 Eq->uzi=false;
             break;
             }
         default: break;
-        }*/
+        }
+        i++;
     }
     mySave.close();
-    std::cout<<Eq->ammunition<<std::endl;
+    /*std::cout<<Eq->ammunition<<std::endl;
     std::cout<<Eq->HP<<std::endl;
     std::cout<<Eq->pieniadze<<std::endl;
     std::cout<<Eq->pistolet<<std::endl;
     std::cout<<Eq->karabin<<std::endl;
     std::cout<<Eq->bazooka<<std::endl;
-    std::cout<<Eq->uzi<<std::endl;
+    std::cout<<Eq->uzi<<std::endl;*/
 }
 
-void save(Equipment *Eq)
+void saveList::save(Equipment *Eq)
 {
     std::fstream Allsave;
     std::string name="",content="",line="";

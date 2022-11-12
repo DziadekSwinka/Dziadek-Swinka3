@@ -776,8 +776,8 @@ private:
     float przeladowanie_time[4]={2,1,5,0.5};
     bool dmg_from_peppa=false;
 public:
-    void Update1(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *T);
-    void Update2(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target);
+    void Update1(AI_Eq *Eq,int *targetHP,short w_rece,Postac *T);
+    void Update2(AI_Eq *Eq,int *targetHP,short w_rece,Postac *Target);
     bool dotykaPostaci(int i);
     AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY,AI_Eq *mEg);
     bullet Bullet_AI[10] = {bullet(window,"Textures//Items//bullet.png",0,&mEq),
@@ -928,7 +928,7 @@ void AI::wystrzel()
             i++;
     }
 }
-void AI::Update2(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
+void AI::Update2(AI_Eq *Eq,int *targetHP,short w_rece,Postac *Target)
 {
     time=przeladowanie.getElapsedTime();
     Postac &target=*Target;
@@ -946,7 +946,7 @@ void AI::Update2(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *Target)
         }
     }
 }
-void AI::Update1(AI_Eq *Eq,unsigned int *targetHP,short w_rece,Postac *T)
+void AI::Update1(AI_Eq *Eq,int *targetHP,short w_rece,Postac *T)
 {
     if(type>0)
     {
@@ -1422,6 +1422,7 @@ int main(int argc, char *argv[])
     loadBt.scaleY=0.45/stosX;
     Equipment Eq(window,stosX,stosY,Vol[0],Vol[1]);
     bron karabin(window,"Textures//Items//ak47.png","Textures//Items//pistolet.png","Textures//Items//bazooka.png","Textures//Items//uzi.png");
+    saveList List(window,stosX,stosY);
     skrzynki();
     sf::Sprite GameOver;
     sf::Texture gameover;
@@ -1559,9 +1560,9 @@ int main(int argc, char *argv[])
             }
         }
         if(saveBt.isPressed())
-            save();
+            List.save(&Eq);
         if(loadBt.isPressed())
-            load();
+            List.LoadList();
         if(Sklep_bt.isPressed())
         {
             if(panelSklep)
@@ -1572,7 +1573,7 @@ int main(int argc, char *argv[])
         window.clear(sf::Color(138,191,255));
         if(Eq.HP>0)
         {
-            if(!panelSklep)
+            if(!panelSklep && !List.showList)
             {
                 Eq.pieniadze+=background.Update(&interior,level,&panelSklep,EnterPressed);
                 if(interior==outside)
@@ -1740,6 +1741,7 @@ int main(int argc, char *argv[])
                 }
             }
             Eq.Update(panelSklep,ButtonPressed);
+            List.Update();
             Sklep_bt.Update(ButtonPressed);
             saveBt.Update(ButtonPressed);
             loadBt.Update(ButtonPressed);
