@@ -1,5 +1,7 @@
 #include "Equipment.hpp"
 
+#include <iostream>
+
 Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol0,float Vol1):window(window1),stosX(stosX),stosY(stosY)
 {
     symbol_txt[0].loadFromFile("Textures//Items//bullet.png");
@@ -7,6 +9,7 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol
     symbol_txt[2].loadFromFile("Textures//Items//ak47.png");
     symbol_txt[3].loadFromFile("Textures//Items//bazooka.png");
     symbol_txt[4].loadFromFile("Textures//Items//uzi.png");
+    symbol_txt[5].loadFromFile("Textures//Items//beer.png");
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     intro.loadFromFile("Sounds//intro.wav");
     ammunition=15;
@@ -20,6 +23,7 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol
         text[i].setPosition((68*i+38)/stosX,98/stosY);
         text[i].setCharacterSize(30/stosX);
     }
+    text[5].setPosition((68*5+28)/stosX,98/stosY);
     pistolet=true;
     karabin=false;
     uzi=false;
@@ -36,15 +40,19 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol
     symbol[2].setScale(-0.07/stosX,0.07/stosY);
     symbol[3].setScale(-0.08/stosX,0.1/stosY);
     symbol[4].setScale(-0.15/stosX,0.15/stosY);
+    symbol[5].setScale(-0.12/stosX,0.12/stosY);
     symbol[1].setPosition(170/stosX,-8/stosY);
     symbol[2].setPosition(210/stosX,35/stosY);
     symbol[3].setPosition(290/stosX,25/stosY);
     symbol[4].setPosition(430/stosX,39/stosY);
+    symbol[5].setPosition(430/stosX,54/stosY);
     symbol[0].setRotation(45);
     symbol[1].setRotation(-45);
     symbol[2].setRotation(-45);
     symbol[3].setRotation(-45);
     symbol[4].setRotation(0);
+    symbol[5].setRotation(45);
+
 
     backRect.setSize(sf::Vector2f(426.f/stosX,125.f/stosY));
     backRect.setPosition(10.f/stosX,10.f/stosY);
@@ -100,15 +108,19 @@ void Equipment::ustaw_sklep()
     Sklep.ico[2].setTexture(symbol_txt[3]);
     Sklep.ico[3].setTexture(symbol_txt[4]);
     Sklep.ico[4].setTexture(symbol_txt[0]);
+    Sklep.ico[5].setTexture(symbol_txt[5]);
     for(int i=0;i<6;i++)
     {
         Sklep.ico[i].setPosition(800.f/stosX,(140+i*120)/stosY);
         Sklep.ico[i].setScale(-0.4/stosX,0.34/stosY);
 
     }
-    Sklep.ico[4].setScale(-0.25,0.25);
+    Sklep.ico[4].setScale(-0.25/stosX,0.25/stosY);
     Sklep.ico[4].setPosition(600.f/stosX,(170+5*120)/stosY);
     Sklep.ico[4].setRotation(90);
+
+    Sklep.ico[5].setScale(-0.15/stosX,0.2/stosY);
+    Sklep.ico[5].setPosition(530.f/stosX,(170+5*120)/stosY);
 }
 void Equipment::ustaw_reke()
 {
@@ -134,8 +146,11 @@ void Equipment::ustaw_reke()
     }else
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
     {
-        if(false)
-            w_rece=5;
+        if(beer>0)
+        {
+            beer--;
+            boostHP=100;
+        }
     }
 }
 void Equipment::ustaw_Text()
@@ -145,7 +160,7 @@ void Equipment::ustaw_Text()
     text[2].setString("[2]");
     text[3].setString("[3]");
     text[4].setString("[4]");
-    text[5].setString("[5]");
+    text[5].setString(std::to_string(beer)+" [5]");
     for(short i=0;i<6;i++)
     {
         Sklep.price_text[i].setFont(OswaldRegular);
@@ -173,16 +188,21 @@ void Equipment::ustaw_Text()
     {
         text[0].setColor(sf::Color(5,0,170));
     }
+    if(true)
+    {
+        text[5].setColor(sf::Color(5,0,170));
+    }
 }
 void Equipment::przyciski()
 {
     int i;
-    for(i=0;i<6;i++)
+    for(i=0;i<7;i++)
     {
         if(kup[i].isPressed())
         {
             if(price[i]<=pieniadze)
             {
+                std::cout<<price[i]<<" "<<pieniadze<<" "<<i<<std::endl;
                 pieniadze-=price[i];
             }else return;
             break;
@@ -235,7 +255,7 @@ void Equipment::przyciski()
             ammunition+=5;
         }
         break;
-    case 5:
+    /*case 5:
         {
             if(pistolet)
             {
@@ -243,8 +263,13 @@ void Equipment::przyciski()
             }else{
                 pistolet=true;
             }
+        }*/
+    case 5:
+        {
+            beer++;
         }
         break;
+    default: break;
     }
 }
 void Equipment::Update(bool panelSklep,bool ButtonPressed)
@@ -256,7 +281,7 @@ void Equipment::Update(bool panelSklep,bool ButtonPressed)
     window.draw(pieniadz_bcg);
     window.draw(pieniadze_tekst);
     window.draw(backRect);
-    for(int i=0;i<5;i++)
+    for(int i=0;i<6;i++)
     {
         window.draw(icon[i]);
         window.draw(text[i]);
@@ -265,7 +290,7 @@ void Equipment::Update(bool panelSklep,bool ButtonPressed)
     if(panelSklep)
     {
         window.draw(Sklep.background);
-        for(int i=0;i<5;i++)
+        for(int i=0;i<6;i++)
         {
             window.draw(Sklep.ico[i]);
             window.draw(Sklep.price_text[i]);

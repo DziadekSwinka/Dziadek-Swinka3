@@ -224,8 +224,8 @@ protected:
     sf::SoundBuffer buffer1,buffer2,buffer3,buffer4;
     sf::Sound sound;
     sf::RenderWindow &window;
-    sf::Texture txt,txt2,red_txt,white_txt;
-    sf::Sprite postac,red[10],white;
+    sf::Texture txt,txt2,red_txt,yellow_txt,white_txt;
+    sf::Sprite postac,red[10],yellow[10],white,white2;
     sf::Clock od_obrazenia;
     sf::Time czas_od_dmg;
     void Fall();
@@ -242,13 +242,14 @@ public:
     float getDegree();
     side Wside();
     float posX,posY;
-    unsigned int Update(unsigned int Hp,sf::Time czas_p,int w_rece);
+    unsigned int Update(unsigned int Hp,int boostHp,sf::Time czas_p,int w_rece);
 };
 Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY)
     :window(window1),stosX(stosX),stosY(stosY)
 {
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     red_txt.loadFromFile("Textures//GUI//red_.png");
+    yellow_txt.loadFromFile("Textures//GUI//yellow_.png");
     white_txt.loadFromFile("Textures//GUI//white_.png");
     czas.setFont(OswaldRegular);
 
@@ -256,6 +257,8 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     {
         red[i].setTexture(red_txt);
         red[i].setScale(0.25,0.25);
+        yellow[i].setTexture(yellow_txt);
+        yellow[i].setScale(0.25,0.25);
     }
 
     buffer1.loadFromFile(sciezka2);
@@ -263,6 +266,7 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     buffer3.loadFromFile(sciezka4);
     buffer4.loadFromFile(sciezka5);
     white.setTexture(white_txt);
+    white2.setTexture(white_txt);
     txt.loadFromFile(sciezka);
     txt2.loadFromFile(sciezka1);
     postac.setTexture(txt);
@@ -277,6 +281,7 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
 {
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     red_txt.loadFromFile("Textures//GUI//red_.png");
+    yellow_txt.loadFromFile("Textures//GUI//yellow_.png");
     white_txt.loadFromFile("Textures//GUI//white_.png");
     czas.setFont(OswaldRegular);
 
@@ -284,6 +289,8 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     {
         red[i].setTexture(red_txt);
         red[i].setScale(0.25,0.25);
+        yellow[i].setTexture(yellow_txt);
+        yellow[i].setScale(0.25,0.25);
     }
 
     buffer1.loadFromFile(sciezka2);
@@ -291,6 +298,7 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     buffer3.loadFromFile(sciezka4);
     buffer4.loadFromFile(sciezka5);
     white.setTexture(white_txt);
+    white2.setTexture(white_txt);
     txt.loadFromFile(sciezka);
     txt2.loadFromFile(sciezka1);
     postac.setTexture(txt);
@@ -434,7 +442,7 @@ void Postac::graj_dzwiek()
     unsigned short i=(std::rand()%5);
     graj_dzwiek(i);
 }
-unsigned int Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
+unsigned int Postac::Update(unsigned int Hp,int boostHp,sf::Time czas_p,int w_rece)
 {
     czas.setString(std::to_string(oblicz_czas(w_rece,czas_p.asSeconds())));
     Fall();
@@ -454,18 +462,22 @@ unsigned int Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
     {
         czas.setPosition(posX-10,posY-220);
         white.setPosition(posX-50,posY-100);
+        white2.setPosition(posX-50,posY-122);
         for(int i=0;i<10;i++)
         {
             red[i].setPosition(posX-50+20*i,posY-100);
+            yellow[i].setPosition(posX-50+20*i,posY-122);
         }
     }
     else
     {
         czas.setPosition(posX-110,posY-220);
         white.setPosition(posX-150,posY-100);
+        white2.setPosition(posX-150,posY-122);
         for(int i=0;i<10;i++)
         {
             red[i].setPosition(posX-150+20*i,posY-100);
+            yellow[i].setPosition(posX-150+20*i,posY-122);
         }
     }
 
@@ -499,10 +511,15 @@ unsigned int Postac::Update(unsigned int Hp,sf::Time czas_p,int w_rece)
 
     window.draw(postac);
     window.draw(white);
+    if(boostHp!=0)
+        window.draw(white2);
     window.draw(czas);
     Hp/=10;
+    boostHp/=10;
     for(int i=0;static_cast<unsigned int>(i)<Hp;i++)
         window.draw(red[i]);
+    for(int i=0;i<boostHp;i++)
+        window.draw(yellow[i]);
 
     return hp_;
 }
@@ -776,8 +793,8 @@ private:
     float przeladowanie_time[4]={2,1,5,0.5};
     bool dmg_from_peppa=false;
 public:
-    void Update1(AI_Eq *Eq,int *targetHP,short w_rece,Postac *T);
-    void Update2(AI_Eq *Eq,int *targetHP,short w_rece,Postac *Target);
+    void Update1(AI_Eq *Eq,int *targetHP,int *boostHp,short w_rece,Postac *T);
+    void Update2(AI_Eq *Eq,int *targetHP,int *boostHp,short w_rece,Postac *Target);
     bool dotykaPostaci(int i);
     AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY,AI_Eq *mEg);
     bullet Bullet_AI[10] = {bullet(window,"Textures//Items//bullet.png",0,&mEq),
@@ -928,7 +945,7 @@ void AI::wystrzel()
             i++;
     }
 }
-void AI::Update2(AI_Eq *Eq,int *targetHP,short w_rece,Postac *Target)
+void AI::Update2(AI_Eq *Eq,int *targetHP,int *boostHp,short w_rece,Postac *Target)
 {
     time=przeladowanie.getElapsedTime();
     Postac &target=*Target;
@@ -936,7 +953,7 @@ void AI::Update2(AI_Eq *Eq,int *targetHP,short w_rece,Postac *Target)
     if(Eq->HP>10)
         wystrzel();
     graj_dzwiek();
-    Update1(Eq,targetHP,w_rece,Target);
+    Update1(Eq,targetHP,boostHp,w_rece,Target);
     for(short i=0;i<10;i++)
     {
         Bullet_AI[i].AI_fix=180.f;
@@ -946,7 +963,7 @@ void AI::Update2(AI_Eq *Eq,int *targetHP,short w_rece,Postac *Target)
         }
     }
 }
-void AI::Update1(AI_Eq *Eq,int *targetHP,short w_rece,Postac *T)
+void AI::Update1(AI_Eq *Eq,int *targetHP,int *boostHp,short w_rece,Postac *T)
 {
     if(type>0)
     {
@@ -984,12 +1001,24 @@ void AI::Update1(AI_Eq *Eq,int *targetHP,short w_rece,Postac *T)
     }
     if(losowa==3 && dist()<300 /*&& std::rand()%3==1*/ && type==0)
     {
-        if(*targetHP>0)
+        int minusHP=10;
+        if(*boostHp!=0)
         {
-            *targetHP-=10;
-            T->clockRestart();
-            graj_dzwiek();
-        }
+            if(minusHP<=*boostHp)
+                *boostHp-=minusHP;
+            else
+            {
+                *boostHp=0;
+                minusHP-=*boostHp;
+                if(minusHP<=*targetHP)
+                    *targetHP-=minusHP;
+            }
+        }else
+            if(minusHP<=*targetHP)
+                *targetHP-=minusHP;
+            else *targetHP=0;
+        T->clockRestart();
+        graj_dzwiek();
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
@@ -1428,6 +1457,10 @@ int main(int argc, char *argv[])
     sf::Texture gameover;
     gameover.loadFromFile("Textures//Background//end.jpg");
     GameOver.setTexture(gameover);
+    bool odblokowane[10];
+    odblokowane[0]=true;
+    for(int i=1;i<10;i++)
+        odblokowane[i]=false;
     system("cls");
     /*Network *net;
     try
@@ -1485,7 +1518,7 @@ int main(int argc, char *argv[])
         }
         if(Misja1_bt.isPressed())
         {
-            if(level==0 || true)
+            if(odblokowane[0])
             {
                 level=1;
                 level_setUp(1,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
@@ -1493,7 +1526,7 @@ int main(int argc, char *argv[])
         }
         if(Misja2_bt.isPressed())
         {
-            if(level==1 || true)
+            if(odblokowane[1])
             {
                 level=2;
                 level_setUp(2,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
@@ -1501,7 +1534,7 @@ int main(int argc, char *argv[])
         }
         if(Misja3_bt.isPressed())
         {
-            if(level==2 || true)
+            if(odblokowane[2])
             {
                 level=3;
                 level_setUp(3,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
@@ -1509,7 +1542,7 @@ int main(int argc, char *argv[])
         }
         if(Misja4_bt.isPressed())
         {
-            if(level==3 || true)
+            if(odblokowane[3])
             {
                 level=4;
                 level_setUp(4,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
@@ -1517,7 +1550,7 @@ int main(int argc, char *argv[])
         }
         if(Misja5_bt.isPressed())
         {
-            if(level==4 || true)
+            if(odblokowane[4])
             {
                 level=5;
                 level_setUp(5,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
@@ -1525,35 +1558,35 @@ int main(int argc, char *argv[])
         }
         if(Misja6_bt.isPressed())
         {
-            if(level==5 || true)
+            if(odblokowane[5])
             {
                 level=6;
                 level_setUp(6,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
             }
         }if(Misja7_bt.isPressed())
         {
-            if(level==6 || true)
+            if(odblokowane[6])
             {
                 level=7;
                 level_setUp(7,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
             }
         }if(Misja8_bt.isPressed())
         {
-            if(level==7 || true)
+            if(odblokowane[7])
             {
                 level=8;
                 level_setUp(8,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
             }
         }if(Misja9_bt.isPressed())
         {
-            if(level==8 || true)
+            if(odblokowane[8])
             {
                 level=9;
                 level_setUp(9,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
             }
         }if(Misja10_bt.isPressed())
         {
-            if(level==5 || true)
+            if(odblokowane[9])
             {
                 level=10;
                 level_setUp(10,&Eq,&peppaEq,&mamaEq,&tataEq,&georgeEq);
@@ -1600,8 +1633,19 @@ int main(int argc, char *argv[])
                             std::cout<<"setMulti function error\n";
                         }
                     }*/
-
-                    unsigned int minusHP=Dziadek.Update(Eq.HP,przeladowanie.getElapsedTime(),Eq.w_rece);
+                    unsigned int minusHP=Dziadek.Update(Eq.HP,Eq.boostHP,przeladowanie.getElapsedTime(),Eq.w_rece);
+                    if(Eq.boostHP!=0)
+                    {
+                        if(minusHP<=Eq.boostHP)
+                            Eq.boostHP-=minusHP;
+                        else
+                        {
+                            Eq.boostHP=0;
+                            minusHP-=Eq.boostHP;
+                            if(minusHP<=Eq.HP)
+                                Eq.HP-=minusHP;
+                        }
+                    }else
                     if(minusHP<=Eq.HP)
                         Eq.HP-=minusHP;
                     else Eq.HP=0;
@@ -1609,121 +1653,131 @@ int main(int argc, char *argv[])
                     if(level==1)
                     {
                         if(peppaEq.HP>0)
-                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            peppa.Update1(&peppaEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(peppaEq.HP==0)
                         {
                             level=0;
                             Eq.dodaj_za_zabojstwo(50);
+                            odblokowane[1]=true;
                         }
                     }
                     if(level==2)
                     {
                         if(mamaEq.HP>0)
-                            mama.Update2(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            mama.Update2(&mamaEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(mamaEq.HP==0)
                         {
                             level=0;
                             Eq.dodaj_za_zabojstwo(70);
+                            odblokowane[2]=true;
                         }
                     }
                     if(level==3)
                     {
                         if(mamaEq.HP>0)
-                            mama.Update2(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            mama.Update2(&mamaEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(peppaEq.HP>0)
-                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            peppa.Update1(&peppaEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(mamaEq.HP==0 && peppaEq.HP==0)
                         {
                             level=0;
                             Eq.dodaj_za_zabojstwo(125);
+                            odblokowane[3]=true;
                         }
                     }
                     if(level==4)
                     {
                         if(tataEq.HP>0)
-                            tata.Update2(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            tata.Update2(&tataEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(tataEq.HP==0)
                         {
                             level=0;
                             Eq.dodaj_za_zabojstwo(140);
+                            odblokowane[4]=true;
                         }
                     }
                     if(level==5)
                     {
                         if(tataEq.HP>0)
-                            tata.Update2(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            tata.Update2(&tataEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(peppaEq.HP>0)
-                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            peppa.Update1(&peppaEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(tataEq.HP==0 && peppaEq.HP==0)
                         {
                             level=0;
                             Eq.dodaj_za_zabojstwo(180);
+                            odblokowane[5]=true;
                         }
                     }
                     if(level==6)
                     {
                         if(peppaEq.HP>0)
-                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            peppa.Update1(&peppaEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(mamaEq.HP>0)
-                            mama.Update2(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            mama.Update2(&mamaEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(tataEq.HP>0)
-                            tata.Update2(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            tata.Update2(&tataEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(tataEq.HP==0 && mamaEq.HP==0 && peppaEq.HP==0)
                         {
                             level=0;
                             Eq.dodaj_za_zabojstwo(200);
+                            odblokowane[6]=true;
                         }
                     }
                     if(level==7)
                     {
                         if(georgeEq.HP>0)
-                            george.Update2(&georgeEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            george.Update2(&georgeEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(georgeEq.HP==0)
                         {
                             level=0;
                             Eq.dodaj_za_zabojstwo(220);
+                            odblokowane[7]=true;
                         }
                     }
                     if(level==8)
                     {
                         if(georgeEq.HP>0)
-                            george.Update2(&georgeEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            george.Update2(&georgeEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(peppaEq.HP>0)
-                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            peppa.Update1(&peppaEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(georgeEq.HP==0 && peppaEq.HP==0)
                         {
                             level=0;
                             Eq.dodaj_za_zabojstwo(250);
+                            odblokowane[8]=true;
                         }
                     }
                     if(level==9)
                     {
                         if(georgeEq.HP>0)
-                            george.Update2(&georgeEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            george.Update2(&georgeEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(peppaEq.HP>0)
-                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            peppa.Update1(&peppaEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(mamaEq.HP>0)
-                            mama.Update2(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            mama.Update2(&mamaEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(georgeEq.HP==0 && mamaEq.HP==0 && peppaEq.HP==0)
                         {
                             level=0;
                             Eq.dodaj_za_zabojstwo(500);
+                            odblokowane[9]=true;
                         }
                     }
                     if(level==10)
                     {
                         if(georgeEq.HP>0)
-                            george.Update2(&georgeEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            george.Update2(&georgeEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(peppaEq.HP>0)
-                            peppa.Update1(&peppaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            peppa.Update1(&peppaEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(mamaEq.HP>0)
-                            mama.Update2(&mamaEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            mama.Update2(&mamaEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(tataEq.HP>0)
-                            tata.Update2(&tataEq,&Eq.HP,Eq.w_rece,&Dziadek);
+                            tata.Update2(&tataEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                         if(georgeEq.HP==0 && tataEq.HP==0 && mamaEq.HP==0 && peppaEq.HP==0)
                         {
                             level=0;
                             Eq.dodaj_za_zabojstwo(500);
+                            //odblokowane[10]=true;
                         }
                     }
                 }
@@ -1743,7 +1797,7 @@ int main(int argc, char *argv[])
                 }
             }
             Eq.Update(panelSklep,ButtonPressed);
-            List.Update(ButtonPressed);
+            List.Update(ButtonPressed,&Eq);
             Sklep_bt.Update(ButtonPressed);
             saveBt.Update(ButtonPressed);
             loadBt.Update(ButtonPressed);

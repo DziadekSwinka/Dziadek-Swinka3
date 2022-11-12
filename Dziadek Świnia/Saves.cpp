@@ -7,6 +7,7 @@
 
 saveList::saveList(sf::RenderWindow &window1,float stosX,float stosY):window(window1),stosX(stosX),stosY(stosY)
 {
+    showList=false;
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     rectangle.setSize(sf::Vector2f(1190.f/stosX,790.f/stosY));
     rectangle.setFillColor(sf::Color(160,140,80));
@@ -72,6 +73,7 @@ void saveList::load(Equipment *Eq,int i)
 
     std::string line="";
     std::fstream mySave;
+    std::cout<<"saves//save"+std::to_string(i)+".txt"<<std::endl;
     mySave.open("saves//save"+std::to_string(i)+".txt",std::ios::in);
     if(!mySave.good())
     {
@@ -126,18 +128,16 @@ void saveList::load(Equipment *Eq,int i)
                 Eq->uzi=false;
             break;
             }
+        case 7:
+            {
+            Eq->beer=stoi(line);
+            break;
+            }
         default: break;
         }
-        i++;
+        j++;
     }
     mySave.close();
-    /*std::cout<<Eq->ammunition<<std::endl;
-    std::cout<<Eq->HP<<std::endl;
-    std::cout<<Eq->pieniadze<<std::endl;
-    std::cout<<Eq->pistolet<<std::endl;
-    std::cout<<Eq->karabin<<std::endl;
-    std::cout<<Eq->bazooka<<std::endl;
-    std::cout<<Eq->uzi<<std::endl;*/
 }
 
 void saveList::save(Equipment *Eq)
@@ -168,6 +168,7 @@ void saveList::save(Equipment *Eq)
     content+=std::to_string(Eq->karabin)+"\n";
     content+=std::to_string(Eq->bazooka)+"\n";
     content+=std::to_string(Eq->uzi)+"\n";
+    content+=std::to_string(Eq->beer)+"\n";
     mySave.open("saves//save"+std::to_string(count)+".txt",std::ios::out|std::ios::trunc);
     mySave.write(& content[0],content.length());
     mySave.close();

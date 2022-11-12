@@ -5,7 +5,7 @@
 #include <SFML/Audio.hpp>
 #include "button.hpp"
 
-const unsigned int price[6]={80,300,500,150,10,0};
+const unsigned int price[6]={80,300,500,150,10,80};
 const float pierwszy_kup = {160.f};
 
 struct sklep
@@ -47,7 +47,8 @@ public:
     int ammunition;
     int HP;
     int pieniadze;
-    int boostHP;
+    int boostHP=0;
+    int beer;
     bool pistolet,karabin,bazooka,uzi;
     short w_rece;
     void Update(bool panelSklep,bool ButtonPressed);

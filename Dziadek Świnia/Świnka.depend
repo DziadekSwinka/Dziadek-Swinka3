@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1668263448 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1668276206 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
@@ -465,10 +465,11 @@
 1665833693 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"Background.hpp"
 
-1666012714 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
+1668273798 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
 	"Equipment.hpp"
+	<iostream>
 
-1668257357 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
+1668273809 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	"button.hpp"
@@ -476,7 +477,7 @@
 1663935746 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\globalne.hpp
 	"obsluga_broni.hpp"
 
-1666009793 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.hpp
+1668276117 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.hpp
 	<SFML/Graphics.hpp>
 	"Equipment.hpp"
 	"side.hpp"
@@ -1280,7 +1281,7 @@
 	<SFML/Network/IpAddress.hpp>
 	<vector>
 
-1668268868 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\saves.cpp
+1668270187 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\saves.cpp
 	<ctime>
 	<fstream>
 	<string>

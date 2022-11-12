@@ -6,7 +6,6 @@
 #include "side.hpp"
 
 class bullet;
-
 struct AI_Eq
 {
     unsigned int HP=100;

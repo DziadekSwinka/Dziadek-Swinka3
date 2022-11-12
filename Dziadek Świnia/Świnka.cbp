@@ -18,9 +18,8 @@
 			<Target title="Release">
 				<Option output="bin/Release/Świnka" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
-				<Option type="1" />
+				<Option type="0" />
 				<Option compiler="gcc" />
-				<Option use_console_runner="0" />
 				<Compiler>
 					<Add option="-O2" />
 				</Compiler>
@@ -70,6 +69,12 @@
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="Network.hpp">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="Saves.cpp">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="Saves.hpp">
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="button.cpp">
