@@ -1562,7 +1562,9 @@ int main(int argc, char *argv[])
         if(saveBt.isPressed())
             List.save(&Eq);
         if(loadBt.isPressed())
-            List.LoadList();
+            if(List.showList)
+                List.showList=false;
+            else List.showList=true;
         if(Sklep_bt.isPressed())
         {
             if(panelSklep)
@@ -1573,7 +1575,7 @@ int main(int argc, char *argv[])
         window.clear(sf::Color(138,191,255));
         if(Eq.HP>0)
         {
-            if(!panelSklep && !List.showList)
+            if(!panelSklep && List.showList==false)
             {
                 Eq.pieniadze+=background.Update(&interior,level,&panelSklep,EnterPressed);
                 if(interior==outside)
@@ -1741,7 +1743,7 @@ int main(int argc, char *argv[])
                 }
             }
             Eq.Update(panelSklep,ButtonPressed);
-            List.Update();
+            List.Update(ButtonPressed);
             Sklep_bt.Update(ButtonPressed);
             saveBt.Update(ButtonPressed);
             loadBt.Update(ButtonPressed);

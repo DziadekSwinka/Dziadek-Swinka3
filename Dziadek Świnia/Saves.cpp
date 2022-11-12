@@ -2,30 +2,50 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-#include <cstdio>
-#include <vector>
+
 #include "Saves.hpp"
 
 saveList::saveList(sf::RenderWindow &window1,float stosX,float stosY):window(window1),stosX(stosX),stosY(stosY)
 {
+    OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     rectangle.setSize(sf::Vector2f(1190.f/stosX,790.f/stosY));
     rectangle.setFillColor(sf::Color(160,140,80));
     rectangle.setOutlineColor(sf::Color(70,70,70));
     rectangle.setOutlineThickness(5);
     rectangle.setPosition(360.f/stosX,100.f/stosY);
+    int k=0;
+    for(int i=0;i<6;i++)
+        for(int j=0;j<6;j++)
+        {
+            text[i][j].setFont(OswaldRegular);
+            text[i][j].setPosition((530+(150*j))*stosX,(170+(130*i))*stosY);
+            text[j][i].setString("Save "+std::to_string(k));
+            k++;
+        }
+
 }
-void saveList::Update()
+void saveList::Update(bool Bp,Equipment *Eq)
 {
     if(showList)
     {
-        std::vector<button*>LoadButton;
-        int ile=LoadList();
-        LoadButton.reserve(ile);
-        for(int i=0;i<ile;i++)
-        {
-            LoadButton=new button(window,"Textures//GUI//noneText","Textures//GUI//noneTextc",1200.f*stosX,(160(+130*i)*stosY),stosX,stosY);
-        }
         window.draw(rectangle);
+        int ile=LoadList();
+        for(int i=0;i<ile && i<36;i++)
+        {
+            Bt[i].Update(Bp);
+
+            int k=0;
+            for(int i=0;i<6;i++)
+                for(int j=0;j<6;j++)
+                {
+                    if(k<ile)
+                        window.draw(text[j][i]);
+                    k++;
+                }
+
+            if(Bt[i].isPressed())
+                load(Eq,i);
+        }
     }
 }
 unsigned int saveList::LoadList()
@@ -43,6 +63,8 @@ unsigned int saveList::LoadList()
     {
         count++;
     }
+    Allsave.close();
+    Allsave.clear();
     return count;
 }
 void saveList::load(Equipment *Eq,int i)

@@ -1743,7 +1743,7 @@ int main(int argc, char *argv[])
                 }
             }
             Eq.Update(panelSklep,ButtonPressed);
-            List.Update();
+            List.Update(ButtonPressed,&Eq);
             Sklep_bt.Update(ButtonPressed);
             saveBt.Update(ButtonPressed);
             loadBt.Update(ButtonPressed);

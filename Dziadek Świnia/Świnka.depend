@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1668259670 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1668263448 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
@@ -1280,15 +1280,14 @@
 	<SFML/Network/IpAddress.hpp>
 	<vector>
 
-1668259246 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\saves.cpp
+1668268868 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\saves.cpp
 	<ctime>
 	<fstream>
 	<string>
 	<iostream>
-	<cstdio>
 	"Saves.hpp"
 
-1668259338 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\saves.hpp
+1668268782 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\saves.hpp
 	<SFML/Graphics.hpp>
 	"Equipment.hpp"
 	"button.hpp"
