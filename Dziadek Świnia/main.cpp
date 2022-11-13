@@ -1417,7 +1417,6 @@ int main(int argc, char *argv[])
     sf::Clock przeladowanie;
     srand(time(NULL));
     std::string *sezon=new std::string;
-    //*sezon="_winter";
     *sezon=set_sezon();
     Config();
     sf::RenderWindow window(sf::VideoMode(Yokna,Xokna,64), "Dziadek Swinka",sf::Style::Default,setting);

@@ -60,7 +60,7 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
         for(int i=0;i<100;i++)
         {
             Snieg[i].setTexture(snieg);
-            Snieg[i].setPosition(std::rand()%window.getSize().x,std::rand()%window.getSize().y-bcg[1].getSize().y);
+            Snieg[i].setPosition(std::rand()%window.getSize().x,std::rand()%window.getSize().y);
         }
     }else
         snowFall=false;

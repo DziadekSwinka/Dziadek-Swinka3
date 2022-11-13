@@ -1411,13 +1411,13 @@ int main(int argc, char *argv[])
 {
     setting.antialiasingLevel=0;
     interior=outside;
-    bool multiplayer=true;
+    //bool multiplayer=true;
     bool Menu_misje=false;
     sf::Clock liczZrzut;
     sf::Clock przeladowanie;
     srand(time(NULL));
     std::string *sezon=new std::string;
-    //*sezon="_winter";
+    *sezon=set_sezon();
     Config();
     sf::RenderWindow window(sf::VideoMode(Yokna,Xokna,64), "Dziadek Swinka",sf::Style::Default,setting);
     {
