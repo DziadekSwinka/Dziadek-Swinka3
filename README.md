@@ -112,6 +112,8 @@ Plik *.exe gry znajdyje śię w Dziadek-Swinka//bin//Release//Świnka.exe
 
 <image>![g1](https://user-images.githubusercontent.com/113696735/196045722-4e899c5c-fff5-4c37-9fb3-12dfdde2716c.PNG)
 
+![swienta](https://user-images.githubusercontent.com/113696735/201524806-9fbb2819-17b7-415b-861f-303e8bfe7b70.PNG)
+
 ![g2](https://user-images.githubusercontent.com/113696735/196047402-1ef81b7e-7d05-4c07-af9f-e537bedb16b1.PNG)
 
 ![g4](https://user-images.githubusercontent.com/113696735/196047585-c6792442-016d-4c83-95ee-447ee46e5d67.PNG)
