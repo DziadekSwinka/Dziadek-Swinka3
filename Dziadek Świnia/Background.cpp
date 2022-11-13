@@ -1,6 +1,6 @@
 #include "Background.hpp"
 
-Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,float stosX,float stosY):stosX(stosX),stosY(stosY),window(window1)
+Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,float stosX,float stosY,std::string sezon):stosX(stosX),stosY(stosY),window(window1)
 {
 
     srand(time(NULL));
@@ -32,16 +32,16 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
     b1_x=x1;
     b2_x=x2;
     b3_x=x3;
-    txt.loadFromFile(sciezka);
-    b1.loadFromFile(budynek1);
+    txt.loadFromFile(sciezka+sezon+".png");
+    b1.loadFromFile(budynek1+sezon+".png");
     B1.setTexture(b1);
     B1.setScale(0.5,0.5);
     B1.setOrigin(0,b1.getSize().y);
-    b2.loadFromFile(budynek2);
+    b2.loadFromFile(budynek2+sezon+".png");
     B2.setTexture(b2);
     B2.setScale(0.5,0.5);
     B2.setOrigin(0,b2.getSize().y);
-    b3.loadFromFile(budynek3);
+    b3.loadFromFile(budynek3+sezon+".png");
     B3.setTexture(b3);
     B3.setScale(0.5,0.5);
     B3.setOrigin(0,b3.getSize().y);
@@ -54,6 +54,16 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
     bcg[0].setPosition(0-798,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));
     bcg[1].setPosition(0,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));
     bcg[2].setPosition(window.getSize().x-4,window.getSize().y-(txt.getSize().y*1.7*bcg[0].getScale().y/2));
+    if(snieg.loadFromFile("Textures//Items//"+sezon+"snow.png"))
+    {
+        snowFall=true;
+        for(int i=0;i<100;i++)
+        {
+            Snieg[i].setTexture(snieg);
+            Snieg[i].setPosition(std::rand()%window.getSize().x,std::rand()%window.getSize().y-bcg[1].getSize().y);
+        }
+    }else
+        snowFall=false;
 
 }
 void Background::wyswietl_napis(float z1,float z2,float z3)
@@ -135,6 +145,21 @@ unsigned int Background::miniGra()
     window.draw(Wskaznik);
     return zwroc;
 }
+void Background::renderSnow()
+{
+    for(int i=0;i<100;i++)
+    {
+        if(std::rand()%(i+1)==i+1)
+        {
+            continue;
+        }
+        if(Snieg[i].getPosition().y>bcg[1].getPosition().y)
+        {
+            Snieg[i].setPosition(std::rand()%window.getSize().x,0);
+        }
+        Snieg[i].move(0,0.05);
+    }
+}
 unsigned int Background::Update(Interior *interior,unsigned short level,bool *panelSklep,bool EnterPressed)
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -169,6 +194,14 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
         window.draw(bcg[0]);
         window.draw(bcg[1]);
         window.draw(bcg[2]);
+        if(snowFall==true)
+        {
+            renderSnow();
+            for(int i=0;i<100;i++)
+            {
+                window.draw(Snieg[i]);
+            }
+        }
         if(*interior==pociong)
         {
             window.draw(Pociag);
@@ -188,13 +221,10 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
             p=miniGra();
         }
     }
-
     if(EnterPressed==true && mGra==false)
     {
         mGra=true;
     }
-
-
     return p;
 }
 

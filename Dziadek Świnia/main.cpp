@@ -1392,6 +1392,16 @@ void Config()
     return;
 }
 
+std::string set_sezon()
+{
+    std::string sezon="";
+    struct tm Tm;
+    if(Tm.tm_mon==9 || Tm.tm_mon==10 || Tm.tm_mon==11 || Tm.tm_mon==0)
+    {
+        sezon="_winter";
+    }else sezon="";
+    return sezon;
+}
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -1401,11 +1411,14 @@ int main(int argc, char *argv[])
 {
     setting.antialiasingLevel=0;
     interior=outside;
-    bool multiplayer=true;
+    //bool multiplayer=true;
     bool Menu_misje=false;
     sf::Clock liczZrzut;
     sf::Clock przeladowanie;
     srand(time(NULL));
+    std::string *sezon=new std::string;
+    //*sezon="_winter";
+    *sezon=set_sezon();
     Config();
     sf::RenderWindow window(sf::VideoMode(Yokna,Xokna,64), "Dziadek Swinka",sf::Style::Default,setting);
     {
@@ -1425,7 +1438,8 @@ int main(int argc, char *argv[])
     //AI_Eq aiEq;
     //AI multiCharacter(window,"Textures//Charakters//dziadek.png","","",0,"","",100,GroundLevel-50,stosX,stosY,&aiEq);
 
-    Background background(window,"Textures//Background//grass.png",100,"Textures//Background//grandpahouse.png",-800,"Textures//Background//house.png",900,"Textures//Background//shop.png",stosX,stosY);
+    Background background(window,"Textures//Background//grass",100,"Textures//Background//grandpahouse",-800,"Textures//Background//house",900,"Textures//Background//shop",stosX,stosY,*sezon);
+    delete sezon;
 
     button Misje_bt(window,"Textures//GUI//bm.png","Textures//GUI//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
     button Misja1_bt(window,"Textures//GUI//m1.png","Textures//GUI//m1c.png",1520.f/stosX,80.f/stosY,stosX,stosY);

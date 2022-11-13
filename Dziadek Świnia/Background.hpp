@@ -29,8 +29,8 @@ private:
     sf::RenderWindow &window;
     sf::Sprite bcg[3],B1,B2,B3;
     sf::Texture txt,b1,b2,b3,baza;
-    sf::Texture gertruda,chmura,wsk;
-    sf::Sprite Pociag,Chmura,Baza,Wskaznik;
+    sf::Texture gertruda,chmura,wsk,snieg;
+    sf::Sprite Pociag,Chmura,Baza,Wskaznik,Snieg[100];
     sf::Text text;
     sf::Font OswaldRegular;
     bool background_move(side Side);
@@ -44,10 +44,12 @@ private:
     bool mGra=false;
     sf::RectangleShape tloGra;
     mGraStruct mStruct;
+    bool snowFall;
+    void renderSnow();
 public:
     float x=0;
     unsigned int Update(Interior *interior,unsigned short level,bool *panelSklep,bool EnterPressed);
-    Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,float stosX,float stosY);
+    Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,float stosX,float stosY,std::string sezon);
 };
 
 
