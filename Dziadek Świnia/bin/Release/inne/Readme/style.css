@@ -1,0 +1,58 @@
+H3
+{
+	font-size: 1.45em;
+	color: #5030bb;
+}
+#text,
+#nav
+{
+	margin-left: 10px;
+}
+#content
+{
+	width: 80%; 
+	margin-left: 10%; 
+	margin-right: 10%; 
+	border: 1px solid black;
+	padding-bottom: 20px;
+}
+.powrot
+{
+	display: block;
+	width: 70px;
+	margin-right: 50px;
+	margin-left: auto;
+	background-color: #5030bb;
+	padding: 10px;
+	border-radius: 5px;
+}
+.powrot a
+{
+	text-algin: center;
+	text-decoration: none;
+	color: white;
+}
+.powrot a:hover
+{
+	color: #eee;
+}
+.powrot:hover
+{
+	background-color: #4020ab;
+}
+.zdjecia
+{
+	width:90%;
+	margin-left:auto;
+	margin-right:auto;
+}
+.zdjecia img
+{
+	display: inline-block;
+	width: 24%;
+	/*height: 120px;*/
+}
+/*table
+{
+	display: table-caption;
+}
