@@ -16,6 +16,7 @@
 #include "Background.hpp"
 #include "mode.hpp"
 #include "Saves.hpp"
+#include "IniConfig.hpp"
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -1313,6 +1314,74 @@ void setMulti(Network *net,Postac *postac,AI *ai,AI_Eq *aiEq,unsigned int HP,flo
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
+
+void lineToSetup(std::string line,int i)
+{
+    std::cout<<i<<"\t"<<line<<std::endl;
+    int xSize=1920,
+        ySize=1080;
+    switch(i)
+    {
+    case 0:
+        {
+            unsigned int numberOfX=line.find("x");
+            if(numberOfX!=std::string::npos)
+            {
+                std::string s1,s2;
+                s1=s2=line;
+                s1.erase(0,numberOfX+1);
+                s2.erase(numberOfX,line.size());
+                ySize=std::stoi(s2);
+                xSize=std::stoi(s1);
+            }
+            else
+            {
+                ySize=1080;
+                xSize=1920;
+            }
+
+            break;
+        }
+        case 1:
+        {
+            if(line=="none")
+            {
+                frameLimit=0;
+            }else
+            //frameLimit=std::stoi(line);
+            break;
+        }
+        case 2:
+        {
+            //setting.antialiasingLevel=std::stoi(line);
+            break;
+        }
+        default:
+        {
+            if(i<=12 && i>2)
+            {
+                if(line!="" && line!="\n")
+                    {
+                        //Vol[i-2]=std::stof(line);
+                    }
+            }
+            break;
+        }
+    }
+    Xokna=xSize;
+    Yokna=ySize;
+}
+void iniToSetup(char buf[10][256])
+{
+    std::string stringBuf[10]={"","","","","","","","","",""};
+    for(int i=0;i<10;i++)
+        for(int j=0;j<256;j++)
+            stringBuf[i]+=buf[i][j];
+    for(int i=0;i<10;i++)
+    {
+        lineToSetup(stringBuf[i],i);
+    }
+}
 void Config()
 {
     try
@@ -1327,61 +1396,11 @@ void Config()
             for(int i=0;i<12||config_file.eof()==true;i++)
             {
                 getline(config_file,line);
-                switch(i)
-                {
-                case 0:
-                    {
-                        unsigned int numberOfX=line.find("x");
-                        if(numberOfX!=std::string::npos)
-                        {
-                            std::string s1,s2;
-                            s1=s2=line;
-                            s1.erase(0,numberOfX+1);
-                            s2.erase(numberOfX,line.size());
-                            //std::cout<<s1<<"\t"<<s2<<std::endl;
-                            ySize=std::stoi(s2);
-                            xSize=std::stoi(s1);
-                        }
-                        else
-                        {
-                            ySize=1080;
-                            xSize=1920;
-                        }
+                lineToSetup(line,i);
 
-                        break;
-                    }
-                case 1:
-                    {
-                        if(line=="none")
-                        {
-                            frameLimit=0;
-                        }else
-                            frameLimit=std::stoi(line);
-                        break;
-                    }
-                case 2:
-                    {
-                        setting.antialiasingLevel=std::stoi(line);
-                        break;
-                    }
-                default:
-                    {
-                        if(i<=12 && i>2)
-                        {
-                            if(line!="" && line!="\n")
-                            {
-                                Vol[i-2]=std::stof(line);
-                            }
-                        }
-                        break;
-                    }
-                }
             }
-
         }
         config_file.close();
-        Xokna=xSize;
-        Yokna=ySize;
     }
     catch(...)
     {
@@ -1406,8 +1425,17 @@ std::string set_sezon()
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
-
+void application();
 int main(int argc, char *argv[])
+{
+    //WritePrivateProfileString("sekcja1","nazwa","wartoœæ","plik.ini");
+    while(true)
+    {
+        application();
+    }
+}
+
+void application()
 {
     setting.antialiasingLevel=0;
     interior=outside;
@@ -1418,15 +1446,16 @@ int main(int argc, char *argv[])
     srand(time(NULL));
     std::string *sezon=new std::string;
     *sezon=set_sezon();
-    Config();
-    sf::RenderWindow window(sf::VideoMode(Yokna,Xokna,64), "Dziadek Swinka",sf::Style::Default,setting);
+    //Config();
+    config();
+    sf::RenderWindow window(sf::VideoMode(Xokna,Yokna,64), "Dziadek Swinka",sf::Style::Default,setting);
     {
         auto image = sf::Image{};
         image.loadFromFile("Textures//Charakters//dziadek.png");
         window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     }
-    const float stosX=1080.f/Xokna;   //std::cout<<stosX<<std::endl;
-    const float stosY=1920.f/Yokna;   //std::cout<<stosY<<std::endl;
+    const float stosX=1920.f/Xokna;   //std::cout<<stosX<<std::endl;
+    const float stosY=1080.f/Yokna;   //std::cout<<stosY<<std::endl;
     const float GroundLevel=700.f/stosY;
     Postac Dziadek(window,"Textures//Charakters//dziadek.png","Textures//Charakters//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY,&peppaEq,&mamaEq,&tataEq);
     AI peppa(window,"Textures//Charakters//obrazek.png","Textures//Charakters//obrazek_dmg.png","Textures//Items//noz.png",0,"Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY,&peppaEq);
@@ -1453,6 +1482,8 @@ int main(int argc, char *argv[])
     button Misja10_bt(window,"Textures//GUI//m10.png","Textures//GUI//m10c.png",1670.f/stosX,320.f/stosY,stosX,stosY);
     button Sklep_bt(window,"Textures//GUI//sklep.png","Textures//GUI//sklepc.png",550.f/stosX,5.f/stosY,stosX,stosY);
 
+    button Restart(window,"Textures//GUI//restart.png","Textures//GUI//restartc.png",550.f/stosX,5.f/stosY,stosX,stosY);
+
     button saveBt(window,"Textures//GUI//zapisz.png","Textures//GUI//zapiszc.png",1100.f/stosX,5.f/stosY,stosX,stosY);
     button loadBt(window,"Textures//GUI//wczytaj.png","Textures//GUI//wczytajc.png",1250.f/stosX,5.f/stosY,stosX,stosY);
 
@@ -1471,7 +1502,7 @@ int main(int argc, char *argv[])
     gameover.loadFromFile("Textures//Background//end.jpg");
     GameOver.setTexture(gameover);
     bool odblokowane[10]={1,0,0,0,0,0,0,0,0,0};
-    system("cls");
+    //system("cls");
     /*Network *net;
     try
     {
@@ -1491,7 +1522,10 @@ int main(int argc, char *argv[])
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
+            {
                 window.close();
+                exit(0);
+            }
             if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left )
             {
                 ButtonPressed=true;
@@ -1505,7 +1539,6 @@ int main(int argc, char *argv[])
                         EnterPressed=true;
                         Eq.ammunition--;
                     }
-
                 }
             }
         }
@@ -1817,13 +1850,17 @@ int main(int argc, char *argv[])
         {
             Eq.main.setLoop(false);
             window.draw(GameOver);
+            Restart.Update(ButtonPressed);
+            if(Restart.isPressed())
+            {
+                return;
+            }
         }
-
         window.display();
         poprz_klatka=klatka.getElapsedTime();
         klatka.restart();
     }
     EnterPressed=false;
 
-    return 0;
+    return;
 }

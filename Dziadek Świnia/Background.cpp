@@ -153,7 +153,7 @@ void Background::renderSnow()
         {
             continue;
         }
-        if(Snieg[i].getPosition().y>bcg[1].getPosition().y)
+        if(Snieg[i].getPosition().y>window.getSize().y)
         {
             Snieg[i].setPosition(std::rand()%window.getSize().x,0);
         }
@@ -199,7 +199,8 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
             renderSnow();
             for(int i=0;i<100;i++)
             {
-                window.draw(Snieg[i]);
+                if(Snieg[i].getPosition().y<=bcg[1].getPosition().y)
+                    window.draw(Snieg[i]);
             }
         }
         if(*interior==pociong)
