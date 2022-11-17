@@ -11,7 +11,7 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
     chmura.loadFromFile("Textures//Background//cloud.png");
     baza.loadFromFile("Textures//Background//baza.png");
     wsk.loadFromFile("Textures//GUI//wskaznik.png");
-    mStruct.texture.loadFromFile("Textures//Charakters//Dinozar.png");
+    mStruct.texture.loadFromFile("Textures//Charakters//Dinozar"+sezon+".png");
     for(int i=0;i<5;i++)
     {
         mStruct.target[i].setScale(0.5/stosX,0.5/stosY);
@@ -131,7 +131,7 @@ unsigned int Background::miniGra()
                 if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && mStruct.display[i]==true)
                 {
                     zwroc+=3;
-                    mStruct.speed+=0.00001;
+                    mStruct.speed+=0.001;
                     mStruct.display[i]=false;
                     continue;
                 }
@@ -173,9 +173,9 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
     window.draw(Chmura);
     if(*interior==outside || *interior==pociong)
     {
-        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             background_move(Right);
-        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::A) && *interior!=pociong)
+        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && *interior!=pociong)
             background_move(Left);
         B1.setPosition(x-b1_x,750);
         B2.setPosition(x-b2_x,750);

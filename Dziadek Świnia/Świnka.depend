@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1668344558 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1668709147 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
@@ -438,6 +438,7 @@
 	"Background.hpp"
 	"mode.hpp"
 	"Saves.hpp"
+	"IniConfig.hpp"
 
 1666880910 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\side.hpp
 
@@ -462,10 +463,10 @@
 	"side.hpp"
 	"mode.hpp"
 
-1668345165 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
+1668708304 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"Background.hpp"
 
-1668273798 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
+1668697396 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
 	"Equipment.hpp"
 	<iostream>
 
@@ -477,7 +478,7 @@
 1663935746 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\globalne.hpp
 	"obsluga_broni.hpp"
 
-1668276117 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.hpp
+1668697083 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\level.hpp
 	<SFML/Graphics.hpp>
 	"Equipment.hpp"
 	"side.hpp"
@@ -1292,4 +1293,12 @@
 	<SFML/Graphics.hpp>
 	"Equipment.hpp"
 	"button.hpp"
+
+1668454142 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\iniconfig.hpp
+	<windows.h>
+	<winbase.h>
+	<string>
+
+1668700752 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\iniconfig.cpp
+	"IniConfig.hpp"
 

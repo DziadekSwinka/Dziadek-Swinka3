@@ -146,7 +146,7 @@ void Equipment::ustaw_reke()
     }else
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
     {
-        if(beer>0)
+        if(beer>0 && boostHP==0)
         {
             beer--;
             boostHP=100;

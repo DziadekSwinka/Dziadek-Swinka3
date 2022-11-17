@@ -1137,7 +1137,7 @@ double AI::liczKat(Postac &target)
 //------------------------------------------------------------------------------------------------------------------------------------------
 void losuj_zrzut()
 {
-    unsigned short l=(std::rand()%8)+1;
+    unsigned short l=(std::rand()%10)+1;
     switch (l)
     {
     case 1:
@@ -1314,16 +1314,30 @@ void setMulti(Network *net,Postac *postac,AI *ai,AI_Eq *aiEq,unsigned int HP,flo
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
-
+void usunBiale(std::string *line)
+{
+    std::string nowyString="";
+    for(int i=0;i<256;i++)
+    {
+        if(line[i]!=" ")
+        {
+            nowyString+=line[i];
+        }else
+        if(line[i+1]==" ")
+            break;
+    }
+    *line=nowyString;
+}
 void lineToSetup(std::string line,int i)
 {
-    std::cout<<i<<"\t"<<line<<std::endl;
+    usunBiale(&line);
     int xSize=1920,
         ySize=1080;
     switch(i)
     {
     case 0:
         {
+            std::cout<<line;
             unsigned int numberOfX=line.find("x");
             if(numberOfX!=std::string::npos)
             {
@@ -1348,12 +1362,12 @@ void lineToSetup(std::string line,int i)
             {
                 frameLimit=0;
             }else
-            //frameLimit=std::stoi(line);
+            frameLimit=std::stoi(line);
             break;
         }
         case 2:
         {
-            //setting.antialiasingLevel=std::stoi(line);
+            setting.antialiasingLevel=std::stoi(line);
             break;
         }
         default:
@@ -1362,7 +1376,7 @@ void lineToSetup(std::string line,int i)
             {
                 if(line!="" && line!="\n")
                     {
-                        //Vol[i-2]=std::stof(line);
+                        Vol[i-2]=std::stof(line);
                     }
             }
             break;
@@ -1371,15 +1385,22 @@ void lineToSetup(std::string line,int i)
     Xokna=xSize;
     Yokna=ySize;
 }
-void iniToSetup(char buf[10][256])
+void iniToSetup(char buf[9][256])
 {
-    std::string stringBuf[10]={"","","","","","","","","",""};
-    for(int i=0;i<10;i++)
+    std::string stringBuf[9]={"","","","","","","","",""};
+    for(int i=0;i<9;i++)
         for(int j=0;j<256;j++)
             stringBuf[i]+=buf[i][j];
-    for(int i=0;i<10;i++)
+    for(int i=0;i<7;i++)
     {
-        lineToSetup(stringBuf[i],i);
+        try
+        {
+            lineToSetup(stringBuf[i],i);
+        }
+        catch(...)
+        {
+            std::cout<<"Error '.ini' file in line"<<i<<std::endl;
+        }
     }
 }
 void Config()
@@ -1428,7 +1449,6 @@ std::string set_sezon()
 void application();
 int main(int argc, char *argv[])
 {
-    //WritePrivateProfileString("sekcja1","nazwa","wartoœæ","plik.ini");
     while(true)
     {
         application();
@@ -1447,7 +1467,7 @@ void application()
     std::string *sezon=new std::string;
     *sezon=set_sezon();
     //Config();
-    config();
+    //config();
     sf::RenderWindow window(sf::VideoMode(Xokna,Yokna,64), "Dziadek Swinka",sf::Style::Default,setting);
     {
         auto image = sf::Image{};
@@ -1457,7 +1477,7 @@ void application()
     const float stosX=1920.f/Xokna;   //std::cout<<stosX<<std::endl;
     const float stosY=1080.f/Yokna;   //std::cout<<stosY<<std::endl;
     const float GroundLevel=700.f/stosY;
-    Postac Dziadek(window,"Textures//Charakters//dziadek.png","Textures//Charakters//dziadek_dmg.png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY,&peppaEq,&mamaEq,&tataEq);
+    Postac Dziadek(window,"Textures//Charakters//dziadek"+*sezon+".png","Textures//Charakters//dziadek_dmg"+*sezon+".png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY,&peppaEq,&mamaEq,&tataEq);
     AI peppa(window,"Textures//Charakters//obrazek.png","Textures//Charakters//obrazek_dmg.png","Textures//Items//noz.png",0,"Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY,&peppaEq);
     AI george(window,"Textures//Charakters//George.png","Textures//Charakters//George_dmg.png","Textures//Items//uzi.png",4,"","",300,GroundLevel-50,stosX,stosY,&peppaEq);
     AI mama(window,"Textures//Charakters//mama_swinka.png","Textures//Charakters//mama_swinka_dmg.png","Textures//Items//pistolet.png",1,"Sounds//mama1.wav","Sounds//mama2.wav",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
@@ -1482,7 +1502,7 @@ void application()
     button Misja10_bt(window,"Textures//GUI//m10.png","Textures//GUI//m10c.png",1670.f/stosX,320.f/stosY,stosX,stosY);
     button Sklep_bt(window,"Textures//GUI//sklep.png","Textures//GUI//sklepc.png",550.f/stosX,5.f/stosY,stosX,stosY);
 
-    button Restart(window,"Textures//GUI//restart.png","Textures//GUI//restartc.png",550.f/stosX,5.f/stosY,stosX,stosY);
+    button Restart(window,"Textures//GUI//restart.png","Textures//GUI//restartc.png",window.getSize().x/(2*stosX)-326,window.getSize().y/(2*stosY)-160,stosX,stosY);
 
     button saveBt(window,"Textures//GUI//zapisz.png","Textures//GUI//zapiszc.png",1100.f/stosX,5.f/stosY,stosX,stosY);
     button loadBt(window,"Textures//GUI//wczytaj.png","Textures//GUI//wczytajc.png",1250.f/stosX,5.f/stosY,stosX,stosY);
@@ -1502,6 +1522,20 @@ void application()
     gameover.loadFromFile("Textures//Background//end.jpg");
     GameOver.setTexture(gameover);
     bool odblokowane[10]={1,0,0,0,0,0,0,0,0,0};
+    sf::Sprite lock[10];
+    sf::Texture Lock;
+    Lock.loadFromFile("Textures//GUI//lock.png");
+    for(short i=0;i<10;i++)
+    {
+        const float przesun_X=80/stosY;
+        const float przesun_Y=10/stosY;
+        lock[i].setTexture(Lock);
+        lock[i].setScale(0.05,0.05);
+        if(i%2==0)
+            lock[i].setPosition(1575-przesun_X,(80+przesun_Y+(60*(i/2))));
+        else
+            lock[i].setPosition(1715+przesun_X,(80+przesun_Y+(60*(i/2))));
+    }
     //system("cls");
     /*Network *net;
     try
@@ -1692,7 +1726,7 @@ void application()
                     if(minusHP<=Eq.HP)
                         Eq.HP-=minusHP;
                     else Eq.HP=0;
-                    karabin.Update(Dziadek.posX,Dziadek.posY,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
+                    karabin.Update(Dziadek.posX,Dziadek.posY+30,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
                     if(level==1)
                     {
                         if(peppaEq.HP>0)
@@ -1837,6 +1871,9 @@ void application()
                     Misja8_bt.Update(ButtonPressed);
                     Misja9_bt.Update(ButtonPressed);
                     Misja10_bt.Update(ButtonPressed);
+                    for(short i=0;i<10;i++)
+                        if(!odblokowane[i])
+                            window.draw(lock[i]);
                 }
             }
             Eq.Update(panelSklep,ButtonPressed);
@@ -1853,6 +1890,11 @@ void application()
             Restart.Update(ButtonPressed);
             if(Restart.isPressed())
             {
+                for(int i=0;i<10;i++)
+                    odblokowane[i]=false;
+                Eq.ammunition=15;
+                Eq.HP=100;
+                Eq.boostHP=0;
                 return;
             }
         }
