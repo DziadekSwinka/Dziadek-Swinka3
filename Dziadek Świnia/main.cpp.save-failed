@@ -1385,24 +1385,6 @@ void lineToSetup(std::string line,int i)
     Xokna=xSize;
     Yokna=ySize;
 }
-void iniToSetup(char buf[9][256])
-{
-    std::string stringBuf[9]={"","","","","","","","",""};
-    for(int i=0;i<9;i++)
-        for(int j=0;j<256;j++)
-            stringBuf[i]+=buf[i][j];
-    for(int i=0;i<7;i++)
-    {
-        try
-        {
-            lineToSetup(stringBuf[i],i);
-        }
-        catch(...)
-        {
-            std::cout<<"Error '.ini' file in line"<<i<<std::endl;
-        }
-    }
-}
 void Config()
 {
     try
@@ -1890,7 +1872,11 @@ void application()
             Restart.Update(ButtonPressed);
             if(Restart.isPressed())
             {
-                odblokowane={0,0,0,0,0,0,0,0,0,0};
+                for(int i=0;i<10;i++)
+                    odblokowane[i]=false;
+                Eq.ammunition=15;
+                Eq.HP=100;
+                Eq.boostHP=0;
                 return;
             }
         }

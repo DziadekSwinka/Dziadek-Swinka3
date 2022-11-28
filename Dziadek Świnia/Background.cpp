@@ -145,7 +145,7 @@ unsigned int Background::miniGra()
     window.draw(Wskaznik);
     return zwroc;
 }
-void Background::renderSnow()
+void Background::renderSnow(float deltaTime)
 {
     for(int i=0;i<100;i++)
     {
@@ -157,10 +157,10 @@ void Background::renderSnow()
         {
             Snieg[i].setPosition(std::rand()%window.getSize().x,0);
         }
-        Snieg[i].move(0,0.05);
+        Snieg[i].move(0,0.2*deltaTime);
     }
 }
-unsigned int Background::Update(Interior *interior,unsigned short level,bool *panelSklep,bool EnterPressed)
+unsigned int Background::Update(Interior *interior,unsigned short level,bool *panelSklep,bool EnterPressed,float deltaTime)
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
     {
@@ -196,7 +196,7 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
         window.draw(bcg[2]);
         if(snowFall==true)
         {
-            renderSnow();
+            renderSnow(deltaTime);
             for(int i=0;i<100;i++)
             {
                 if(Snieg[i].getPosition().y<=bcg[1].getPosition().y)

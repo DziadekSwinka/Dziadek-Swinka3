@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1668709834 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1669644905 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
@@ -453,7 +453,7 @@
 
 1663503798 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\enum.hpp
 
-1668345658 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.hpp
+1669644905 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.hpp
 	<SFML/Graphics.hpp>
 	<String>
 	<iostream>
@@ -463,7 +463,7 @@
 	"side.hpp"
 	"mode.hpp"
 
-1668708304 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
+1669644953 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"Background.hpp"
 
 1668697396 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
@@ -1294,11 +1294,12 @@
 	"Equipment.hpp"
 	"button.hpp"
 
-1668454142 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\iniconfig.hpp
+1668782334 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\iniconfig.hpp
 	<windows.h>
 	<winbase.h>
 	<string>
 
-1668700752 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\iniconfig.cpp
+1668782439 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\iniconfig.cpp
 	"IniConfig.hpp"
+	<iostream>
 

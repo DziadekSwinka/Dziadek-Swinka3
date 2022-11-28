@@ -1385,24 +1385,6 @@ void lineToSetup(std::string line,int i)
     Xokna=xSize;
     Yokna=ySize;
 }
-void iniToSetup(char buf[9][256])
-{
-    std::string stringBuf[9]={"","","","","","","","",""};
-    for(int i=0;i<9;i++)
-        for(int j=0;j<256;j++)
-            stringBuf[i]+=buf[i][j];
-    for(int i=0;i<7;i++)
-    {
-        try
-        {
-            lineToSetup(stringBuf[i],i);
-        }
-        catch(...)
-        {
-            std::cout<<"Error '.ini' file in line"<<i<<std::endl;
-        }
-    }
-}
 void Config()
 {
     try
@@ -1687,7 +1669,7 @@ void application()
         {
             if(!panelSklep && List.showList==false)
             {
-                Eq.pieniadze+=background.Update(&interior,level,&panelSklep,EnterPressed);
+                Eq.pieniadze+=background.Update(&interior,level,&panelSklep,EnterPressed,czas_na_klatke());
                 if(interior==outside)
                 {
                     if(skrzynka.active)
