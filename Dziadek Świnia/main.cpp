@@ -5,7 +5,7 @@
 #include <string>
 #include <cstdlib>
 #include <time.h>
-#include <math.h>
+#include <cmath>
 #include <fstream>
 
 #include "Network.hpp"
@@ -17,6 +17,11 @@
 #include "mode.hpp"
 #include "Saves.hpp"
 #include "IniConfig.hpp"
+#include "Loading.hpp"
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -1456,21 +1461,24 @@ void application()
         image.loadFromFile("Textures//Charakters//dziadek.png");
         window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     }
+    LoadingScreen *Loading=new LoadingScreen(window);
     const float stosX=1920.f/Xokna;   //std::cout<<stosX<<std::endl;
     const float stosY=1080.f/Yokna;   //std::cout<<stosY<<std::endl;
     const float GroundLevel=700.f/stosY;
     Postac Dziadek(window,"Textures//Charakters//dziadek"+*sezon+".png","Textures//Charakters//dziadek_dmg"+*sezon+".png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY,&peppaEq,&mamaEq,&tataEq);
+    Loading->Push();
     AI peppa(window,"Textures//Charakters//obrazek.png","Textures//Charakters//obrazek_dmg.png","Textures//Items//noz.png",0,"Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY,&peppaEq);
     AI george(window,"Textures//Charakters//George.png","Textures//Charakters//George_dmg.png","Textures//Items//uzi.png",4,"","",300,GroundLevel-50,stosX,stosY,&peppaEq);
+    Loading->Push();
     AI mama(window,"Textures//Charakters//mama_swinka.png","Textures//Charakters//mama_swinka_dmg.png","Textures//Items//pistolet.png",1,"Sounds//mama1.wav","Sounds//mama2.wav",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
     AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",2,"Sounds//tata1.wav","Sounds//tata2.wav",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
-
+    Loading->Push();
     //AI_Eq aiEq;
     //AI multiCharacter(window,"Textures//Charakters//dziadek.png","","",0,"","",100,GroundLevel-50,stosX,stosY,&aiEq);
 
     Background background(window,"Textures//Background//grass",100,"Textures//Background//grandpahouse",-800,"Textures//Background//house",900,"Textures//Background//shop",stosX,stosY,*sezon);
     delete sezon;
-
+    Loading->Push();
     button Misje_bt(window,"Textures//GUI//bm.png","Textures//GUI//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
     button Misja1_bt(window,"Textures//GUI//m1.png","Textures//GUI//m1c.png",1520.f/stosX,80.f/stosY,stosX,stosY);
     button Misja2_bt(window,"Textures//GUI//m2.png","Textures//GUI//m2c.png",1670.f/stosX,80.f/stosY,stosX,stosY);
@@ -1488,6 +1496,7 @@ void application()
 
     button saveBt(window,"Textures//GUI//zapisz.png","Textures//GUI//zapiszc.png",1100.f/stosX,5.f/stosY,stosX,stosY);
     button loadBt(window,"Textures//GUI//wczytaj.png","Textures//GUI//wczytajc.png",1250.f/stosX,5.f/stosY,stosX,stosY);
+    Loading->Push();
 
     Sklep_bt.scaleX=0.45/stosX;
     Sklep_bt.scaleY=0.45/stosY;
@@ -1495,8 +1504,10 @@ void application()
     saveBt.scaleY=0.45/stosX;
     loadBt.scaleY=0.45/stosY;
     loadBt.scaleY=0.45/stosX;
+    Loading->Push();
     Equipment Eq(window,stosX,stosY,Vol[0],Vol[1]);
     bron karabin(window,"Textures//Items//ak47.png","Textures//Items//pistolet.png","Textures//Items//bazooka.png","Textures//Items//uzi.png");
+    Loading->Push();
     saveList List(window,stosX,stosY);
     skrzynki();
     sf::Sprite GameOver;
@@ -1507,6 +1518,7 @@ void application()
     sf::Sprite lock[10];
     sf::Texture Lock;
     Lock.loadFromFile("Textures//GUI//lock.png");
+    Loading->Push();
     for(short i=0;i<10;i++)
     {
         const float przesun_X=80/stosY;
@@ -1518,6 +1530,7 @@ void application()
         else
             lock[i].setPosition(1715+przesun_X,(80+przesun_Y+(60*(i/2))));
     }
+    Loading->Push();
     //system("cls");
     /*Network *net;
     try
@@ -1528,10 +1541,9 @@ void application()
     {
         std::cout<<"Network class error\n"<<e.what()<<std::endl;
     }*/
-
     if(frameLimit!=0)
         window.setFramerateLimit(frameLimit);
-
+    Loading->Push();
     while (window.isOpen())
     {
         sf::Event event;

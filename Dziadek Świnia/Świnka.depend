@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1669644905 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1732040770 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
@@ -428,7 +428,7 @@
 	<string>
 	<cstdlib>
 	<time.h>
-	<math.h>
+	<cmath>
 	<fstream>
 	"Network.hpp"
 	"side.hpp"
@@ -439,6 +439,7 @@
 	"mode.hpp"
 	"Saves.hpp"
 	"IniConfig.hpp"
+	"Loading.hpp"
 
 1666880910 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\side.hpp
 
@@ -466,7 +467,7 @@
 1669644953 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"Background.hpp"
 
-1668697396 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
+1732038764 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
 	"Equipment.hpp"
 	<iostream>
 
@@ -1302,4 +1303,10 @@
 1668782439 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\iniconfig.cpp
 	"IniConfig.hpp"
 	<iostream>
+
+1732040626 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\loading.cpp
+	"Loading.hpp"
+
+1732040872 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\loading.hpp
+	<SFML/Graphics.hpp>
 
