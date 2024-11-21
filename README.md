@@ -3,7 +3,7 @@
   <H2>O grze</H2>
 Gra opowiada o Dziadku Śwince, który jest w rzeczywistości seryjnym mordercą.</br>
 W grze mamy do dyspozycji 10 poziomów, sklep, i dwie minigry.
-Jedna z nich polega na wywożeniu imigrantów do niemiec, a w drugiej musimy klikać na pojawiające się na ekranie dinozaury.
+Jedna z nich polega na wywożeniu imigrantów do niemiec, a w drugiej musimy zbierać pojawiające się na ekranie dinozaury.
 </p>
 Plik *.exe gry znajduje śię w Dziadek-Swinka//bin//Release//Świnka.exe
 </br></br>
