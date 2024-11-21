@@ -221,6 +221,7 @@ private:
     void graj_dzwiek();
     void graj_dzwiek(unsigned short i);
     float oblicz_czas(int w_rece,float czas);
+    bool jumpAllowed;
     sf::Font OswaldRegular;
     sf::Text czas;
     bool dotykaPostaci(int i,AI_Eq *myEq);
@@ -537,14 +538,20 @@ float Postac::getDegree()
 void Postac::Fall()
 {
     float gravity=0.0001;
-    if(postac.getPosition().y+(txt.getSize().y)/4<=window.getSize().y-380/stosY&&postac.getPosition().y>=0+5)
+    if(postac.getPosition().y>=548)
     {
-        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        jumpAllowed=true;
+    }
+    if(postac.getPosition().y + (txt.getSize().y) / 4 <= window.getSize().y - 380/stosY && postac.getPosition().y >= 0+5)
+    {
+        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && jumpAllowed==true)
         {
             vs=-0.1;
             postac.move(0,vs*czas_na_klatke()*3);
+            if(postac.getPosition().y<=500)
+                jumpAllowed=false;
         }
-        else if(false==sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        else //if(false==sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
             vs+=gravity*czas_na_klatke()*2;
             postac.move(0,vs*czas_na_klatke()*3);
