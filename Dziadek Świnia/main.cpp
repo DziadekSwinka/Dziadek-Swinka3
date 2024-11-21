@@ -631,11 +631,11 @@ void bron::wystrzel(float degree)
 void bron::ustawPocisk(short i,float degree)
 {
     Bullet[i].setPosition(sprite.getPosition().x,sprite.getPosition().y-20);
-    Bullet[i].setRotation(degree);
     if(sprite.getScale().x>0)
         Bullet[i].k=true;
     else
         Bullet[i].k=false;
+        Bullet[i].setRotation(degree);
 }
 void bron::move_to_side(side Side)
 {
