@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <conio.h>
 #include <time.h>
 #include <cmath>
 #include <fstream>
@@ -1422,8 +1423,9 @@ void Config()
 std::string set_sezon()
 {
     std::string sezon="";
-    struct tm Tm;
-    if(Tm.tm_mon==9 || Tm.tm_mon==10 || Tm.tm_mon==11 || Tm.tm_mon==0)
+    time_t t = time(nullptr);
+    struct tm Tm = *localtime(&t);
+    if(Tm.tm_mon==9 || Tm.tm_mon==11 || Tm.tm_mon==10 || Tm.tm_mon==0)
     {
         sezon="_winter";
     }else sezon="";
