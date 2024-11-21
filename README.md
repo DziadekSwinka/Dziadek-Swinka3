@@ -84,26 +84,6 @@ Plik *.exe gry znajduje śię w Dziadek-Swinka//bin//Release//Świnka.exe
     <H3>Głośność innych postaci</H3>
     0-100
     </li>
-    <li>
-    <H3>NIEPRZYPISANE</H3>
-    0-100
-    </li>
-    <li>
-    <H3>NIEPRZYPISANE</H3>
-    0-100
-    </li>
-    <li>
-    <H3>NIEPRZYPISANE</H3>
-    0-100
-    </li>
-    <li>
-    <H3>NIEPRZYPISANE</H3>
-    0-100
-    </li>
-    <li>
-    <H3>NIEPRZYPISANE</H3>
-    0-100
-    </li>
   </ul>
   Ważne jest aby w pliku zawarte były wszystkie linijki, nawet jeśli ich wartość wynosi 0. W przeciwnym wypadku gra może nie działać poprawnie.
 </p>
