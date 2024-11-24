@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1732222997 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1732465999 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
@@ -440,7 +440,9 @@
 	"mode.hpp"
 	"Saves.hpp"
 	"IniConfig.hpp"
+	"plot.hpp"
 	"Loading.hpp"
+	"sezon.h"
 
 1666880910 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\side.hpp
 
@@ -455,7 +457,7 @@
 
 1663503798 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\enum.hpp
 
-1669644905 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.hpp
+1732484448 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.hpp
 	<SFML/Graphics.hpp>
 	<String>
 	<iostream>
@@ -464,6 +466,7 @@
 	<time.h>
 	"side.hpp"
 	"mode.hpp"
+	"plot.hpp"
 
 1669644953 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"Background.hpp"
@@ -1309,5 +1312,11 @@
 	"Loading.hpp"
 
 1732040872 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\loading.hpp
+	<SFML/Graphics.hpp>
+
+1732461037 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\sezon.h
+	<string>
+
+1732484728 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.hpp
 	<SFML/Graphics.hpp>
 

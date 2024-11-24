@@ -18,7 +18,9 @@
 #include "mode.hpp"
 #include "Saves.hpp"
 #include "IniConfig.hpp"
+#include "plot.hpp"
 #include "Loading.hpp"
+#include "sezon.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -635,7 +637,7 @@ void bron::ustawPocisk(short i,float degree)
         Bullet[i].k=true;
     else
         Bullet[i].k=false;
-        Bullet[i].setRotation(degree);
+    Bullet[i].setRotation(degree);
 }
 void bron::move_to_side(side Side)
 {
@@ -1426,18 +1428,6 @@ void Config()
     }
     return;
 }
-
-std::string set_sezon()
-{
-    std::string sezon="";
-    time_t t = time(nullptr);
-    struct tm Tm = *localtime(&t);
-    if(Tm.tm_mon==9 || Tm.tm_mon==11 || Tm.tm_mon==10 || Tm.tm_mon==0)
-    {
-        sezon="_winter";
-    }else sezon="";
-    return sezon;
-}
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -1515,6 +1505,7 @@ void application()
     loadBt.scaleY=0.45/stosX;
     Loading->Push();
     Equipment Eq(window,stosX,stosY,Vol[0],Vol[1]);
+    Plot plot(window,Eq.pieniadze);
     bron karabin(window,"Textures//Items//ak47.png","Textures//Items//pistolet.png","Textures//Items//bazooka.png","Textures//Items//uzi.png");
     Loading->Push();
     saveList List(window,stosX,stosY);
@@ -1730,6 +1721,10 @@ void application()
                         Eq.HP-=minusHP;
                     else Eq.HP=0;
                     karabin.Update(Dziadek.posX,Dziadek.posY+30,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
+                    if(level==0)
+                    {
+                        plot.Update();
+                    }
                     if(level==1)
                     {
                         if(peppaEq.HP>0)

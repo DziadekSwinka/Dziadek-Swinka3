@@ -9,6 +9,7 @@
 #include <time.h>
 #include "side.hpp"
 #include "mode.hpp"
+#include "plot.hpp"
 
 float czas_na_klatke();
 
