@@ -8,26 +8,20 @@ class Plot
 private:
     sf::RenderWindow &window;
     unsigned int state;
+    //const int number_of_NPCs=1;
     int &money;
     int extraMoney[8]={20,40,60,65,70,75,80,80};
-    void Push_state()
+    void Push_state();
+    struct
     {
-        state++;
-        money+=extraMoney[state];
-
-    }
+        sf::Sprite sprite;
+        sf::Texture texture;
+        unsigned int appears_drg_st;
+        sf::Vector2f position;
+    }NPC[1];
 public:
-    void Update()
-    {
-        if(false)   //dorobic warunek ukonczenia stanu
-        {
-            Push_state();
-        }
-    }
-    Plot(sf::RenderWindow &window1,int &money_temp):window(window1),money(money_temp)
-    {
-        state=0;
-    }
+    void Update(float posX);
+    Plot(sf::RenderWindow &window1,int &money_temp, float Ground_LVL);
 };
 
 #endif // PLOT_HPP_INCLUDED

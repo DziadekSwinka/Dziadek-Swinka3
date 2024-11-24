@@ -1505,7 +1505,7 @@ void application()
     loadBt.scaleY=0.45/stosX;
     Loading->Push();
     Equipment Eq(window,stosX,stosY,Vol[0],Vol[1]);
-    Plot plot(window,Eq.pieniadze);
+    Plot plot(window,Eq.pieniadze,GroundLevel);
     bron karabin(window,"Textures//Items//ak47.png","Textures//Items//pistolet.png","Textures//Items//bazooka.png","Textures//Items//uzi.png");
     Loading->Push();
     saveList List(window,stosX,stosY);
@@ -1720,10 +1720,10 @@ void application()
                     if(minusHP<=Eq.HP)
                         Eq.HP-=minusHP;
                     else Eq.HP=0;
-                    karabin.Update(Dziadek.posX,Dziadek.posY+30,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
+                        karabin.Update(Dziadek.posX,Dziadek.posY+30,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
                     if(level==0)
                     {
-                        plot.Update();
+                        plot.Update(background.x);
                     }
                     if(level==1)
                     {

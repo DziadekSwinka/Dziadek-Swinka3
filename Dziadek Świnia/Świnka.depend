@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1732465999 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1732487586 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
@@ -1317,6 +1317,9 @@
 1732461037 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\sezon.h
 	<string>
 
-1732484728 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.hpp
+1732487764 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.hpp
 	<SFML/Graphics.hpp>
+
+1732487764 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.cpp
+	"plot.hpp"
 
