@@ -651,6 +651,7 @@ void bron::move_to_side(side Side)
 }
 void bron::Update(float posX,float posY,float degree,bool *EnterP,short type)
 {
+
     sprite.setTexture(&txt[type]);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
@@ -679,7 +680,10 @@ void bron::Update(float posX,float posY,float degree,bool *EnterP,short type)
         if(Bullet[i].fly==true)
             Bullet[i].Update();
     }
-    window.draw(sprite);
+    if(type>0)
+    {
+         window.draw(sprite);
+    }
 }
 
 
@@ -1225,10 +1229,11 @@ void skrzynka_fall(int GroundLevel,float x,float y,Equipment *Eq)
                 {
                     skrzynka_off(Eq);
                 }
-        }else if(x-skrzynka.posX<100)
-                 {
-                     skrzynka_off(Eq);
-                 }
+        }
+        else if(x-skrzynka.posX<100)
+        {
+            skrzynka_off(Eq);
+        }
     }
 }
 void skrzynki()
@@ -1570,6 +1575,9 @@ void application()
                 }
             }
         }
+        if(plot.getState()<1)
+            liczZrzut.restart();
+
         sf::Time time1=liczZrzut.getElapsedTime();
         if(time1.asSeconds()>4)
         {

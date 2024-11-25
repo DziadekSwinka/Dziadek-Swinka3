@@ -15,13 +15,33 @@ void Plot::Push_state()
     money+=extraMoney[state];
     state++;
 }
-
+unsigned int Plot::getState()
+{
+    return state;
+}
+void Plot::NPC_text(std::string text,float myPosX,float posX)
+{
+    Notification_text.setString(text);
+    Notification_text.setPosition(posX-myPosX,300);
+    Notification_text.setCharacterSize(24);
+    Notification_text.setFillColor(sf::Color::Red);
+    window.draw(Notification_text);
+    std::cout<<text<<std::endl;
+}
 void Plot::Update(float posX)
 {
     for(auto i:NPC)
     {
         if(i.appears_drg_st==state)
         {
+            switch(state)
+            {
+            case 0:
+                if(abs(posX-i.position.x-(1920/2)<200))
+                    NPC_text("PRZESZUKAJ [F]",NPC[0].position.x,posX);
+                break;
+            default: break;
+            }
             i.sprite.setPosition(posX-i.position.x,i.position.y);
             window.draw(i.sprite);
         }

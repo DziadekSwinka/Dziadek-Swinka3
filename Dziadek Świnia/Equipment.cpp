@@ -25,11 +25,11 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol
         text[i].setCharacterSize(30/stosX);
     }
     text[5].setPosition((68*5+28)/stosX,98/stosY);
-    pistolet=true;
+    pistolet=false;
     karabin=false;
     uzi=false;
     bazooka=false;
-    w_rece=1;
+    w_rece=0;
     dodaj_pieniadze.setFont(OswaldRegular);
     pieniadze_tekst.setFont(OswaldRegular);
     pieniadze_plus.setFont(OswaldRegular);
