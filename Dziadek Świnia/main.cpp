@@ -1893,6 +1893,7 @@ void application()
                 Eq.ammunition=15;
                 Eq.HP=100;
                 Eq.boostHP=0;
+                level=0;
                 return;
             }
         }

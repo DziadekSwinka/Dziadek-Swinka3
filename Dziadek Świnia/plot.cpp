@@ -5,7 +5,7 @@ Plot::Plot(sf::RenderWindow &window1,int &money_temp,float Ground_LVL):window(wi
     state=0;
     NPC[0].texture.loadFromFile("Textures//Charakters//plot1.png");
     NPC[0].appears_drg_st=0;
-    NPC[0].position={1500,Ground_LVL};
+    NPC[0].position={1500,Ground_LVL-100};
     NPC[0].sprite.setScale(0.5,0.5);
     NPC[0].sprite.setTexture(NPC[0].texture);
 }
