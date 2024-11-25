@@ -68,20 +68,23 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
 }
 void Background::wyswietl_napis(float z1,float z2,float z3)
 {
-    text.setString("Wejdz do budynku \n \t\t[F]");
-    text.setPosition(960,400);
+    text.setString("WEJDZ DO BUDYNKU [F]");
+
     if(abs(x+z1-700)<200)
     {
+        text.setPosition(x+z1+80,300);
         pokaz_tekst[0]=1;
     }else pokaz_tekst[0]=0;
 
     if(abs(x+z3-700)<200)
     {
+        text.setPosition(x+z3+180,300);
         pokaz_tekst[1]=1;
     }else pokaz_tekst[1]=0;
 
     if(abs(x+z2-700)<200)
     {
+        text.setPosition(x+z2+60,300);
         pokaz_tekst[2]=1;
     }else pokaz_tekst[2]=0;
 }

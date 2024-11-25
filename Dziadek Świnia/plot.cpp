@@ -8,6 +8,10 @@ Plot::Plot(sf::RenderWindow &window1,int &money_temp,float Ground_LVL):window(wi
     NPC[0].position={1500,Ground_LVL-100};
     NPC[0].sprite.setScale(0.5,0.5);
     NPC[0].sprite.setTexture(NPC[0].texture);
+    OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
+    Notification_text.setFont(OswaldRegular);
+    Notification_text.setCharacterSize(24);
+    Notification_text.setFillColor(sf::Color::Red);
 }
 
 void Plot::Push_state()
@@ -21,12 +25,12 @@ unsigned int Plot::getState()
 }
 void Plot::NPC_text(std::string text,float myPosX,float posX)
 {
-    Notification_text.setString(text);
+
     Notification_text.setPosition(posX-myPosX,300);
-    Notification_text.setCharacterSize(24);
-    Notification_text.setFillColor(sf::Color::Red);
+    Notification_text.setString(text);
     window.draw(Notification_text);
-    std::cout<<text<<std::endl;
+
+    //std::cout<<text<<std::endl;
 }
 void Plot::Update(float posX)
 {
@@ -37,7 +41,7 @@ void Plot::Update(float posX)
             switch(state)
             {
             case 0:
-                if(abs(posX-i.position.x-(1920/2)<200))
+                if(abs(posX-i.position.x-(1920/2)+100)<300)
                     NPC_text("PRZESZUKAJ [F]",NPC[0].position.x,posX);
                 break;
             default: break;

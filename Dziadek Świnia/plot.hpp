@@ -7,6 +7,7 @@
 class Plot
 {
 private:
+    sf::Font OswaldRegular;
     sf::RenderWindow &window;
     sf::Text Notification_text;
     unsigned int state;

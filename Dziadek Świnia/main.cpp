@@ -523,7 +523,8 @@ unsigned int Postac::Update(unsigned int Hp,int boostHp,sf::Time czas_p,int w_re
     window.draw(white);
     if(boostHp!=0)
         window.draw(white2);
-    window.draw(czas);
+    if(w_rece>0)
+        window.draw(czas);
     Hp/=10;
     boostHp/=10;
     for(int i=0;static_cast<unsigned int>(i)<Hp;i++)
@@ -1519,7 +1520,7 @@ void application()
     sf::Texture gameover;
     gameover.loadFromFile("Textures//Background//end.jpg");
     GameOver.setTexture(gameover);
-    bool odblokowane[10]={1,0,0,0,0,0,0,0,0,0};
+    bool odblokowane[10]={0,0,0,0,0,0,0,0,0,0};
     sf::Sprite lock[10];
     sf::Texture Lock;
     Lock.loadFromFile("Textures//GUI//lock.png");
