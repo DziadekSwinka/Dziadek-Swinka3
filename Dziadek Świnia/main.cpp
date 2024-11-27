@@ -1511,7 +1511,7 @@ void application()
     loadBt.scaleY=0.45/stosX;
     Loading->Push();
     Equipment Eq(window,stosX,stosY,Vol[0],Vol[1]);
-    Plot plot(window,Eq.pieniadze,GroundLevel);
+    Plot plot(window,Eq,GroundLevel);
     bron karabin(window,"Textures//Items//ak47.png","Textures//Items//pistolet.png","Textures//Items//bazooka.png","Textures//Items//uzi.png");
     Loading->Push();
     saveList List(window,stosX,stosY);
@@ -1547,6 +1547,7 @@ void application()
     {
         std::cout<<"Network class error\n"<<e.what()<<std::endl;
     }*/
+    system("cls");
     if(frameLimit!=0)
         window.setFramerateLimit(frameLimit);
     Loading->Push();

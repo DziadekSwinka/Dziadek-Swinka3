@@ -1,6 +1,6 @@
 #include "plot.hpp"
 
-Plot::Plot(sf::RenderWindow &window1,int &money_temp,float Ground_LVL):window(window1),money(money_temp)
+Plot::Plot(sf::RenderWindow &window_temp,Equipment &eq_temp,float Ground_LVL):window(window_temp),Eq(eq_temp)
 {
     state=0;
     NPC[0].texture.loadFromFile("Textures//Charakters//plot1.png");
@@ -16,7 +16,7 @@ Plot::Plot(sf::RenderWindow &window1,int &money_temp,float Ground_LVL):window(wi
 
 void Plot::Push_state()
 {
-    money+=extraMoney[state];
+    Eq.pieniadze+=extraMoney[state];
     state++;
 }
 unsigned int Plot::getState()
@@ -42,16 +42,19 @@ void Plot::Update(float posX)
             {
             case 0:
                 if(abs(posX-i.position.x-(1920/2)+100)<300)
+                {
                     NPC_text("PRZESZUKAJ [F]",NPC[0].position.x,posX);
+                    if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+                    {
+                        Eq.pistolet=true;
+                        Push_state();
+                    }
+                }
                 break;
             default: break;
             }
             i.sprite.setPosition(posX-i.position.x,i.position.y);
             window.draw(i.sprite);
         }
-    }
-    if(false)   //dorobic warunek ukonczenia stanu
-    {
-        Push_state();
     }
 }

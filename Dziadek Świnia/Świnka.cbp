@@ -72,6 +72,8 @@
 		<Unit filename="IniConfig.hpp">
 			<Option target="Release" />
 		</Unit>
+		<Unit filename="Loading.cpp" />
+		<Unit filename="Loading.hpp" />
 		<Unit filename="Network.cpp">
 			<Option target="Release" />
 		</Unit>
@@ -100,6 +102,9 @@
 		<Unit filename="mode.hpp">
 			<Option target="Release" />
 		</Unit>
+		<Unit filename="plot.cpp" />
+		<Unit filename="plot.hpp" />
+		<Unit filename="sezon.h" />
 		<Unit filename="side.hpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

@@ -80,6 +80,7 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol
     main.play();
 
     Ile=0;
+    ustaw_Text();
 }
 void Equipment::pociag()
 {
@@ -171,19 +172,19 @@ void Equipment::ustaw_Text()
     }
     if(pistolet)
     {
-        text[1].setColor(sf::Color(5,0,170));
+        text[1].setColor(sf::Color::Red);
     }else  text[1].setColor(sf::Color(0,0,0));
     if(karabin)
     {
-        text[2].setColor(sf::Color(5,0,170));
+        text[2].setColor(sf::Color::Red);
     }else  text[2].setColor(sf::Color(0,0,0));
     if(bazooka)
     {
-        text[3].setColor(sf::Color(5,0,170));
+        text[3].setColor(sf::Color::Red);
     }else  text[3].setColor(sf::Color(0,0,0));
     if(uzi)
     {
-        text[4].setColor(sf::Color(5,0,170));
+        text[4].setColor(sf::Color::Red);
     }else  text[4].setColor(sf::Color(0,0,0));
     if(true)
     {
@@ -191,7 +192,7 @@ void Equipment::ustaw_Text()
     }
     if(true)
     {
-        text[5].setColor(sf::Color(5,0,170));
+        text[5].setColor(sf::Color::Red);
     }
 }
 void Equipment::przyciski()
@@ -276,7 +277,6 @@ void Equipment::przyciski()
 void Equipment::Update(bool panelSklep,bool ButtonPressed)
 {
     przyciski();
-    ustaw_Text();
     ustaw_reke();
     pieniadze_tekst.setString(std::to_string(pieniadze)+" $");
     window.draw(pieniadz_bcg);
