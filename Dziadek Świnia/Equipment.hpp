@@ -31,6 +31,7 @@ private:
     void ustaw_Text();
     void ustaw_reke();
     void ustaw_sklep();
+    void UpdateText();
     void przyciski();
     float stosX,stosY;
     button kup[6]={ button(window,"Textures//GUI//kup.png","Textures//GUI//kupc.png",1200.f*stosX,pierwszy_kup*stosY,stosX,stosY),

@@ -28,7 +28,7 @@ private:
     Equipment &Eq;
 public:
     unsigned int getState();
-    void Update(float posX);
+    int Update(float posX);
     Plot(sf::RenderWindow &window_temp,Equipment &eq_temp,float Ground_LVL);
 };
 

@@ -32,7 +32,7 @@ void Plot::NPC_text(std::string text,float myPosX,float posX)
 
     //std::cout<<text<<std::endl;
 }
-void Plot::Update(float posX)
+int Plot::Update(float posX)
 {
     for(auto i:NPC)
     {
@@ -57,4 +57,5 @@ void Plot::Update(float posX)
             window.draw(i.sprite);
         }
     }
+    return (state-1);
 }

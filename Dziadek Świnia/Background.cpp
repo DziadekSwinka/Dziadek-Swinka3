@@ -144,7 +144,7 @@ unsigned int Background::miniGra()
     window.draw(tloGra);
     for(short m=0;m<5;m++)
         if(mStruct.display[m]==true)
-        window.draw(mStruct.target[m]);
+            window.draw(mStruct.target[m]);
     window.draw(Wskaznik);
     return zwroc;
 }

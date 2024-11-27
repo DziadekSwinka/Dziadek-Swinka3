@@ -155,21 +155,8 @@ void Equipment::ustaw_reke()
         }
     }
 }
-void Equipment::ustaw_Text()
+void Equipment::UpdateText()
 {
-    text[0].setString(std::to_string(ammunition));
-    text[1].setString("[1]");
-    text[2].setString("[2]");
-    text[3].setString("[3]");
-    text[4].setString("[4]");
-    text[5].setString(std::to_string(beer)+" [5]");
-    for(short i=0;i<6;i++)
-    {
-        Sklep.price_text[i].setFont(OswaldRegular);
-        Sklep.price_text[i].setColor(sf::Color(250,200,60));
-        Sklep.price_text[i].setString(std::to_string(price[i])+"$");
-        Sklep.price_text[i].setPosition(800/stosX,(170+i*130)/stosY);
-    }
     if(pistolet)
     {
         text[1].setColor(sf::Color::Red);
@@ -193,6 +180,22 @@ void Equipment::ustaw_Text()
     if(true)
     {
         text[5].setColor(sf::Color::Red);
+    }
+}
+void Equipment::ustaw_Text()
+{
+    text[0].setString(std::to_string(ammunition));
+    text[1].setString("[1]");
+    text[2].setString("[2]");
+    text[3].setString("[3]");
+    text[4].setString("[4]");
+    text[5].setString(std::to_string(beer)+" [5]");
+    for(short i=0;i<6;i++)
+    {
+        Sklep.price_text[i].setFont(OswaldRegular);
+        Sklep.price_text[i].setColor(sf::Color(250,200,60));
+        Sklep.price_text[i].setString(std::to_string(price[i])+"$");
+        Sklep.price_text[i].setPosition(800/stosX,(170+i*130)/stosY);
     }
 }
 void Equipment::przyciski()
@@ -278,6 +281,7 @@ void Equipment::Update(bool panelSklep,bool ButtonPressed)
 {
     przyciski();
     ustaw_reke();
+    UpdateText();
     pieniadze_tekst.setString(std::to_string(pieniadze)+" $");
     window.draw(pieniadz_bcg);
     window.draw(pieniadze_tekst);

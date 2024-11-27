@@ -1515,7 +1515,7 @@ void application()
     bron karabin(window,"Textures//Items//ak47.png","Textures//Items//pistolet.png","Textures//Items//bazooka.png","Textures//Items//uzi.png");
     Loading->Push();
     saveList List(window,stosX,stosY);
-    skrzynki();
+    //skrzynki();
     sf::Sprite GameOver;
     sf::Texture gameover;
     gameover.loadFromFile("Textures//Background//end.jpg");
@@ -1577,7 +1577,8 @@ void application()
                 }
             }
         }
-        if(plot.getState()<1)
+///-----------------------------------------Zawieszam dzialanie zrzutow - do przeprojektowania----------------------------------------------------------------------------------
+        /*if(plot.getState()<1)
             liczZrzut.restart();
 
         sf::Time time1=liczZrzut.getElapsedTime();
@@ -1585,7 +1586,7 @@ void application()
         {
             liczZrzut.restart();
             losuj_zrzut();
-        }
+        }*/
         if(Misje_bt.isPressed())
         {
             if(Menu_misje)
@@ -1733,7 +1734,9 @@ void application()
                         karabin.Update(Dziadek.posX,Dziadek.posY+30,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
                     if(level==0)
                     {
-                        plot.Update(background.x);
+                        auto temp=plot.Update(background.x);
+                        if(temp>=0)
+                            odblokowane[temp]=true;
                     }
                     if(level==1)
                     {
