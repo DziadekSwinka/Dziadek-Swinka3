@@ -12,7 +12,7 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol
     symbol_txt[5].loadFromFile("Textures//Items//beer.png");
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     intro.loadFromFile("Sounds//intro.wav");
-    ammunition=15;
+    ammunition=0;
     HP=100;
     pieniadze=100;
     beer=0;
@@ -126,6 +126,10 @@ void Equipment::ustaw_sklep()
 }
 void Equipment::ustaw_reke()
 {
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
+    {
+        w_rece=0;
+    }else
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
     {
         if(pistolet)
@@ -157,34 +161,34 @@ void Equipment::ustaw_reke()
 }
 void Equipment::UpdateText()
 {
+    text[0].setString(std::to_string(ammunition));
     if(pistolet)
     {
-        text[1].setColor(sf::Color::Red);
-    }else  text[1].setColor(sf::Color(0,0,0));
+        text[1].setColor(sf::Color::Green);
+    }else  text[1].setColor(sf::Color::Red);
     if(karabin)
     {
-        text[2].setColor(sf::Color::Red);
-    }else  text[2].setColor(sf::Color(0,0,0));
+        text[2].setColor(sf::Color::Green);
+    }else  text[2].setColor(sf::Color::Red);
     if(bazooka)
     {
-        text[3].setColor(sf::Color::Red);
-    }else  text[3].setColor(sf::Color(0,0,0));
+        text[3].setColor(sf::Color::Green);
+    }else  text[3].setColor(sf::Color::Red);
     if(uzi)
     {
-        text[4].setColor(sf::Color::Red);
-    }else  text[4].setColor(sf::Color(0,0,0));
-    if(true)
+        text[4].setColor(sf::Color::Green);
+    }else  text[4].setColor(sf::Color::Red);
+    if(ammunition>0)
     {
-        text[0].setColor(sf::Color(5,0,170));
-    }
-    if(true)
+        text[0].setColor(sf::Color::Green);
+    }else text[0].setColor(sf::Color::Red);
+    if(beer>0)
     {
-        text[5].setColor(sf::Color::Red);
-    }
+        text[5].setColor(sf::Color::Green);
+    }else text[5].setColor(sf::Color::Red);
 }
 void Equipment::ustaw_Text()
 {
-    text[0].setString(std::to_string(ammunition));
     text[1].setString("[1]");
     text[2].setString("[2]");
     text[3].setString("[3]");

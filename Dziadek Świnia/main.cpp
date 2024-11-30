@@ -455,7 +455,8 @@ void Postac::graj_dzwiek()
 }
 unsigned int Postac::Update(unsigned int Hp,int boostHp,sf::Time czas_p,int w_rece)
 {
-    czas.setString(std::to_string(oblicz_czas(w_rece,czas_p.asSeconds())));
+    auto LoadingTime=oblicz_czas(w_rece,czas_p.asSeconds());
+    czas.setString(std::to_string(LoadingTime));
     Fall();
 
     //postac.setPosition(posX,posY);
@@ -524,7 +525,7 @@ unsigned int Postac::Update(unsigned int Hp,int boostHp,sf::Time czas_p,int w_re
     window.draw(white);
     if(boostHp!=0)
         window.draw(white2);
-    if(w_rece>0)
+    if(w_rece>0 && LoadingTime>0)
         window.draw(czas);
     Hp/=10;
     boostHp/=10;
@@ -1002,7 +1003,6 @@ void AI::Update1(AI_Eq *Eq,int *targetHP,int *boostHp,short w_rece,Postac *T)
     int losowa=std::rand()%2000;
     if(losowa==1 && type==0)
     {
-
         move_to_side(Right);
         do
         {
@@ -1077,9 +1077,9 @@ void AI::Update1(AI_Eq *Eq,int *targetHP,int *boostHp,short w_rece,Postac *T)
                 break;
             case 3:
                 {
-                    if(Eq->HP>=40)
+                    if(Eq->HP>=80)
                     {
-                    Eq->HP-=40;
+                    Eq->HP-=80;
                     }
                 }
                 break;
@@ -1736,8 +1736,8 @@ void application()
                     if(level==0)
                     {
                         auto temp=plot.Update(background.x);
-                        if(temp>=0)
-                            odblokowane[temp]=true;
+                        if(temp>=1)                             //tutaj wpisac ostani stan fabuly
+                            odblokowane[0]=true;
                     }
                     if(level==1)
                     {

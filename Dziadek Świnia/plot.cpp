@@ -1,6 +1,6 @@
 #include "plot.hpp"
 
-Plot::Plot(sf::RenderWindow &window_temp,Equipment &eq_temp,float Ground_LVL):window(window_temp),Eq(eq_temp)
+Plot::Plot(sf::RenderWindow &window_temp,Equipment &eq_temp,float Ground_LVL):window(window_temp),Eq(eq_temp),Help(window_temp)
 {
     state=0;
     NPC[0].texture.loadFromFile("Textures//Charakters//plot1.png");
@@ -10,8 +10,8 @@ Plot::Plot(sf::RenderWindow &window_temp,Equipment &eq_temp,float Ground_LVL):wi
     NPC[0].sprite.setTexture(NPC[0].texture);
 
     NPC[1].texture.loadFromFile("Textures//Charakters//plot2.png");
-    NPC[1].appears_drg_st=0;
-    NPC[1].position={-1000,Ground_LVL-100};
+    NPC[1].appears_drg_st=1;
+    NPC[1].position={-1500,Ground_LVL-100};
     NPC[1].sprite.setScale(0.5,0.5);
     NPC[1].sprite.setTexture(NPC[1].texture);
 
@@ -51,6 +51,8 @@ int Plot::Update(float posX)
             {
                 if(abs(posX-i.position.x-(1920/2)+100)<300)
                 {
+                    if(Help.isSet==false)
+                        Help.SetState(1);
                     NPC_text("PRZESZUKAJ [F]",NPC[0].position.x,posX);
                     if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
                     {
@@ -67,8 +69,10 @@ int Plot::Update(float posX)
                 if(abs(posX-i.position.x-(1920/2)+100)<300)
                 {
                     NPC_text("PRZESZUKAJ [F]",NPC[1].position.x,posX);
+                    if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
                     {
-
+                        Eq.ammunition+=10;
+                        Push_state();
                     }
                 }
                 i.sprite.setPosition(posX-i.position.x,i.position.y);
@@ -82,5 +86,6 @@ int Plot::Update(float posX)
 
         }
     }
+    Help.Update();
     return (state-1);
 }

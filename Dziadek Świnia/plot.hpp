@@ -10,6 +10,7 @@
 class Plot
 {
 private:
+    helper Help;
     sf::Font OswaldRegular;
     sf::RenderWindow &window;
     sf::Text Notification_text;
