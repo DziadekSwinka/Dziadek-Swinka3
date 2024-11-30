@@ -1327,11 +1327,11 @@
 1733006398 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.cpp
 	"plot.hpp"
 
-1733006389 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.hpp
+1733006898 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.hpp
 	<SFML/Graphics.hpp>
 	<vector>
 	<fstream>
 
-1733006295 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.cpp
+1733006609 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.cpp
 	"helper.hpp"
 

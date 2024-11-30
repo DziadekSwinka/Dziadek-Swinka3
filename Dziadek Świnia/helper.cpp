@@ -19,9 +19,12 @@ helper::helper(sf::RenderWindow &temp_window):window(temp_window)
 }
 void helper::SetState(int temp_state)
 {
-    isSet=true;
-    clock.restart();
-    state=temp_state;
+    if(temp_state>state)
+    {
+        isSet=true;
+        clock.restart();
+        state=temp_state;
+    }
 }
 void helper::Update()
 {
