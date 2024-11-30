@@ -4,8 +4,9 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <conio.h>
 #include <time.h>
-#include <math.h>
+#include <cmath>
 #include <fstream>
 
 #include "Network.hpp"
@@ -17,6 +18,14 @@
 #include "mode.hpp"
 #include "Saves.hpp"
 #include "IniConfig.hpp"
+#include "plot.hpp"
+#include "Loading.hpp"
+#include "sezon.h"
+#include "helper.hpp"
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -215,6 +224,7 @@ private:
     void graj_dzwiek();
     void graj_dzwiek(unsigned short i);
     float oblicz_czas(int w_rece,float czas);
+    bool jumpAllowed;
     sf::Font OswaldRegular;
     sf::Text czas;
     bool dotykaPostaci(int i,AI_Eq *myEq);
@@ -514,7 +524,8 @@ unsigned int Postac::Update(unsigned int Hp,int boostHp,sf::Time czas_p,int w_re
     window.draw(white);
     if(boostHp!=0)
         window.draw(white2);
-    window.draw(czas);
+    if(w_rece>0)
+        window.draw(czas);
     Hp/=10;
     boostHp/=10;
     for(int i=0;static_cast<unsigned int>(i)<Hp;i++)
@@ -531,14 +542,20 @@ float Postac::getDegree()
 void Postac::Fall()
 {
     float gravity=0.0001;
-    if(postac.getPosition().y+(txt.getSize().y)/4<=window.getSize().y-380/stosY&&postac.getPosition().y>=0+5)
+    if(postac.getPosition().y>=548)
     {
-        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        jumpAllowed=true;
+    }
+    if(postac.getPosition().y + (txt.getSize().y) / 4 <= window.getSize().y - 380/stosY && postac.getPosition().y >= 0+5)
+    {
+        if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && jumpAllowed==true)
         {
             vs=-0.1;
             postac.move(0,vs*czas_na_klatke()*3);
+            if(postac.getPosition().y<=500)
+                jumpAllowed=false;
         }
-        else if(false==sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        else //if(false==sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
             vs+=gravity*czas_na_klatke()*2;
             postac.move(0,vs*czas_na_klatke()*3);
@@ -618,11 +635,11 @@ void bron::wystrzel(float degree)
 void bron::ustawPocisk(short i,float degree)
 {
     Bullet[i].setPosition(sprite.getPosition().x,sprite.getPosition().y-20);
-    Bullet[i].setRotation(degree);
     if(sprite.getScale().x>0)
         Bullet[i].k=true;
     else
         Bullet[i].k=false;
+    Bullet[i].setRotation(degree);
 }
 void bron::move_to_side(side Side)
 {
@@ -636,6 +653,7 @@ void bron::move_to_side(side Side)
 }
 void bron::Update(float posX,float posY,float degree,bool *EnterP,short type)
 {
+
     sprite.setTexture(&txt[type]);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
@@ -664,7 +682,10 @@ void bron::Update(float posX,float posY,float degree,bool *EnterP,short type)
         if(Bullet[i].fly==true)
             Bullet[i].Update();
     }
-    window.draw(sprite);
+    if(type>0)
+    {
+         window.draw(sprite);
+    }
 }
 
 
@@ -1210,10 +1231,11 @@ void skrzynka_fall(int GroundLevel,float x,float y,Equipment *Eq)
                 {
                     skrzynka_off(Eq);
                 }
-        }else if(x-skrzynka.posX<100)
-                 {
-                     skrzynka_off(Eq);
-                 }
+        }
+        else if(x-skrzynka.posX<100)
+        {
+            skrzynka_off(Eq);
+        }
     }
 }
 void skrzynki()
@@ -1413,17 +1435,6 @@ void Config()
     }
     return;
 }
-
-std::string set_sezon()
-{
-    std::string sezon="";
-    struct tm Tm;
-    if(Tm.tm_mon==9 || Tm.tm_mon==10 || Tm.tm_mon==11 || Tm.tm_mon==0)
-    {
-        sezon="_winter";
-    }else sezon="";
-    return sezon;
-}
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -1456,21 +1467,24 @@ void application()
         image.loadFromFile("Textures//Charakters//dziadek.png");
         window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     }
+    LoadingScreen *Loading=new LoadingScreen(window);
     const float stosX=1920.f/Xokna;   //std::cout<<stosX<<std::endl;
     const float stosY=1080.f/Yokna;   //std::cout<<stosY<<std::endl;
     const float GroundLevel=700.f/stosY;
     Postac Dziadek(window,"Textures//Charakters//dziadek"+*sezon+".png","Textures//Charakters//dziadek_dmg"+*sezon+".png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY,&peppaEq,&mamaEq,&tataEq);
+    Loading->Push();
     AI peppa(window,"Textures//Charakters//obrazek.png","Textures//Charakters//obrazek_dmg.png","Textures//Items//noz.png",0,"Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY,&peppaEq);
     AI george(window,"Textures//Charakters//George.png","Textures//Charakters//George_dmg.png","Textures//Items//uzi.png",4,"","",300,GroundLevel-50,stosX,stosY,&peppaEq);
+    Loading->Push();
     AI mama(window,"Textures//Charakters//mama_swinka.png","Textures//Charakters//mama_swinka_dmg.png","Textures//Items//pistolet.png",1,"Sounds//mama1.wav","Sounds//mama2.wav",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
     AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",2,"Sounds//tata1.wav","Sounds//tata2.wav",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
-
+    Loading->Push();
     //AI_Eq aiEq;
     //AI multiCharacter(window,"Textures//Charakters//dziadek.png","","",0,"","",100,GroundLevel-50,stosX,stosY,&aiEq);
 
     Background background(window,"Textures//Background//grass",100,"Textures//Background//grandpahouse",-800,"Textures//Background//house",900,"Textures//Background//shop",stosX,stosY,*sezon);
     delete sezon;
-
+    Loading->Push();
     button Misje_bt(window,"Textures//GUI//bm.png","Textures//GUI//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
     button Misja1_bt(window,"Textures//GUI//m1.png","Textures//GUI//m1c.png",1520.f/stosX,80.f/stosY,stosX,stosY);
     button Misja2_bt(window,"Textures//GUI//m2.png","Textures//GUI//m2c.png",1670.f/stosX,80.f/stosY,stosX,stosY);
@@ -1488,6 +1502,7 @@ void application()
 
     button saveBt(window,"Textures//GUI//zapisz.png","Textures//GUI//zapiszc.png",1100.f/stosX,5.f/stosY,stosX,stosY);
     button loadBt(window,"Textures//GUI//wczytaj.png","Textures//GUI//wczytajc.png",1250.f/stosX,5.f/stosY,stosX,stosY);
+    Loading->Push();
 
     Sklep_bt.scaleX=0.45/stosX;
     Sklep_bt.scaleY=0.45/stosY;
@@ -1495,18 +1510,22 @@ void application()
     saveBt.scaleY=0.45/stosX;
     loadBt.scaleY=0.45/stosY;
     loadBt.scaleY=0.45/stosX;
+    Loading->Push();
     Equipment Eq(window,stosX,stosY,Vol[0],Vol[1]);
+    Plot plot(window,Eq,GroundLevel);
     bron karabin(window,"Textures//Items//ak47.png","Textures//Items//pistolet.png","Textures//Items//bazooka.png","Textures//Items//uzi.png");
+    Loading->Push();
     saveList List(window,stosX,stosY);
-    skrzynki();
+    //skrzynki();
     sf::Sprite GameOver;
     sf::Texture gameover;
     gameover.loadFromFile("Textures//Background//end.jpg");
     GameOver.setTexture(gameover);
-    bool odblokowane[10]={1,0,0,0,0,0,0,0,0,0};
+    bool odblokowane[10]={0,0,0,0,0,0,0,0,0,0};
     sf::Sprite lock[10];
     sf::Texture Lock;
     Lock.loadFromFile("Textures//GUI//lock.png");
+    Loading->Push();
     for(short i=0;i<10;i++)
     {
         const float przesun_X=80/stosY;
@@ -1518,6 +1537,7 @@ void application()
         else
             lock[i].setPosition(1715+przesun_X,(80+przesun_Y+(60*(i/2))));
     }
+    Loading->Push();
     //system("cls");
     /*Network *net;
     try
@@ -1528,10 +1548,10 @@ void application()
     {
         std::cout<<"Network class error\n"<<e.what()<<std::endl;
     }*/
-
+    system("cls");
     if(frameLimit!=0)
         window.setFramerateLimit(frameLimit);
-
+    Loading->Push();
     while (window.isOpen())
     {
         sf::Event event;
@@ -1558,12 +1578,16 @@ void application()
                 }
             }
         }
+///-----------------------------------------Zawieszam dzialanie zrzutow - do przeprojektowania----------------------------------------------------------------------------------
+        /*if(plot.getState()<1)
+            liczZrzut.restart();
+
         sf::Time time1=liczZrzut.getElapsedTime();
         if(time1.asSeconds()>4)
         {
             liczZrzut.restart();
             losuj_zrzut();
-        }
+        }*/
         if(Misje_bt.isPressed())
         {
             if(Menu_misje)
@@ -1669,7 +1693,7 @@ void application()
         {
             if(!panelSklep && List.showList==false)
             {
-                Eq.pieniadze+=background.Update(&interior,level,&panelSklep,EnterPressed);
+                Eq.pieniadze+=background.Update(&interior,level,&panelSklep,EnterPressed,czas_na_klatke());
                 if(interior==outside)
                 {
                     if(skrzynka.active)
@@ -1708,7 +1732,13 @@ void application()
                     if(minusHP<=Eq.HP)
                         Eq.HP-=minusHP;
                     else Eq.HP=0;
-                    karabin.Update(Dziadek.posX,Dziadek.posY+30,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
+                        karabin.Update(Dziadek.posX,Dziadek.posY+30,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
+                    if(level==0)
+                    {
+                        auto temp=plot.Update(background.x);
+                        if(temp>=0)
+                            odblokowane[temp]=true;
+                    }
                     if(level==1)
                     {
                         if(peppaEq.HP>0)
@@ -1877,6 +1907,7 @@ void application()
                 Eq.ammunition=15;
                 Eq.HP=100;
                 Eq.boostHP=0;
+                level=0;
                 return;
             }
         }

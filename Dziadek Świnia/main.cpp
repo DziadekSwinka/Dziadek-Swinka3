@@ -21,6 +21,7 @@
 #include "plot.hpp"
 #include "Loading.hpp"
 #include "sezon.h"
+#include "helper.hpp"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -1577,7 +1578,7 @@ void application()
                 }
             }
         }
-///-----------------------------------------Zawieszam dzialanie zrzutow - do przeprojektowania----------------------------------------------------------------------------------
+///-----------------------------------------------------Zawieszam dzialanie zrzutow - do przeprojektowania----------------------------------------------------------------------------------
         /*if(plot.getState()<1)
             liczZrzut.restart();
 

@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "Equipment.hpp"
+#include "helper.hpp"
 
 class Plot
 {
@@ -24,7 +25,7 @@ private:
         sf::Texture texture;
         unsigned int appears_drg_st;
         sf::Vector2f position;
-    }NPC[1];
+    }NPC[2];
     Equipment &Eq;
 public:
     unsigned int getState();
