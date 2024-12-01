@@ -8,6 +8,7 @@
 class helper
 {
 private:
+    float boardPosition[2]={150,900};
     sf::RenderWindow &window;
     sf::RectangleShape board;
     sf::Text disp_text;

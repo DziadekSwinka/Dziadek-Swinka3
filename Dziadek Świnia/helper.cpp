@@ -1,6 +1,7 @@
 #include "helper.hpp"
 
-helper::helper(sf::RenderWindow &temp_window):window(temp_window)
+helper::helper(sf::RenderWindow &temp_window): window(temp_window),
+                                                board(sf::Vector2f(1000,72))
 {
     std::fstream file;
     file.open("helper.txt");
@@ -12,10 +13,20 @@ helper::helper(sf::RenderWindow &temp_window):window(temp_window)
     }
     file.close();
 
+    boardPosition[0]=1920.f/2.f;
+
     font.loadFromFile("Fonts//Oswald-Regular.ttf");
+    disp_text.setOrigin(board.getSize().x/2,0);
     disp_text.setFont(font);
     disp_text.setCharacterSize(24);
-    disp_text.setPosition(200,200);
+    disp_text.setPosition(boardPosition[0]+24,boardPosition[1]+24);
+    disp_text.setColor(sf::Color::Black);
+
+    board.setFillColor(sf::Color(180,180,180));
+    board.setOutlineColor(sf::Color(135,135,135));
+    board.setOutlineThickness(5);
+    board.setOrigin(board.getSize().x/2,0);
+    board.setPosition(boardPosition[0],boardPosition[1]);
 }
 void helper::SetState(int temp_state)
 {
@@ -35,7 +46,10 @@ void helper::Update()
     }else if(state>0)
         disp_text.setString(Mem_text[state-1]);
 
-    if(time.asSeconds()<10)
+    if(time.asSeconds()<3 && isSet)
+    {
+        window.draw(board);
         window.draw(disp_text);
+    }
     else if(isSet) isSet=false;
 }

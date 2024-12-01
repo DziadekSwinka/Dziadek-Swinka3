@@ -14,7 +14,7 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol
     intro.loadFromFile("Sounds//intro.wav");
     ammunition=0;
     HP=100;
-    pieniadze=100;
+    pieniadze=15;
     beer=0;
     for(int i=0;i<6;i++)
     {

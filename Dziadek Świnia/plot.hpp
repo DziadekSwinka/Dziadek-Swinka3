@@ -26,7 +26,7 @@ private:
         sf::Texture texture;
         unsigned int appears_drg_st;
         sf::Vector2f position;
-    }NPC[2];
+    }NPC[3];
     Equipment &Eq;
 public:
     unsigned int getState();
