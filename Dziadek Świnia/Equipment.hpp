@@ -23,9 +23,9 @@ private:
     sf::RenderWindow &window;
     sf::SoundBuffer intro;
     sf::Font OswaldRegular;
-    sf::RectangleShape backRect,icon[6],pieniadz_bcg;
-    sf::Sprite symbol[6];
-    sf::Texture symbol_txt[6];
+    sf::RectangleShape backRect,icon[7],pieniadz_bcg;
+    sf::Sprite symbol[7];
+    sf::Texture symbol_txt[7];
     sf::Clock clock,clock2;
     sf::Text text[6],pieniadze_tekst,pieniadze_plus,dodaj_pieniadze;
     void ustaw_Text();

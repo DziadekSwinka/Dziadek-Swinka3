@@ -49,7 +49,7 @@ private:
     void renderSnow(float deltaTime);
 public:
     float x=0;
-    unsigned int Update(Interior *interior,unsigned short level,bool *panelSklep,bool EnterPressed,float deltaTime);
+    unsigned int Update(Interior *interior,unsigned short level,bool *panelSklep,bool EnterPressed,float deltaTime,bool key);
     Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,float stosX,float stosY,std::string sezon);
 };
 

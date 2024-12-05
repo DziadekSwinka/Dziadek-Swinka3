@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1733006233 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1733434492 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
@@ -458,7 +458,7 @@
 
 1663503798 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\enum.hpp
 
-1732484448 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.hpp
+1733434475 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.hpp
 	<SFML/Graphics.hpp>
 	<String>
 	<iostream>
@@ -469,14 +469,14 @@
 	"mode.hpp"
 	"plot.hpp"
 
-1733088710 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
+1733434475 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"Background.hpp"
 
-1733432075 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
+1733434241 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
 	"Equipment.hpp"
 	<iostream>
 
-1733432075 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
+1733433928 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.hpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	"button.hpp"
@@ -1318,13 +1318,13 @@
 1732461037 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\sezon.h
 	<string>
 
-1733052280 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.hpp
+1733432848 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.hpp
 	<SFML/Graphics.hpp>
 	<iostream>
 	"Equipment.hpp"
 	"helper.hpp"
 
-1733052514 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.cpp
+1733432931 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.cpp
 	"plot.hpp"
 
 1733050486 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.hpp

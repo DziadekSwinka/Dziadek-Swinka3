@@ -163,13 +163,14 @@ void Background::renderSnow(float deltaTime)
         Snieg[i].move(0,0.2*deltaTime);
     }
 }
-unsigned int Background::Update(Interior *interior,unsigned short level,bool *panelSklep,bool EnterPressed,float deltaTime)
+unsigned int Background::Update(Interior *interior,unsigned short level,bool *panelSklep,bool EnterPressed,float deltaTime,bool key)
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
     {
         *interior=outside;
         x=x_outside;
         mGra=0;
+        EnterPressed=false;
     }
     wyswietl_napis(b1_x,b2_x,b3_x);
     wejdz(interior,panelSklep);
@@ -211,7 +212,6 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
             window.draw(Pociag);
         }
     }
-
     unsigned int p=0.f;
     if(*interior==tajna_baza_wojskowa_pod_domem)
     {
@@ -227,7 +227,12 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
     }
     if(EnterPressed==true && mGra==false)
     {
-        mGra=true;
+        if(key)
+            mGra=true;
+        else
+        {
+
+        }
     }
     return p;
 }

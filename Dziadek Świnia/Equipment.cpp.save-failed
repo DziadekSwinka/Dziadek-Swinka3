@@ -17,7 +17,7 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol
     HP=100;
     pieniadze=15;
     beer=0;
-    klucz=false;
+    klucz=true;
     for(int i=0;i<6;i++)
     {
         text[i].setFont(OswaldRegular);
@@ -81,7 +81,7 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol
         if(i!=6)
             icon[i].setPosition((70*i+25)/stosX,45.f/stosY);
         else
-            icon[i].setPosition((70+15)/stosX,(900+15)/stosY);
+            icon[i].setPosition(70/sotsX,900/stosY);
     }
     ustaw_sklep();
     main.setBuffer(intro);
@@ -308,7 +308,6 @@ void Equipment::Update(bool panelSklep,bool ButtonPressed)
     }
     if(klucz)
     {
-        window.draw(icon[6]);
         window.draw(symbol[6]);
     }
     if(panelSklep)

@@ -1698,7 +1698,7 @@ void application()
         {
             if(!panelSklep && List.showList==false)
             {
-                Eq.pieniadze+=background.Update(&interior,level,&panelSklep,EnterPressed,czas_na_klatke(),Eq.klucz);
+                Eq.pieniadze+=background.Update(&interior,level,&panelSklep,EnterPressed,czas_na_klatke());
                 if(interior==outside)
                 {
                     if(skrzynka.active)

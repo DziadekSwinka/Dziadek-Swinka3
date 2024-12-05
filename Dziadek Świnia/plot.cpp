@@ -22,6 +22,11 @@ Plot::Plot(sf::RenderWindow &window_temp,Equipment &eq_temp,float Ground_LVL):wi
     NPC[2].sprite.setScale(0.5,0.5);
     NPC[2].sprite.setTexture(NPC[2].texture);
 
+    NPC[3].appears_drg_st=3;
+    NPC[3].position={500,Ground_LVL-50};
+    NPC[3].sprite.setScale(0.5,0.5);
+    NPC[3].sprite.setTexture(NPC[2].texture);
+
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     Notification_text.setFont(OswaldRegular);
     Notification_text.setCharacterSize(24);
@@ -90,15 +95,22 @@ int Plot::Update(float posX)
                 break;
             }
             case 2:
+            case 3:
             {
                 if(abs(posX-i.position.x-(1920/2)+100)<300)
                 {
                     //if(Help.isSet==false)
                         //Help.SetState(1);
-                    NPC_text("PRZESZUKAJ [F]",NPC[2].position.x,posX);
+                    NPC_text("PRZESZUKAJ [F]",NPC[state].position.x,posX);
                     if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
                     {
-                        Eq.pieniadze+=15;
+                        if(state==2)
+                            Eq.pieniadze+=15;
+                        if(state==3 && !Eq.klucz)
+                        {
+                            Eq.klucz=true;
+                            Help.SetState(4);
+                        }
                         Push_state();
                     }
                 }
