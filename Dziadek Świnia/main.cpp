@@ -37,6 +37,7 @@
 
 bool ButtonPressed=0;
 bool EnterPressed=0;
+bool EnterPressed_shoot=0;
 bool panelSklep=0;
 short level=0;
 
@@ -1572,10 +1573,15 @@ void application()
                 {
                     if(mozna_strzelac(Eq.w_rece,&przeladowanie)==true)
                     {
-                        EnterPressed=true;
+                        EnterPressed_shoot=true;                                                          ///Trzeba rozdzielic EnterPressed poniewaz klasa background rowniez jej uzywa
+                                                                                                    ///pojawia sie bug przez ktorego mozna do dinozaurow wejsc tylko z bronia w reku i amunicja
                         Eq.ammunition--;
                     }
                 }
+            }
+            if(event.key.code == sf::Keyboard::Enter)
+            {
+                EnterPressed=true;
             }
         }
 ///-----------------------------------------------------Zawieszam dzialanie zrzutow - do przeprojektowania----------------------------------------------------------------------------------
@@ -1732,7 +1738,7 @@ void application()
                     if(minusHP<=Eq.HP)
                         Eq.HP-=minusHP;
                     else Eq.HP=0;
-                        karabin.Update(Dziadek.posX,Dziadek.posY+30,Dziadek.getDegree(),&EnterPressed,Eq.w_rece);
+                        karabin.Update(Dziadek.posX,Dziadek.posY+30,Dziadek.getDegree(),&EnterPressed_shoot,Eq.w_rece);
                     if(level==0)
                     {
                         auto temp=plot.Update(background.x);
@@ -1916,6 +1922,7 @@ void application()
         klatka.restart();
     }
     EnterPressed=false;
+    EnterPressed_shoot=false;
 
     return;
 }

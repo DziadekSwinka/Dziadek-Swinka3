@@ -16,6 +16,7 @@ Equipment::Equipment(sf::RenderWindow &window1,float stosX,float stosY,float Vol
     HP=100;
     pieniadze=15;
     beer=0;
+    klucz=false;
     for(int i=0;i<6;i++)
     {
         text[i].setFont(OswaldRegular);

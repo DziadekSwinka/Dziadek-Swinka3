@@ -50,6 +50,7 @@ public:
     int pieniadze;
     int boostHP=0;
     int beer;
+    bool klucz=false;
     bool pistolet,karabin,bazooka,uzi;
     short w_rece;
     void Update(bool panelSklep,bool ButtonPressed);
