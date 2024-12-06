@@ -17,7 +17,7 @@ private:
     unsigned int state;
     //const int number_of_NPCs=1;
 //    int &money;
-    int extraMoney[8]={20,40,60,65,70,75,80,80};
+    int extraMoney[8]={20,30,10,10,0,20,30,20};
     void Push_state();
     void NPC_text(std::string text,float myPosX,float posX);
     struct
@@ -26,7 +26,7 @@ private:
         sf::Texture texture;
         unsigned int appears_drg_st;
         sf::Vector2f position;
-    }NPC[4];
+    }NPC[5];
     Equipment &Eq;
 public:
     unsigned int getState();

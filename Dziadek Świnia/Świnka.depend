@@ -469,7 +469,7 @@
 	"mode.hpp"
 	"plot.hpp"
 
-1733434475 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
+1733510696 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"Background.hpp"
 
 1733434241 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
@@ -1318,13 +1318,13 @@
 1732461037 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\sezon.h
 	<string>
 
-1733432848 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.hpp
+1733511842 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.hpp
 	<SFML/Graphics.hpp>
 	<iostream>
 	"Equipment.hpp"
 	"helper.hpp"
 
-1733432931 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.cpp
+1733511490 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.cpp
 	"plot.hpp"
 
 1733050486 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.hpp

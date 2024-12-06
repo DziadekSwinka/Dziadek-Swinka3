@@ -27,6 +27,12 @@ Plot::Plot(sf::RenderWindow &window_temp,Equipment &eq_temp,float Ground_LVL):wi
     NPC[3].sprite.setScale(0.5,0.5);
     NPC[3].sprite.setTexture(NPC[2].texture);
 
+    NPC[4].texture.loadFromFile("Textures//Charakters//DannyPies.png");
+    NPC[4].appears_drg_st=4;
+    NPC[4].position={2500,Ground_LVL-50};
+    NPC[4].sprite.setScale(0.5,0.5);
+    NPC[4].sprite.setTexture(NPC[4].texture);
+
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     Notification_text.setFont(OswaldRegular);
     Notification_text.setCharacterSize(24);
@@ -119,9 +125,39 @@ int Plot::Update(float posX)
                 break;
 
             }
-            default: break;
+            case 4:
+            {
+                if(abs(posX-i.position.x-(1920/2)+100)<300)
+                {
+                    if(Help.isSet==false)
+                            Help.SetState(5);
+                    NPC_text("Porozmawiaj za 100$ [F]",NPC[state].position.x,posX);
+                    if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+                    {
+                        if(Eq.pieniadze>=100)
+                        {
+                            Eq.pieniadze-=100;
+                             Help.SetState(6);
+                        }
+                        Push_state();
+                    }
+                }
+                i.sprite.setPosition(posX-i.position.x,i.position.y);
+                window.draw(i.sprite);
+                break;
+            }
+            default:
+                {
+
+                break;
+                }
             }
 
+        }
+        if(state>NPC[4].appears_drg_st)
+        {
+            NPC[4].sprite.setPosition(posX-NPC[4].position.x,NPC[4].position.y);
+            window.draw(NPC[4].sprite);
         }
     }
     Help.Update();

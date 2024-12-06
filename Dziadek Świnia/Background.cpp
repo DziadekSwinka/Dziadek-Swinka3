@@ -169,7 +169,7 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
     {
         *interior=outside;
         x=x_outside;
-        mGra=0;
+        mGra=false;
         EnterPressed=false;
     }
     wyswietl_napis(b1_x,b2_x,b3_x);
@@ -231,7 +231,7 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
             mGra=true;
         else
         {
-
+            //wejscie tylko z kluczem - dorobic napis
         }
     }
     return p;
