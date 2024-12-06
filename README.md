@@ -12,7 +12,7 @@ Plik *.exe gry znajduje śię w Dziadek-Swinka//bin//Release//Świnka.exe
 
 <p>
   <H2>Minimalne wymagania sprzętowe:</H2>
-  <strong>Procesor:</strong> 2ghz lub więcej<br>
+  <strong>Procesor:</strong> 2GHz lub więcej<br>
   <strong>Pamięć RAM:</strong> 512MB</br>
   <strong>Miejsce na dysku:</strong> 128MB</br>
   </br></br>
