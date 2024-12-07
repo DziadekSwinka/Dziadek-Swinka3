@@ -1,6 +1,9 @@
 #include "Background.hpp"
 
-Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,float stosX,float stosY,std::string sezon):stosX(stosX),stosY(stosY),window(window1)
+Background::Background(sf::RenderWindow &window1,std::string sciezka,float x0,std::string budynek0,float x1,
+                       std::string budynek1,float x2,std::string budynek2,float x3,std::string budynek3,
+                       float x4,std::string budynek4,float stosX,float stosY,std::string sezon)
+:stosX(stosX),stosY(stosY),window(window1)
 {
 
     srand(time(NULL));
@@ -32,19 +35,35 @@ Background::Background(sf::RenderWindow &window1,std::string sciezka,float x1,st
     b1_x=x1;
     b2_x=x2;
     b3_x=x3;
+    b4_x=x4;
+    b0_x=x0;
     txt.loadFromFile(sciezka+sezon+".png");
-    b1.loadFromFile(budynek1+sezon+".png");
-    B1.setTexture(b1);
-    B1.setScale(0.5,0.5);
-    B1.setOrigin(0,b1.getSize().y);
-    b2.loadFromFile(budynek2+sezon+".png");
-    B2.setTexture(b2);
-    B2.setScale(0.5,0.5);
-    B2.setOrigin(0,b2.getSize().y);
-    b3.loadFromFile(budynek3+sezon+".png");
-    B3.setTexture(b3);
-    B3.setScale(0.5,0.5);
-    B3.setOrigin(0,b3.getSize().y);
+
+    b[0].loadFromFile(budynek0+sezon+".png");
+    B[0].setTexture(b[0]);
+    B[0].setScale(0.7,0.7);
+    B[0].setOrigin(0,b[0].getSize().y);
+
+    b[1].loadFromFile(budynek1+sezon+".png");
+    B[1].setTexture(b[1]);
+    B[1].setScale(0.5,0.5);
+    B[1].setOrigin(0,b[1].getSize().y);
+
+    b[2].loadFromFile(budynek2+sezon+".png");
+    B[2].setTexture(b[2]);
+    B[2].setScale(0.5,0.5);
+    B[2].setOrigin(0,b[2].getSize().y);
+
+    b[3].loadFromFile(budynek3+sezon+".png");
+    B[3].setTexture(b[3]);
+    B[3].setScale(0.5,0.5);
+    B[3].setOrigin(0,b[3].getSize().y);
+
+    b[4].loadFromFile(budynek4+sezon+".png");
+    B[4].setTexture(b[4]);
+    B[4].setScale(0.3,0.3);
+    B[4].setOrigin(0,b[4].getSize().y);
+
     for(int i=0;i<3;i++)
     {
         bcg[i].setTexture(txt);
@@ -181,16 +200,20 @@ unsigned int Background::Update(Interior *interior,unsigned short level,bool *pa
             background_move(Right);
         if(true==sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && *interior!=pociong)
             background_move(Left);
-        B1.setPosition(x-b1_x,750);
-        B2.setPosition(x-b2_x,750);
-        B3.setPosition(x-b3_x,750);
+        B[1].setPosition(x-b1_x,750);
+        B[2].setPosition(x-b2_x,750);
+        B[3].setPosition(x-b3_x,770);
+        B[4].setPosition(x-b4_x,750);
+        B[0].setPosition(x-b0_x,750);
         for(short i=0;i<3;i++)
                 bcg[i].setTexture(txt);
         if(*interior==outside)
         {
-            window.draw(B1);
-            window.draw(B2);
-            window.draw(B3);
+            window.draw(B[1]);
+            window.draw(B[2]);
+            window.draw(B[3]);
+            window.draw(B[4]);
+            window.draw(B[0]);
             if(pokaz_tekst[0]||pokaz_tekst[1]||pokaz_tekst[2])
                 if(level<1)
                     window.draw(text);

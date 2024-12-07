@@ -1483,7 +1483,7 @@ void application()
     //AI_Eq aiEq;
     //AI multiCharacter(window,"Textures//Charakters//dziadek.png","","",0,"","",100,GroundLevel-50,stosX,stosY,&aiEq);
 
-    Background background(window,"Textures//Background//grass",100,"Textures//Background//grandpahouse",-800,"Textures//Background//house",900,"Textures//Background//shop",stosX,stosY,*sezon);
+    Background background(window,"Textures//Background//grass",-1600,"Textures//Background//szpital",100,"Textures//Background//grandpahouse",-800,"Textures//Background//house",900,"Textures//Background//shop",1700,"Textures//Background//przedszkole",stosX,stosY,*sezon);
     delete sezon;
     Loading->Push();
     button Misje_bt(window,"Textures//GUI//bm.png","Textures//GUI//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
