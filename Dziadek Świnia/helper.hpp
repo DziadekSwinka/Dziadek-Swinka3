@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <fstream>
+#include <queue>
 
 class helper
 {
@@ -15,7 +16,8 @@ private:
     sf::Font font;
     sf::Clock clock;
     sf::Time time;
-    std::vector<std::string>Mem_text;
+    std::vector <std::string> Mem_text;
+    std::queue <int> que;
     int state;
 
 public:

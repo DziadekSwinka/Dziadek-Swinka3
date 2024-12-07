@@ -469,7 +469,7 @@
 	"mode.hpp"
 	"plot.hpp"
 
-1733594059 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
+1733594929 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\background.cpp
 	"Background.hpp"
 
 1733434241 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\equipment.cpp
@@ -1327,11 +1327,12 @@
 1733511490 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.cpp
 	"plot.hpp"
 
-1733050486 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.hpp
+1733612629 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.hpp
 	<SFML/Graphics.hpp>
 	<vector>
 	<fstream>
+	<queue>
 
-1733051884 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.cpp
+1733612629 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.cpp
 	"helper.hpp"
 

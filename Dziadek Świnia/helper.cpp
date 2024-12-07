@@ -30,7 +30,8 @@ helper::helper(sf::RenderWindow &temp_window): window(temp_window),
 }
 void helper::SetState(int temp_state)
 {
-    if(temp_state>state)
+    if(isSet) que.push(temp_state);
+    else if(temp_state>state)
     {
         isSet=true;
         clock.restart();
@@ -46,10 +47,21 @@ void helper::Update()
     }else if(state>0)
         disp_text.setString(Mem_text[state-1]);
 
-    if(time.asSeconds()<3 && isSet)
+
+    if(isSet)
     {
-        window.draw(board);
-        window.draw(disp_text);
+        if(time.asSeconds()<3)
+        {
+            window.draw(board);
+            window.draw(disp_text);
+        }
+        else if(que.size()==0) isSet=false;
+        else if(!que.empty())
+        {
+            state=que.front();
+            que.pop();
+            clock.restart();
+            isSet=true;
+        }
     }
-    else if(isSet) isSet=false;
 }
