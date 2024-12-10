@@ -250,7 +250,7 @@ protected:
     float stosX,stosY;
 public:
     float hand_degree=0;
-    operator=(Postac &obj);
+    void operator=(Postac &obj);
     void clockRestart();
     //Postac();
     Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY);
@@ -293,7 +293,7 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     posY=y;
 }
 Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY,AI_Eq *t1,AI_Eq *t2,AI_Eq *t3,AI_Eq *t4)
-    :window(window1),stosX(stosX),stosY(stosY),t1(t1),t2(t2),t3(t3),t4(t4)
+    :t1(t1),t2(t2),t3(t3),t4(t4),window(window1),stosX(stosX),stosY(stosY)
 {
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     red_txt.loadFromFile("Textures//GUI//red_.png");
@@ -324,11 +324,12 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     posX=x;
     posY=y;
 }
-Postac::operator=(Postac &obj)
+void Postac::operator=(Postac &obj)
 {
     obj.posY=posY;
     obj.posX=posX;
     obj.hand_degree=hand_degree;
+    return;
 }
 side Postac::Wside()
 {
@@ -841,7 +842,7 @@ public:
                             bullet(window,"Textures//Items//bullet.png",9,&mEq)};
 };
 AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY,AI_Eq *mEq)
-    :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y,stosX,stosY),type(type),mEq(*mEq)
+    :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y,stosX,stosY),mEq(*mEq),type(type)
 {
     std::cout<<"...."<<std::endl;
     buffer.loadFromFile("Sounds//piu_piu.wav");
@@ -1328,7 +1329,7 @@ void setMulti(Network *net,Postac *postac,AI *ai,AI_Eq *aiEq,unsigned int HP,flo
 
     float PosX[10],PosY[10],Dir[10];
     bool isFly[10];
-    side Side;
+    //side Side;
     for(int i=0;i<10;i++)
     {
         PosX[i]=Bron->Bullet[i].posX;
@@ -1425,7 +1426,7 @@ void Config()
 {
     try
     {
-        int xSize=0,ySize=0;
+        //int xSize=0,ySize=0;
         std::string sciezka="Config.txt";
         std::string line="";
         std::fstream config_file;
@@ -1700,9 +1701,11 @@ void application()
         if(saveBt.isPressed())
             List.save(&Eq);
         if(loadBt.isPressed())
+        {
             if(List.showList)
                 List.showList=false;
             else List.showList=true;
+        }
         if(Sklep_bt.isPressed())
         {
             if(panelSklep)
@@ -1741,17 +1744,17 @@ void application()
                     unsigned int minusHP=Dziadek.Update(Eq.HP,Eq.boostHP,przeladowanie.getElapsedTime(),Eq.w_rece);
                     if(Eq.boostHP!=0)
                     {
-                        if(minusHP<=Eq.boostHP)
+                        if((int)minusHP<=Eq.boostHP)
                             Eq.boostHP-=minusHP;
                         else
                         {
                             Eq.boostHP=0;
                             minusHP-=Eq.boostHP;
-                            if(minusHP<=Eq.HP)
+                            if((int)minusHP<=Eq.HP)
                                 Eq.HP-=minusHP;
                         }
                     }else
-                    if(minusHP<=Eq.HP)
+                    if((int)minusHP<=Eq.HP)
                         Eq.HP-=minusHP;
                     else Eq.HP=0;
                         karabin.Update(Dziadek.posX,Dziadek.posY+30,Dziadek.getDegree(),&EnterPressed_shoot,Eq.w_rece);
