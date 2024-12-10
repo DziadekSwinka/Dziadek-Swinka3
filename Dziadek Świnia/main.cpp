@@ -123,6 +123,7 @@ bullet::bullet(sf::RenderWindow &window1,std::string sciezka,int i):window(windo
     sprite.setScale(0.05,0.05);
     fly=false;
     bullet_wsk[i]=this;
+    //std::cout<<i<<std::endl;
 }
 bullet::bullet(sf::RenderWindow &window1,std::string sciezka,int i,AI_Eq *newEq):window(window1)
 {
@@ -131,6 +132,7 @@ bullet::bullet(sf::RenderWindow &window1,std::string sciezka,int i,AI_Eq *newEq)
     sprite.setScale(0.05,0.05);
     fly=false;
     newEq->bullet_wsk[i]=this;
+    //std::cout<<"n"<<i<<std::endl;
 }
 
 bool bullet::pozaEkranem()
@@ -213,6 +215,7 @@ void bullet::Update()
         fly=false;
 
     window.draw(sprite);
+    std::cout<<posX;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -232,6 +235,7 @@ private:
     AI_Eq *t1;
     AI_Eq *t2;
     AI_Eq *t3;
+    AI_Eq *t4;
 protected:
     sf::SoundBuffer buffer1,buffer2,buffer3,buffer4;
     sf::Sound sound;
@@ -250,7 +254,7 @@ public:
     void clockRestart();
     //Postac();
     Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY);
-    Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY,AI_Eq *t1,AI_Eq *t2,AI_Eq *t3);
+    Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY,AI_Eq *t1,AI_Eq *t2,AI_Eq *t3,AI_Eq *t4);
     float getDegree();
     side Wside();
     float posX,posY;
@@ -288,8 +292,8 @@ Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka
     posX=x;
     posY=y;
 }
-Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY,AI_Eq *t1,AI_Eq *t2,AI_Eq *t3)
-    :window(window1),stosX(stosX),stosY(stosY),t1(t1),t2(t2),t3(t3)
+Postac::Postac(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka2,std::string sciezka3,std::string sciezka4,std::string sciezka5,float x,float y,float stosX,float stosY,AI_Eq *t1,AI_Eq *t2,AI_Eq *t3,AI_Eq *t4)
+    :window(window1),stosX(stosX),stosY(stosY),t1(t1),t2(t2),t3(t3),t4(t4)
 {
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     red_txt.loadFromFile("Textures//GUI//red_.png");
@@ -359,6 +363,7 @@ bool Postac::dotykaPostaci(int i,AI_Eq *myEq)
         sizeX*=abs(postac.getScale().x);
         sizeY*=abs(postac.getScale().y);
 
+        //std::cout<<bX<<"\t"<<x<<"\t"<<i<<std::endl;
         if(bX>(x) && bX<(x+sizeX))
         {
             if(bY>(y) && bY<(y+sizeY))
@@ -512,6 +517,8 @@ unsigned int Postac::Update(unsigned int Hp,int boostHp,sf::Time czas_p,int w_re
             hp_+=10;
         if(dotykaPostaci(i,t3)==true)
             hp_+=20;
+        if(dotykaPostaci(i,t4)==true)
+            hp_+=10;
     }
     if(hp_>0)
         od_obrazenia.restart();
@@ -817,6 +824,7 @@ private:
     float przeladowanie_time[4]={2,1,5,0.5};
     bool dmg_from_peppa=false;
 public:
+    void setPosition(float x,float bcgx);
     void Update1(AI_Eq *Eq,int *targetHP,int *boostHp,short w_rece,Postac *T);
     void Update2(AI_Eq *Eq,int *targetHP,int *boostHp,short w_rece,Postac *Target);
     bool dotykaPostaci(int i);
@@ -835,6 +843,7 @@ public:
 AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::string sciezka_bron,const int type,std::string sciezka2,std::string sciezka3,float x,float y,float stosX,float stosY,AI_Eq *mEq)
     :Postac(window1,sciezka,sciezka1,sciezka2,sciezka3,"","",x,y,stosX,stosY),type(type),mEq(*mEq)
 {
+    std::cout<<"...."<<std::endl;
     buffer.loadFromFile("Sounds//piu_piu.wav");
     mieso.loadFromFile("Textures//Charakters//porkchop_raw.png");
     b1.loadFromFile(sciezka_bron);
@@ -862,6 +871,10 @@ AI::AI(sf::RenderWindow &window1,std::string sciezka,std::string sciezka1,std::s
         }
     }
     B1.setScale(scaleX,scaleY);
+}
+void AI::setPosition(float x,float bcgx)
+{
+    postac.setPosition(x-bcgx,postac.getPosition().y);
 }
 void AI::graj_dzwiek()
 {
@@ -1472,19 +1485,21 @@ void application()
     const float stosX=1920.f/Xokna;   //std::cout<<stosX<<std::endl;
     const float stosY=1080.f/Yokna;   //std::cout<<stosY<<std::endl;
     const float GroundLevel=700.f/stosY;
-    Postac Dziadek(window,"Textures//Charakters//dziadek"+*sezon+".png","Textures//Charakters//dziadek_dmg"+*sezon+".png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY,&peppaEq,&mamaEq,&tataEq);
+    Postac Dziadek(window,"Textures//Charakters//dziadek"+*sezon+".png","Textures//Charakters//dziadek_dmg"+*sezon+".png","Sounds//dziadek1.wav","Sounds//dziadek2.wav","","Sounds//dziadek4.wav",window.getSize().x/2,GroundLevel,stosX,stosY,&peppaEq,&mamaEq,&tataEq,&bykEq);
     Loading->Push();
     AI peppa(window,"Textures//Charakters//obrazek.png","Textures//Charakters//obrazek_dmg.png","Textures//Items//noz.png",0,"Sounds//peppa1.wav","Sounds//smiech1.wav",100,GroundLevel-50,stosX,stosY,&peppaEq);
     AI george(window,"Textures//Charakters//George.png","Textures//Charakters//George_dmg.png","Textures//Items//uzi.png",4,"","",300,GroundLevel-50,stosX,stosY,&peppaEq);
     Loading->Push();
     AI mama(window,"Textures//Charakters//mama_swinka.png","Textures//Charakters//mama_swinka_dmg.png","Textures//Items//pistolet.png",1,"Sounds//mama1.wav","Sounds//mama2.wav",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
     AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",2,"Sounds//tata1.wav","Sounds//tata2.wav",900,GroundLevel-50,stosX,stosY,&tataEq);
-    AI pan_byk(window,"Textures//Charakters//pan_byk.png","Textures//Charakters//pan_byk_dmg.png","Textures//Items//pistolet.png",1,"Sounds//byk1.wav","Sounds//byk2.wav",1400,GroundLevel-50,stosX,stosY,&bykEq);                                                                                   //dorobic brakujace pliki
+    AI pan_byk(window,"Textures//Charakters//pan_byk.png","Textures//Charakters//pan_byk_dmg.png","Textures//Items//pistolet.png",1,"Sounds//byk1.wav","Sounds//byk2.wav",0,GroundLevel-50,stosX,stosY,&bykEq);
+                                                                                  //dorobic brakujace pliki
     Loading->Push();
     //AI_Eq aiEq;
     //AI multiCharacter(window,"Textures//Charakters//dziadek.png","","",0,"","",100,GroundLevel-50,stosX,stosY,&aiEq);
 
     Background background(window,"Textures//Background//grass",-1600,"Textures//Background//szpital",100,"Textures//Background//grandpahouse",-800,"Textures//Background//house",900,"Textures//Background//shop",1700,"Textures//Background//przedszkole",stosX,stosY,*sezon);
+    pan_byk.setPosition(1400,background.x);
     delete sezon;
     Loading->Push();
     button Misje_bt(window,"Textures//GUI//bm.png","Textures//GUI//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
@@ -1551,7 +1566,7 @@ void application()
     {
         std::cout<<"Network class error\n"<<e.what()<<std::endl;
     }*/
-    system("cls");
+    //system("cls");
     if(frameLimit!=0)
         window.setFramerateLimit(frameLimit);
     Loading->Push();
@@ -1746,7 +1761,10 @@ void application()
                         if(temp>=5)                             //tutaj wpisac ostani stan fabuly
                             odblokowane[0]=true;
                         if(PlotTabUpdt[0]==true)
+                        {
                             pan_byk.Update2(&bykEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
+                            //std::cout<<background.x<<"\t"<<pan_byk.posX<<"\t"<<std::endl;
+                        }
                     }
                     if(level==1)
                     {
