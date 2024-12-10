@@ -53,7 +53,7 @@ struct obj
 };
 void level_setUp(unsigned short level);
 Interior interior=outside;
-AI_Eq peppaEq,mamaEq,tataEq,georgeEq;
+AI_Eq peppaEq,mamaEq,tataEq,georgeEq,bykEq;
 obj skrzynka;
 sf::Clock klatka;
 sf::Time poprz_klatka;
@@ -1478,7 +1478,8 @@ void application()
     AI george(window,"Textures//Charakters//George.png","Textures//Charakters//George_dmg.png","Textures//Items//uzi.png",4,"","",300,GroundLevel-50,stosX,stosY,&peppaEq);
     Loading->Push();
     AI mama(window,"Textures//Charakters//mama_swinka.png","Textures//Charakters//mama_swinka_dmg.png","Textures//Items//pistolet.png",1,"Sounds//mama1.wav","Sounds//mama2.wav",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
-    AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",2,"Sounds//tata1.wav","Sounds//tata2.wav",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
+    AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",2,"Sounds//tata1.wav","Sounds//tata2.wav",900,GroundLevel-50,stosX,stosY,&tataEq);
+    AI pan_byk(window,"Textures//Charakters//pan_byk.png","Textures//Charakters//pan_byk_dmg.png","Textures//Items//pistolet.png",1,"Sounds//byk1.wav","Sounds//byk2.wav",1400,GroundLevel-50,stosX,stosY,&bykEq);                                                                                   //dorobic brakujace pliki
     Loading->Push();
     //AI_Eq aiEq;
     //AI multiCharacter(window,"Textures//Charakters//dziadek.png","","",0,"","",100,GroundLevel-50,stosX,stosY,&aiEq);
@@ -1513,7 +1514,7 @@ void application()
     loadBt.scaleY=0.45/stosX;
     Loading->Push();
     Equipment Eq(window,stosX,stosY,Vol[0],Vol[1]);
-    Plot plot(window,Eq,GroundLevel);
+    Plot plot(window,Eq,GroundLevel,&bykEq.HP);
     bron karabin(window,"Textures//Items//ak47.png","Textures//Items//pistolet.png","Textures//Items//bazooka.png","Textures//Items//uzi.png");
     Loading->Push();
     saveList List(window,stosX,stosY);
@@ -1527,6 +1528,7 @@ void application()
     sf::Texture Lock;
     Lock.loadFromFile("Textures//GUI//lock.png");
     Loading->Push();
+    int PlotTabUpdt[1];
     for(short i=0;i<10;i++)
     {
         const float przesun_X=80/stosY;
@@ -1740,9 +1742,11 @@ void application()
                         karabin.Update(Dziadek.posX,Dziadek.posY+30,Dziadek.getDegree(),&EnterPressed_shoot,Eq.w_rece);
                     if(level==0)
                     {
-                        auto temp=plot.Update(background.x);
-                        if(temp>=1)                             //tutaj wpisac ostani stan fabuly
+                        auto temp=plot.Update(background.x,bykEq.HP,PlotTabUpdt);
+                        if(temp>=5)                             //tutaj wpisac ostani stan fabuly
                             odblokowane[0]=true;
+                        if(PlotTabUpdt[0]==true)
+                            pan_byk.Update2(&bykEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);
                     }
                     if(level==1)
                     {

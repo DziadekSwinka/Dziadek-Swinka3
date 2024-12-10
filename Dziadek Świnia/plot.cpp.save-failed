@@ -1,8 +1,7 @@
 #include "plot.hpp"
 
-Plot::Plot(sf::RenderWindow &window_temp,Equipment &eq_temp,float Ground_LVL,unsigned int * bykHP_temp):window(window_temp),Eq(eq_temp),Help(window_temp),bykHP(bykHP_temp)
+Plot::Plot(sf::RenderWindow &window_temp,Equipment &eq_temp,float Ground_LVL):window(window_temp),Eq(eq_temp),Help(window_temp)
 {
-    //*bykHP=*bykHP_temp;
     state=0;
 
     NPC[0].texture.loadFromFile("Textures//Charakters//plot1.png");
@@ -34,8 +33,6 @@ Plot::Plot(sf::RenderWindow &window_temp,Equipment &eq_temp,float Ground_LVL,uns
     NPC[4].sprite.setScale(0.4,0.4);
     NPC[4].sprite.setTexture(NPC[4].texture);
 
-    NPC[5].appears_drg_st=5;
-
     OswaldRegular.loadFromFile("Fonts//Oswald-Regular.ttf");
     Notification_text.setFont(OswaldRegular);
     Notification_text.setCharacterSize(24);
@@ -46,7 +43,6 @@ void Plot::Push_state()
 {
     Eq.pieniadze+=extraMoney[state];
     state++;
-    stateConfig(state);
 }
 unsigned int Plot::getState()
 {
@@ -57,17 +53,11 @@ void Plot::NPC_text(std::string text,float myPosX,float posX)
     Notification_text.setPosition(posX-myPosX,300);
     Notification_text.setString(text);
     window.draw(Notification_text);
+
     //std::cout<<text<<std::endl;
 }
-void Plot::stateConfig(int nextState)
+int Plot::Update(float posX)
 {
-    if(nextState==5)
-        *bykHP=100;
-}
-int Plot::Update(float posX,int bykHP_curr,int UpdateTab[])
-{
-    for(int i=0;i<1;i++)
-        UpdateTab[i]=0;
     for(auto i:NPC)
     {
         if(i.appears_drg_st==state)
@@ -100,7 +90,7 @@ int Plot::Update(float posX,int bykHP_curr,int UpdateTab[])
                     NPC_text("PRZESZUKAJ [F]",NPC[1].position.x,posX);
                     if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
                     {
-                        /*if(Help.isSet==false)*/       //nie ma zrobionej kolejki [nie prawda- kolejka juz zrobiona]
+                        /*if(Help.isSet==false)*/       //nie ma zrobionej kolejki
                             Help.SetState(3);
                         Eq.ammunition+=10;
                         Push_state();
@@ -149,20 +139,13 @@ int Plot::Update(float posX,int bykHP_curr,int UpdateTab[])
                             Eq.pieniadze-=100;
                              Help.SetState(6);
                              Help.SetState(7);
-                             Push_state();
                         }
+                        Push_state();
                     }
                 }
                 i.sprite.setPosition(posX-i.position.x,i.position.y);
                 window.draw(i.sprite);
                 break;
-            }
-            case 5:
-            {
-                Help.SetState(8);
-                if(bykHP_curr>0)
-                    UpdateTab[0]=1;              //wyciagne Update do main'a a tu zrobie tylko returna z logiki
-                else Push_state();
             }
             default:
                 {

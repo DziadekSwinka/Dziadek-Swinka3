@@ -420,7 +420,7 @@
 
 1662730441 c:\users\pc\documents\github\dziadek-swinka3\dzadek Œwinka\side.hpp
 
-1733591851 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+1733841528 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
@@ -1318,13 +1318,13 @@
 1732461037 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\sezon.h
 	<string>
 
-1733511842 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.hpp
+1733840992 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.hpp
 	<SFML/Graphics.hpp>
 	<iostream>
 	"Equipment.hpp"
 	"helper.hpp"
 
-1733511490 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.cpp
+1733841528 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\plot.cpp
 	"plot.hpp"
 
 1733612629 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.hpp
@@ -1333,6 +1333,31 @@
 	<fstream>
 	<queue>
 
-1733612629 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.cpp
+1733613293 source:c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\helper.cpp
+	"helper.hpp"
+
+1733677198 c:\users\pc\documents\github\dziadek-swinka3\dziadek Œwinia\main.cpp
+	<SFML/Graphics.hpp>
+	<SFML/Audio.hpp>
+	<SFML/Network.hpp>
+	<iostream>
+	<string>
+	<cstdlib>
+	<conio.h>
+	<time.h>
+	<cmath>
+	<fstream>
+	"Network.hpp"
+	"side.hpp"
+	"Equipment.hpp"
+	"level.hpp"
+	"button.hpp"
+	"Background.hpp"
+	"mode.hpp"
+	"Saves.hpp"
+	"IniConfig.hpp"
+	"plot.hpp"
+	"Loading.hpp"
+	"sezon.h"
 	"helper.hpp"
 

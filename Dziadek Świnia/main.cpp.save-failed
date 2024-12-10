@@ -53,7 +53,7 @@ struct obj
 };
 void level_setUp(unsigned short level);
 Interior interior=outside;
-AI_Eq peppaEq,mamaEq,tataEq,georgeEq;
+AI_Eq peppaEq,mamaEq,tataEq,georgeEq,bykEq;
 obj skrzynka;
 sf::Clock klatka;
 sf::Time poprz_klatka;
@@ -1478,12 +1478,13 @@ void application()
     AI george(window,"Textures//Charakters//George.png","Textures//Charakters//George_dmg.png","Textures//Items//uzi.png",4,"","",300,GroundLevel-50,stosX,stosY,&peppaEq);
     Loading->Push();
     AI mama(window,"Textures//Charakters//mama_swinka.png","Textures//Charakters//mama_swinka_dmg.png","Textures//Items//pistolet.png",1,"Sounds//mama1.wav","Sounds//mama2.wav",1400,GroundLevel-50,stosX,stosY,&mamaEq);                                                                                      //dorobic brakujace pliki
-    AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",2,"Sounds//tata1.wav","Sounds//tata2.wav",900,GroundLevel-50,stosX,stosY,&tataEq);                                                                                      //dorobic brakujace pliki
+    AI tata(window,"Textures//Charakters//tata_swinka.png","Textures//Charakters//tata_swinka_dmg.png","Textures//Items//ak47.png",2,"Sounds//tata1.wav","Sounds//tata2.wav",900,GroundLevel-50,stosX,stosY,&tataEq);
+    //AI pan_byk(window,"Textures//Charakters//pan_byk.png","Textures//Charakters//pan_byk_dmg.png","Textures//Items//pistolet.png",1,"Sounds//byk1.wav","Sounds//byk2.wav",1400,GroundLevel-50,stosX,stosY,&bykEq);                                                                                   //dorobic brakujace pliki
     Loading->Push();
     //AI_Eq aiEq;
     //AI multiCharacter(window,"Textures//Charakters//dziadek.png","","",0,"","",100,GroundLevel-50,stosX,stosY,&aiEq);
 
-    Background background(window,"Textures//Background//grass",100,"Textures//Background//grandpahouse",-800,"Textures//Background//house",900,"Textures//Background//shop",stosX,stosY,*sezon);
+    Background background(window,"Textures//Background//grass",-1600,"Textures//Background//szpital",100,"Textures//Background//grandpahouse",-800,"Textures//Background//house",900,"Textures//Background//shop",1700,"Textures//Background//przedszkole",stosX,stosY,*sezon);
     delete sezon;
     Loading->Push();
     button Misje_bt(window,"Textures//GUI//bm.png","Textures//GUI//bmc.png",1600.f/stosX,20.f/stosY,stosX,stosY);
@@ -1527,6 +1528,7 @@ void application()
     sf::Texture Lock;
     Lock.loadFromFile("Textures//GUI//lock.png");
     Loading->Push();
+    //int PlotTabUpdt[1];
     for(short i=0;i<10;i++)
     {
         const float przesun_X=80/stosY;
@@ -1698,7 +1700,7 @@ void application()
         {
             if(!panelSklep && List.showList==false)
             {
-                Eq.pieniadze+=background.Update(&interior,level,&panelSklep,EnterPressed,czas_na_klatke());
+                Eq.pieniadze+=background.Update(&interior,level,&panelSklep,EnterPressed,czas_na_klatke(),Eq.klucz);
                 if(interior==outside)
                 {
                     if(skrzynka.active)
@@ -1740,9 +1742,11 @@ void application()
                         karabin.Update(Dziadek.posX,Dziadek.posY+30,Dziadek.getDegree(),&EnterPressed_shoot,Eq.w_rece);
                     if(level==0)
                     {
-                        auto temp=plot.Update(background.x);
+                        auto temp=plot.Update(background.x,bykEq.HP/*,PlotTabUpdt*/);
                         if(temp>=1)                             //tutaj wpisac ostani stan fabuly
                             odblokowane[0]=true;
+                        /*if(PlotTabUpdt[0]==true)
+                            pan_byk.Update1(&bykEq,&Eq.HP,&Eq.boostHP,Eq.w_rece,&Dziadek);*/
                     }
                     if(level==1)
                     {
