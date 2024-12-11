@@ -215,7 +215,7 @@ void bullet::Update()
         fly=false;
 
     window.draw(sprite);
-    std::cout<<posX;
+    //std::cout<<posX;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -1567,7 +1567,7 @@ void application()
     {
         std::cout<<"Network class error\n"<<e.what()<<std::endl;
     }*/
-    //system("cls");
+    system("cls");
     if(frameLimit!=0)
         window.setFramerateLimit(frameLimit);
     Loading->Push();
@@ -1699,7 +1699,7 @@ void application()
             }
         }
         if(saveBt.isPressed())
-            List.save(&Eq);
+            List.save(&Eq,plot.getState(),odblokowane);
         if(loadBt.isPressed())
         {
             if(List.showList)
@@ -1918,8 +1918,9 @@ void application()
                             window.draw(lock[i]);
                 }
             }
+            unsigned int *plot_wsk=plot.getStateRef();
             Eq.Update(panelSklep,ButtonPressed);
-            List.Update(ButtonPressed,&Eq);
+            List.Update(ButtonPressed,&Eq,plot_wsk,odblokowane);
             Sklep_bt.Update(ButtonPressed);
             saveBt.Update(ButtonPressed);
             loadBt.Update(ButtonPressed);

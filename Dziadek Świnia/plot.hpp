@@ -32,6 +32,7 @@ private:
     Equipment &Eq;
 public:
     unsigned int getState();
+    unsigned int *getStateRef();
     int Update(float posX,int bykHP_curr,int UpdateTab[]);
     Plot(sf::RenderWindow &window_temp,Equipment &eq_temp,float Ground_LVL,unsigned int * bykHP_temp);
 };

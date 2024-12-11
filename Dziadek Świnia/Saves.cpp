@@ -25,7 +25,7 @@ saveList::saveList(sf::RenderWindow &window1,float stosX,float stosY):window(win
         }
 
 }
-void saveList::Update(bool Bp,Equipment *Eq)
+void saveList::Update(bool Bp,Equipment *Eq,unsigned int *state,bool unlock[])
 {
     if(showList)
     {
@@ -45,7 +45,7 @@ void saveList::Update(bool Bp,Equipment *Eq)
                 }
 
             if(Bt[i].isPressed())
-                load(Eq,i);
+                load(Eq,i,state,unlock);
         }
     }
 }
@@ -68,7 +68,7 @@ unsigned int saveList::LoadList()
     Allsave.clear();
     return count;
 }
-void saveList::load(Equipment *Eq,int i)
+void saveList::load(Equipment *Eq,int i,unsigned int *state,bool unlock[])
 {
 
     std::string line="";
@@ -133,6 +133,20 @@ void saveList::load(Equipment *Eq,int i)
             Eq->beer=stoi(line);
             break;
             }
+        case 8:
+            {
+                *state=stoi(line);
+                break;
+            }
+        case 9:
+            {
+                int k=0;
+                while(stoi(line)>k)
+                {
+                    unlock[j]=true;
+                    k++;
+                }
+            }
         default: break;
         }
         j++;
@@ -140,7 +154,7 @@ void saveList::load(Equipment *Eq,int i)
     mySave.close();
 }
 
-void saveList::save(Equipment *Eq)
+void saveList::save(Equipment *Eq,int state,bool unlock[])
 {
     std::fstream Allsave;
     std::string name="",content="",line="";
@@ -169,6 +183,13 @@ void saveList::save(Equipment *Eq)
     content+=std::to_string(Eq->bazooka)+"\n";
     content+=std::to_string(Eq->uzi)+"\n";
     content+=std::to_string(Eq->beer)+"\n";
+    content+=std::to_string(state)+"\n";
+    int j=0;
+    while(unlock[j]==true)
+    {
+        j++;
+    }
+    content+=std::to_string(j)+"\n";
     mySave.open("saves//save"+std::to_string(count)+".txt",std::ios::out|std::ios::trunc);
     mySave.write(& content[0],content.length());
     mySave.close();

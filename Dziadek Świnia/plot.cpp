@@ -52,6 +52,10 @@ unsigned int Plot::getState()
 {
     return state;
 }
+unsigned int* Plot::getStateRef()
+{
+    return &state;
+}
 void Plot::NPC_text(std::string text,float myPosX,float posX)
 {
     Notification_text.setPosition(posX-myPosX,300);

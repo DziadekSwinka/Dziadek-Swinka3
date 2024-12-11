@@ -60,11 +60,11 @@ private:
 
 public:
     unsigned int LoadList();
-    void load(Equipment *Eq,int i);
-    void save(Equipment *Eq);
+    void load(Equipment *Eq,int i,unsigned int *state,bool unlock[]);
+    void save(Equipment *Eq,int state,bool unlock[]);
     bool showList;
     saveList(sf::RenderWindow &window1,float stosX,float stosY);
-    void Update(bool Bp,Equipment *Eq);
+    void Update(bool Bp,Equipment *Eq,unsigned int *state,bool unlock[]);
 };
 
 #endif // SAVES_HPP_INCLUDED
