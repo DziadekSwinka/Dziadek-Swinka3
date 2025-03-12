@@ -106,7 +106,7 @@ int Plot::Update(float posX,int bykHP_curr,int UpdateTab[])
                     {
                         /*if(Help.isSet==false)*/       //nie ma zrobionej kolejki [nie prawda- kolejka juz zrobiona]
                             Help.SetState(3);
-                        Eq.ammunition+=10;
+                        Eq.ammunition+=20;
                         Push_state();
                     }
                 }
